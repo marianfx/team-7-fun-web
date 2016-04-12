@@ -67,11 +67,17 @@
 
       <section typeof="sa:Abstract" id="abstract">
         <h2>Descriere</h2>
+       <p>
+          Fun Web este un joc ce are drept scop invatarea de catre jucatori a celor mai importante concepte invatate de la facultate. Initial jocul se va axa doar pe materia "Tehnologii Web", dar va putea fi extins si pentru celelalte materii. Acest joc este de tip RPG si isi propune sa fie un simulator al vietii unui student la facultate. 
+        </p>
         <p>
-         *********
+          Dupa autentificare, vor aparea niste dialoguri in care utilziatorul va alege niste raspunsuri, pe baza carora ii vor fi adaugate anumite puncte de abilitati. De asemenea, in functie de raspunsuri se va decide si daca el isi va putea urma calea predestinata (informatician, programator web), altfel, va fi scos din joc - game over. In timpul jocului utilizatorul va trebui sa se duca la cursuri, sa invete, sa faca quizz-uri si sa treaca examene. De asemenea, el poate sa se duca in arena, unde se va duela cu alti jucatori. Toate aceste activitati ii vor aduce anumite bonusuri jucatorului cum ar fi experienta si bani (cokkies).
+        </p>
+        <p>
+          Dupa ce termina de parcurs toate cursurile jucatorul va fi nevoit sa faca anumite quest-uri zilnice pentru a nu uita conceptele invatate si a-si pastra nivelul skill-urilor. 
         </p>
       </section>
-      
+    
         <h2>Introducere</h2>
                
         <p>
@@ -86,6 +92,46 @@
         <p>
           Dupa ce termina de parcurs toate cursurile jucatorul va fi nevoit sa faca anumite quest-uri zilnice pentru a nu uita conceptele invatate si a-si pastra nivelul skill-urilor. 
         </p>
+
+
+      <section typeof="sa:MaterialsAndMethods">
+        <h2>Modelarea datelor</h2>
+        
+        <p>
+          Pentru stocarea și manipularea datelor necesare rulării aplicației se va folosi serverul
+          de baze de date Oracle. Astfel s-a modelat o schemă de baze de date bazată minimal pe
+          următoarele tabele:
+        </p>
+
+        <ul>
+			<li> <i>Users</i> - conține informații necesare autentificării utilizatorilor.</li>
+			<li> <i>Players</i> - conține informații despre caracterul fiecărui utilizator.</li>  
+			<li> <i>Friends</i> - stochează perechi de id-uri ale utilizatorilor pentru a ilustra prietenii fiecăruia.</li>
+			<li> <i>Teams</i> - memorează triple de id-uri ale utilizatorilor pentru a descrie echipele formate.</li>
+			<li> <i>Statistics</i> - conține diverse statistici despre fiecare utilizator</li>
+			<li> <i>Items</i> - conține informații despre diferitele obiecte pe care un caracter le poate deține 
+			  pentru a-și îmbunătăți abilitățile</li>  
+			<li> <i>Inventories</i> - tabelă de legătură pentru a ilustra obiectele deținute de caracterul fiecărui utilizator</li>
+			<li> <i>Rounds</i> - conține informații despre fiecare rundă</li>
+			<li> <i>Questions</i> - conține enunțul și răspunsurile fiecărei întrebări, precum și runda în care aceasta apare</li>  
+        </ul>  
+
+        
+
+        <figure typeof="sa:Image">
+          <img src="./res/WebFunDatabaseSchema.jpg">
+          <figcaption>
+            Diagrama care descrie arhitectura bazei de date.
+          </figcaption>
+        </figure>
+
+      </section>
+
+      <section typeof="sa:MaterialsAndMethods" id="motivation">
+        <h2>Motivation</h2>
+        
+        
+
       </section>
       <section typeof="sa:Results" id="definition">
         <h2>Tehnologii Folosite</h2>
