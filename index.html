@@ -190,34 +190,39 @@
 					</li>
 					<li>
 						<p>
-							<b>Arena</b> - Localizare: dreapta - jos.<br>
+							<b>Arena</b> - Localizare: dreapta - jos<br>
 
 							 Aceasta cladire va fi deblocata doar dupa ce jucatorul a invatat macar o notiune teoretica. Pentru a intra in arena si pentru a initia un duel va trebui sa platesti nu anumit numar de cookie-uri.<br>
 
 							 Duelul se bazeaza pe un sistem de intrebari si raspunsuri, iar tipul duelului poate varia:
 						</p>
 					<ul>
-						Moduri:
-						<li>Duel PvP random: fiecare meci jucat in acest mod este contorizat si in functie de rezultate se acttualizeaza topul celor mai buni duelist</li>
-						<li>Duel cu un prieten: acest mod ofera posibilitatea de a provoca persoane cunoscute la un duel, poti acumula experienta, dar rezultatul nu va si luat in considerare.</li>
-						<li>Team deathmatch: poti provoca alta echipa la duel, sau te poti duela cu o echipa aleasa random; pentru fiecare intrebare din duel va fi ales cate un player din cate o echipa, iar jucatorii alesi vor incerca sa raspunda corect.</li>
+						<li>Duel PvP random: fiecare meci jucat in acest mod este contorizat si in functie de rezultate se acttualizeaza topul celor mai buni duelist;</li>
+						<li>Duel cu un prieten: acest mod ofera posibilitatea de a provoca persoane cunoscute la un duel, poti acumula experienta, dar rezultatul nu va si luat in considerare;</li>
+						<li>Team deathmatch: poti provoca alta echipa la duel, sau te poti duela cu o echipa aleasa random; pentru fiecare intrebare din duel va fi ales cate un player din cate o echipa, iar jucatorii alesi vor incerca sa raspunda corect;</li>
 					</ul>
 					<li>
-						Biblioteca - dreapta, sus. Aici pot fi cumparate cursurile complete sau item(vor aparea acasa dupa cumpararea lor).
+						<b>Biblioteca</b> - Localizare: dreapta - sus <br> 
+
+
+						In aceasta cladire jucatorii vor avea posibilitatea sa cumpere cursurile complete pe care va trebui sa le invete si, in mod automat, i se vor debloca si quizz-urile corespunzatoare acelor cursuri avand posibilitatea sa dea examenul final. De la biblioteca se mai pot cumpara diverse iteme care au scopul de a intari si dezvolta abilitatile jucatorului.
 					</li>
 					<li>
-						Restul cladirilor. Fiecare materie din facultate (noi ne axam doar pe Web for demonstration purposes) va aparea pe harta la o anumita locatie. Web-ul va contine o grupare de `cladiri`: HTTP, Ajax, REST, HTML, CSS etc
+						<b>Alte cladiri</b> <br> 
+
+						Fiecare materie din facultate poate fi reprezentat printr-un campus specific. Pentru inceput jocul va avea un singur campus pentru Web si va contine mai multe cladiri printre care enumeram: HTTP, Ajax, REST, HTML si CSS.
+
 					</li>
 				</ol>
 				Userul poate calatori intre locatiile care se afla pe harta prin sistemul point&click.
-				Cand navigheaza la o cladire (exemplu HTTP), acesta poate deschide interfata acelei cladiri, care ii va afisa o pagina cu:
+				Cand navigheaza la o cladire (exemplu HTTP), i se va deschide interfata acelei cladiri, care va cuprinde:
 				<ul>
 					
-					<li>modulele de invatare</li>
-					<li>quiz-urile</li>
-					<li>examenul final.</li>
+					<li>module de invatare</li>
+					<li>quiz-uri</li>
+					<li>examen final</li>
 				</ul>
-				debloca quiz-ul pentru el. Apoi deblocheaza al doilea modul de invatare si tot asa...
+				Quizz-urile se vor debloca progresiv, in functie de cursurile la care a participat respectivul jucator,iar urmatorul curs va fi disponibil doar daca quizz-ul curent a fost trecut. Examenul final va cuprinde o serie de intrebari din toate cursurile acelui modul.
 			</p>
 		  
 			</p>
@@ -229,40 +234,43 @@
 			  </figure>
 			 </p>   
 		 
-		<h4>Player</h4>
+		<h4><b>Player</b></h4>
 		<p>
-			Fiecare jucator este caracterizat de un anumit nivel, iar avansarea la urmatorul nivel se face automat atunci cand acumuleaza exprienta necesara. In principiu, jucatorul va primi puncte de experienta pentru fiecare activitate pe care o va face in joc. Dar va fi bonusat mult mai consistent,prin experienta si prin cookie-uri (gold) daca va dovedi ca a inteles conceptele pe care le-a studiat.
+			Fiecare jucator este caracterizat de un anumit nivel, iar avansarea la urmatorul nivel se face automat atunci cand acumuleaza exprienta necesara. In principiu, jucatorul va primi puncte de experienta pentru fiecare activitate pe care o va face in joc. Dar va fi bonusat mult mai consistent, prin experienta si prin cookie-uri (gold) daca va dovedi ca a inteles conceptele pe care le-a studiat.
         </p>
 		
-		<h4>Sistem Leveling</h4>
+		<h4><b>Sistem Leveling</b></h4>
 		<p>
-			Un jucator poate castiga experienta in urmatoarele moduri:
+		<ul>
+			<li>Un jucator poate castiga experienta in urmatoarele moduri:
 			<ol>
 				<li>Parcurge un curs: invata niste concepte/notiuni noi.</li>
 				<li>Face un quizz: indiferent daca trece sau nu acel quizz el va primi experienta.</li>
 				<li>Raspunde corect la o intrebare din quizz.</li>
-				<li>Se dueleaza in arena: va primi experienta mai mare daca va castiga, dar va primi puncte de experienta chiar daca va fi pierde.</li>
+				<li>Se dueleaza in arena: va primi experienta mai mare daca va castiga, dar va primi puncte de experienta chiar si daca va fi pierde.</li>
 			</ol>
-			Un jucator poate castiga cookie-uri
+			</li>
+			
+			<li>Un jucator poate castiga cookie-uri
 			<ol>
 				<li>Random cand circula pe harta, in functie de nivelul abilitatii "luck".</li>
 				<li>La fiecare Level-Up</li>
 				<li>Daca reuseste sa treaca un quizz cu 100% raspunsuri corecte</li>
 				
-			</ol>
+			</ol></li></ul>
 		</p>
-		<h4>Cookie-uri</h4>
+		<h4><b>Cookie-uri</b></h4>
 		<p>
 			Cookie-urile vor putea fi folosite pentru:
 			<ol>
-				<li>a intra in arena.</li>
+				<li>a intra in arena</li>
 				<li>a cumpara obiecte ce imbunatatesc abilitatile</li>
 				<li>a cumpara cursurile complete din Bilioteca</li>
 				
 			</ol>
 						
         </p>
-		<h4>Skills</h4>
+		<h4><b>Skills</b></h4>
 		<p>
 			Fiecare player va avea in timpul jocului urmatoarele abilitati, in urma intrebareilor de la intro acesta va fi predispus spre anumite abilitati mai tare decat celelalte. <br>
 			Acestea fiind:
@@ -277,6 +285,17 @@
 		
 
         </section>
+
+        <section>
+        	<h3>Gameplay</h3>
+        	<p>
+        	Deoarece majoritatea studentilor sunt stresati si plictisiti de mediul academic, iar actualul proiect incearca sa rezolve aceasta problema intr-un mod interactiv si amuzant.<br>
+			Fun Web este un joc, ce te ajuta sa inveti notiunile teoretice de la facultate intr-un cadru informal, interactiv si uneori chiar amuzant. 
+        	</p>
+
+
+        </section>
+
 		<section id="references-section">
           <h3>The References Section</h3>
           <p>
