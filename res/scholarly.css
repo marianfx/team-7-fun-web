@@ -56,7 +56,7 @@ article {
   border-bottom: 8px solid transparent;
   border-left: 4px solid transparent;
   border-image: url('card-bg.png') 28 28 8 4 repeat;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 300;
   line-height: 24px;
   -moz-hyphens: auto;
@@ -394,4 +394,8 @@ aside[typeof="schema:WPSideBar"] {
   figure {
     background: transparent;
   }
+}
+
+dt {
+  font-weight: bold;
 }

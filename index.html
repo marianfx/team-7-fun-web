@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width">
 
-    <title>Fun@Web - Scholrarly HTML</title>
+    <title>Fun@Web - Scholarly HTML</title>
     <link rel="stylesheet" href="./res/scholarly.css">
     <link rel="stylesheet" href="./res/prism-coy.css">
     <script src="./res/prism.js" defer=""></script>
@@ -13,10 +13,10 @@
   <body prefix="schema: http://schema.org/ xsd: http://www.w3.org/2001/XMLSchema# sa: https://ns.science.ai/" data-pinterest-extension-installed="cr1.39.1">
     <header>
       <p class="title">Fun@Web</p>
-      <p class="subtitle">Tehnologii Web, invățate amuzant.</p>
+      <p class="subtitle">Tehnologii Web, învățate amuzant.</p>
     </header>
     <article id="what" typeof="schema:ScholarlyArticle" resource="#">
-      <h1>Intro</h1>
+      <h1>Fun@Web</h1>
       <section>
         <ol>
           <li property="schema:author" typeof="sa:ContributorRole">
@@ -74,6 +74,55 @@
           is encoded as a document. It is, itself, written in Scholarly HTML.
         </p>
       </section>
+
+      <section typeof="sa:MaterialsAndMethods">
+        <h2>Modelarea datelor</h2>
+        
+        <p>
+          Pentru stocarea și manipularea datelor necesare rulării aplicației se va folosi serverul
+          de baze de date Oracle. Astfel s-a modelat o schemă de baze de date bazată minimal pe
+          următoarele tabele:
+        </p>
+
+        <dl>
+          <dt>Users</dt>
+          <dd>conține informații necesare autentificării utilizatorilor</dd>
+
+          <dt>Players</dt>
+          <dd>conține informații despre caracterul fiecărui utilizator</dd>
+
+          <dt>Friends</dt>
+          <dd>stochează perechi de id-uri ale utilizatorilor pentru a ilustra prietenii fiecăruia</dd>
+
+          <dt>Teams</dt>
+          <dd>memorează triple de id-uri ale utilizatorilor pentru a descrie echipele formate</dd>
+
+          <dt>Statistics</dt>
+          <dd>conține diverse statistici despre fiecare utilizator</dd>
+
+          <dt>Items</dt>
+          <dd>conține informații despre diferitele obiecte pe care un caracter le poate deține 
+          pentru a-și îmbunătăți abilitățile</dd>
+
+          <dt>Inventories</dt>
+          <dd>tabelă de legătură pentru a ilustra obiectele deținute de caracterul fiecărui utilizator</dd>
+
+          <dt>Rounds</dt>
+          <dd>conține informații despre fiecare rundă</dd>
+
+          <dt>Questions</dt>
+          <dd>conține enunțul și răspunsurile fiecărei întrebări, precum și runda în care aceasta apare</dd>
+        </dl>
+
+        <figure typeof="sa:Image">
+          <img src="./res/WebFunDatabaseSchema.jpg">
+          <figcaption>
+            Diagrama care descrie arhitectura bazei de date.
+          </figcaption>
+        </figure>
+
+      </section>
+
       <section typeof="sa:MaterialsAndMethods" id="motivation">
         <h2>Motivation</h2>
         <aside typeof="schema:WPSideBar">
@@ -1110,14 +1159,9 @@
     </article>
     <footer>
       <p>
-        <a href="http://creativecommons.org/licenses/by/4.0/">CC-BY</a>
-        <a href="https://twitter.com/sciencedotai">@sciencedotai</a>
-        •
-        <a href="https://github.com/scienceai/scholarly.vernacular.io">Contribute</a>
-        •
-        Brought to you by the
-        <a href="http://science.ai/"><img src="./res/sciencedotai.svg" alt="science.ai logo" height="20px"></a>
-        League of JStice
+        <a href="http://info.uaic.ro">FII</a>
+        <a href="http://profs.info.uaic.ro/~busaco/teach/courses/web/">Tehnologii Web</a>
+        Proiecte
       </p>
     </footer>
 
