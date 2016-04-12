@@ -67,8 +67,14 @@
 
       <section typeof="sa:Abstract" id="abstract">
         <h2>Descriere</h2>
+       <p>
+          Fun Web este un joc ce are drept scop invatarea de catre jucatori a celor mai importante concepte invatate de la facultate. Initial jocul se va axa doar pe materia "Tehnologii Web", dar va putea fi extins si pentru celelalte materii. Acest joc este de tip RPG si isi propune sa fie un simulator al vietii unui student la facultate. 
+        </p>
         <p>
-         *********
+          Dupa autentificare, vor aparea niste dialoguri in care utilziatorul va alege niste raspunsuri, pe baza carora ii vor fi adaugate anumite puncte de abilitati. De asemenea, in functie de raspunsuri se va decide si daca el isi va putea urma calea predestinata (informatician, programator web), altfel, va fi scos din joc - game over. In timpul jocului utilizatorul va trebui sa se duca la cursuri, sa invete, sa faca quizz-uri si sa treaca examene. De asemenea, el poate sa se duca in arena, unde se va duela cu alti jucatori. Toate aceste activitati ii vor aduce anumite bonusuri jucatorului cum ar fi experienta si bani (cokkies).
+        </p>
+        <p>
+          Dupa ce termina de parcurs toate cursurile jucatorul va fi nevoit sa faca anumite quest-uri zilnice pentru a nu uita conceptele invatate si a-si pastra nivelul skill-urilor. 
         </p>
       </section>
 
@@ -81,35 +87,20 @@
           următoarele tabele:
         </p>
 
-        <dl>
-          <dt>Users</dt>
-          <dd>conține informații necesare autentificării utilizatorilor</dd>
+        <ul>
+			<li> <i>Users</i> - conține informații necesare autentificării utilizatorilor.</li>
+			<li> <i>Players</i> - conține informații despre caracterul fiecărui utilizator.</li>  
+			<li> <i>Friends</i> - stochează perechi de id-uri ale utilizatorilor pentru a ilustra prietenii fiecăruia.</li>
+			<li> <i>Teams</i> - memorează triple de id-uri ale utilizatorilor pentru a descrie echipele formate.</li>
+			<li> <i>Statistics</i> - conține diverse statistici despre fiecare utilizator</li>
+			<li> <i>Items</i> - conține informații despre diferitele obiecte pe care un caracter le poate deține 
+			  pentru a-și îmbunătăți abilitățile</li>  
+			<li> <i>Inventories</i> - tabelă de legătură pentru a ilustra obiectele deținute de caracterul fiecărui utilizator</li>
+			<li> <i>Rounds</i> - conține informații despre fiecare rundă</li>
+			<li> <i>Questions</i> - conține enunțul și răspunsurile fiecărei întrebări, precum și runda în care aceasta apare</li>  
+        </ul>  
 
-          <dt>Players</dt>
-          <dd>conține informații despre caracterul fiecărui utilizator</dd>
-
-          <dt>Friends</dt>
-          <dd>stochează perechi de id-uri ale utilizatorilor pentru a ilustra prietenii fiecăruia</dd>
-
-          <dt>Teams</dt>
-          <dd>memorează triple de id-uri ale utilizatorilor pentru a descrie echipele formate</dd>
-
-          <dt>Statistics</dt>
-          <dd>conține diverse statistici despre fiecare utilizator</dd>
-
-          <dt>Items</dt>
-          <dd>conține informații despre diferitele obiecte pe care un caracter le poate deține 
-          pentru a-și îmbunătăți abilitățile</dd>
-
-          <dt>Inventories</dt>
-          <dd>tabelă de legătură pentru a ilustra obiectele deținute de caracterul fiecărui utilizator</dd>
-
-          <dt>Rounds</dt>
-          <dd>conține informații despre fiecare rundă</dd>
-
-          <dt>Questions</dt>
-          <dd>conține enunțul și răspunsurile fiecărei întrebări, precum și runda în care aceasta apare</dd>
-        </dl>
+        
 
         <figure typeof="sa:Image">
           <img src="./res/WebFunDatabaseSchema.jpg">
@@ -122,34 +113,8 @@
 
       <section typeof="sa:MaterialsAndMethods" id="motivation">
         <h2>Motivation</h2>
-        <aside typeof="schema:WPSideBar">
-          <p>
-            <strong>New</strong>: you can now join the
-            <a href="https://www.w3.org/community/scholarlyhtml/">Scholarly HTML Community Group</a>
-            to help make this a standard.
-          </p>
-          <p>
-            This document is an early-stage release. While the underlying format is relatively
-            mature and actually implemented, details are still in flux and the format can still be
-            changed. The quality of this document is also being gradually improved. If you’re
-            interested in this project, come join
-            <a href="https://github.com/scienceai/scholarly.vernacular.io/">the party on GitHub</a>
-            or talk to either <a href="https://twitter.com/sciencedotai">@sciencedotai</a> or
-            <a href="https://twitter.com/robinberjon">@robinberjon</a> in Twitter.
-          </p>
-        </aside>
-        <p>
-          Fun Web este un quizz-game ce are drept scop invatarea de catre jucatori a celor mai importante concepte invatate de la facultate. Initial jocul se va axa doar pe materia "Tehnologii Web", dar va putea fi extins si pentru celelalte materii. Acest joc este de tip RPG si isi propune sa fie un simulator al vietii unui student la facultate. 
-        </p>
-        <p>
-          Dupa autentificare, vor aparea niste dialoguri in care utilziatorul va alege niste raspunsuri, pe baza carora ii vor fi adaugate anumite puncte de abilitati. De asemenea, in functie de raspunsuri se va decide si daca el isi va putea urma calea predestinata (informatician, programator web), altfel, va fi scos din joc - game over.
-        </p>
-        <p>
-          In timpul jocului utilizatorul va trebui sa se duca la cursuri, sa invete, sa faca quizz-uri si sa treaca examene. De asemenea, el poate sa se duca in arena, unde se va duela cu alti jucatori. Toate aceste activitati ii vor aduce anumite bonusuri jucatorului cum ar fi experienta si bani (cokkies).
-        </p>
-        <p>
-          Dupa ce termina de parcurs toate cursurile jucatorul va fi nevoit sa faca anumite quest-uri zilnice pentru a nu uita conceptele invatate si a-si pastra nivelul skill-urilor. 
-        </p>
+        
+        
       </section>
       <section typeof="sa:Results" id="definition">
         <h2>Tehnologii Folosite</h2>
