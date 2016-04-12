@@ -62,7 +62,13 @@ article {
   -moz-hyphens: auto;
   hyphens: auto;
 }
-h1, h2, h3 {
+h4{
+font-variant: small-caps;
+text-align: left;
+font-weight: 300;
+  
+}
+h1,h2, h3 {
   font-variant: small-caps;
   text-align: center;
   font-weight: 300;
@@ -75,6 +81,7 @@ h1 {
   line-height: 32px;
 }
 h2 {
+
   padding-top: 16px;
   padding-bottom: 0;
   margin-bottom: 0;
