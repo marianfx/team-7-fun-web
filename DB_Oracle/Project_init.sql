@@ -85,8 +85,8 @@ CREATE TABLE Players (
 	,s_luck INT DEFAULT 0 NOT NULL
 	,s_time INT DEFAULT 0 NOT NULL
 	,s_cheat INT DEFAULT 0 NOT NULL
-    ,skillPoints INT DEFAULT 0 NOT NULL
-	,lastRoundID INT DEFAULT 0 REFERENCES Rounds(roundID)
+  ,skillPoints INT DEFAULT 0 NOT NULL
+	,lastRoundID INT REFERENCES Rounds(roundID)
 	,guildID INT REFERENCES Guilds(guildID)
 	)
 /
@@ -160,7 +160,7 @@ CREATE TABLE PlayersStatistics (
 	 playerID INT NOT NULL PRIMARY KEY
 	,wins INT DEFAULT 0 NOT NULL
 	,loses INT DEFAULT 0 NOT NULL
-	,perfectRounds INT NOT NULL
+	,perfectRounds INT DEFAULT 0 NOT NULL
 	,dailyLogins INT DEFAULT 1 NOT NULL
 	,lastLoginDate DATE DEFAULT SYSDATE NOT NULL
 	,FOREIGN KEY (playerID) REFERENCES Players(playerID)
