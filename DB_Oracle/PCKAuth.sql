@@ -1,8 +1,8 @@
 create or replace PACKAGE authentication IS
-  bonusDaily INT :=5;
+  bonusDaily INT := 5;
   FUNCTION loginUser(p_username VARCHAR2,p_password VARCHAR2) RETURN INT;
   FUNCTION loginAdmin(p_password VARCHAR2) RETURN INT;
-  PROCEDURE registerUser( p_playerID INT, p_username VARCHAR2);
+  PROCEDURE registerUser( p_playerID INT, p_username VARCHAR2); --here you don't need the id (generated automatically), but other info for GameUsers table
   PROCEDURE updateOnLogin(p_playerID INT);
 END authentication;
 /
