@@ -1,8 +1,9 @@
+set serveroutput on;
 create or replace PACKAGE authentication IS
-  bonusDaily INT := 5;
+  bonusDaily INT :=5;
   FUNCTION loginUser(p_username VARCHAR2,p_password VARCHAR2) RETURN INT;
   FUNCTION loginAdmin(p_password VARCHAR2) RETURN INT;
-  PROCEDURE registerUser( p_playerID INT, p_username VARCHAR2); --here you don't need the id (generated automatically), but other info for GameUsers table
+  PROCEDURE onUserRegister( p_playerID INT, p_username VARCHAR2);
   PROCEDURE updateOnLogin(p_playerID INT);
 END authentication;
 /
@@ -12,19 +13,32 @@ create or replace PACKAGE BODY authentication IS
     RETURN INT 
     AS
       v_password GameUsers.password%TYPE;
-      
+      counter INT;
+      v_playerID INT;
     BEGIN
-        SELECT password INTO  v_password from GameUsers
+    
+      select count(username) into counter from GameUsers
+        where username=p_username;
+      if counter=0 then
+          raise TWExceptions.inexistent_user;
+       
+      END IF;  
+      SELECT PLAYERID,password INTO v_playerID, v_password from GameUsers
           where USERNAME=p_username;
          
         IF(v_password=p_password) THEN
+          AUTHENTICATION.UPDATEONLOGIN(v_playerID);
           return 1;
         ELSE
-          return 0;
+          raise TWExceptions.wrong_password;
+          return 0;  
         END IF;
-        EXCEPTION WHEN NO_DATA_FOUND THEN
-          SYS.DBMS_OUTPUT.PUT_LINE('wrong password or username');
-          return 0;
+       
+       EXCEPTION
+       WHEN TWExceptions.inexistent_user 
+        THEN RAISE_APPLICATION_ERROR (-20001,'invalid username');
+       WHEN TWExceptions.wrong_password
+        THEN RAISE_APPLICATION_ERROR (-20002,'wrong password'); 
         
     END loginUser;
   FUNCTION loginAdmin(p_password VARCHAR2) 
@@ -32,26 +46,14 @@ create or replace PACKAGE BODY authentication IS
    IS
     v_password GameUsers.password%TYPE;
    BEGIN
-        SELECT password INTO v_password from GameUsers
-          where USERNAME='admin';
-         
-        IF(v_password=p_password) THEN
-          return 1;
-        ELSE
-          return 0;
-        END IF;
-        EXCEPTION WHEN NO_DATA_FOUND THEN
-          SYS.DBMS_OUTPUT.PUT_LINE('wrong password for admin');
-          return 0;
-      
-        
-    END loginAdmin; 
-  PROCEDURE registerUser( p_playerID INT, p_username VARCHAR2)
+        return loginUser('admin','admin'); 
+   END loginAdmin; 
+  PROCEDURE onUserRegister( p_playerID INT, p_username VARCHAR2)
   IS
   BEGIN
     INSERT INTO Players (playerName) VALUES (p_username);
     INSERT INTO PlayersStatistics (playerID) VALUES(p_playerID);
-  END registerUser;
+  END onUserRegister;
   
   PROCEDURE updateOnLogin(p_playerID INT)
   IS
@@ -83,18 +85,21 @@ create or replace PACKAGE BODY authentication IS
     END IF;
     
     v_bonus:=v_dailyLogins*bonusDaily;
-    
+    if v_date_diff>=1 THEN
     UPDATE PLAYERS
         SET experience=experience+v_bonus
         WHERE playerID=p_playerID;   
-       
+    END IF;   
   END updateOnLogin;
 END authentication;
 /
-
+DECLARE
+  v_login INT;
 BEGIN
  
- -- INSERT INTO GameUsers (username, email,password) VALUES ('tuxi','tuxi@gmail.com','123');
-  AUTHENTICATION.UPDATEONLOGIN(1); 
+  --INSERT INTO GameUsers (username, email,password) VALUES ('tuxi','tuxi@gmail.com','123');
+  --AUTHENTICATION.UPDATEONLOGIN(1);
+  v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
+  SYS.DBMS_OUTPUT.PUT_LINE(v_login);
 END;
 

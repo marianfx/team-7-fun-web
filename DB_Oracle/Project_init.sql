@@ -85,7 +85,7 @@ CREATE TABLE Players (
 	,s_luck INT DEFAULT 0 NOT NULL
 	,s_time INT DEFAULT 0 NOT NULL
 	,s_cheat INT DEFAULT 0 NOT NULL
-    ,skillPoints INT DEFAULT 0 NOT NULL
+  ,skillPoints INT DEFAULT 0 NOT NULL
 	,lastRoundID INT REFERENCES Rounds(roundID)
 	,guildID INT REFERENCES Guilds(guildID)
 	)
@@ -140,6 +140,7 @@ CREATE TABLE GameUsers (
 	,password VARCHAR2(100) NOT NULL
 	,facebookID VARCHAR2(1000)
 	,registrationDate DATE DEFAULT SYSDATE NOT NULL
+    ,CONSTRAINT user_unique UNIQUE (username, email)
 	,FOREIGN KEY (playerID) REFERENCES Players(playerID)
 	)
 /
