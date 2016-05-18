@@ -130,7 +130,7 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 	PROCEDURE onUserRegister(p_playerID INT, p_username VARCHAR2)
 	IS
 	BEGIN
-			INSERT INTO Players (playerName) VALUES (p_username);
+			INSERT INTO Players (playerID, playerName) VALUES (p_playerID, p_username);
 			INSERT INTO PlayersStatistics (playerID) VALUES (p_playerID);
 	END onUserRegister;
 
