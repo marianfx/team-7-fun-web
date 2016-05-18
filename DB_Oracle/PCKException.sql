@@ -1,5 +1,6 @@
 
 -- ##### The Exceptions Package #####
+DROP PACKAGE TWExceptions;
 CREATE OR REPLACE PACKAGE TWExceptions IS
 
   inexistent_user EXCEPTION;
