@@ -96,7 +96,7 @@ BEFORE INSERT ON GameUsers
 FOR EACH ROW
 BEGIN
   :new.playerID:=playerID_seq.NEXTVAL;
-  AUTHENTICATION.REGISTERUSER(playerID_seq.CURRVAL,:new.username);
+  AUTHENTICATION.onUserRegister(playerID_seq.CURRVAL,:new.username);
 END;
 /
 COMMIT;
