@@ -17,6 +17,10 @@ CREATE OR REPLACE PACKAGE data_manipulation IS
 		PROCEDURE WRITE_TO_FILE(DICTIONARY IN KVDICT, FILE_NAME VARCHAR2);
 		PROCEDURE WRITE_DATA_TO_CSV(TAB_NAME IN VARCHAR2);
 		PROCEDURE EXPORT_ALL_TABLES_TO_CSV;
+		PROCEDURE  populate_player;
+		PROCEDURE  populate_question;
+		PROCEDURE  populate_rounds
+		
 
     PROCEDURE READ_FROM_FILE(DICTIONARY OUT KVDICT, FILE_NAME VARCHAR2);
 		PROCEDURE LOAD_DATA_FROM_CSV(FILE_NAME VARCHAR2, TAB_NAME VARCHAR2);
@@ -264,6 +268,64 @@ IS
       WHEN TWExceptions.TABLE_INEXISTENT THEN
           RAISE_APPLICATION_ERROR(-20005, 'The table ' || TAB_NAME || ' does not exist.');
 	END;
+
+
+CREATE OR REPLACE PROCEDURE  populate_player AS
+  v_level Players.playerlevel%TYPE;
+  v_max_player Players.playerID%TYPE:=playerID_seq.currval;
+  BEGIN
+
+    FOR i IN 1..5000 LOOP
+
+      
+            EXECUTE IMMEDIATE 'INSERT INTO GameUsers (Username,Email,Password) VALUES(' 
+                           || ''''||dbms_random.string('U', 20)||''''|| ','
+                           || ''''||dbms_random.string('U', 20)||'@gmail.com'||''''|| ','
+                           || ''''||dbms_random.string('U', 20)||''''||
+                           ')';
+  
+           v_level:=DBMS_RANDOM.value(1,10);
+           UPDATE players 
+           SET experience=50* POWER(2,v_level-1), playerlevel=v_level 
+           WHERE playerid=v_max_player+i;
+      
+  END LOOP;
+  
+END  populate_player;
+
+CREATE OR REPLACE PROCEDURE  populate_question AS
+
+  BEGIN
+  
+  FOR i IN 1 ..1000 LOOP
+        EXECUTE IMMEDIATE 'INSERT INTO questions (question,ANSWERA, ANSWERB,ANSWERC,ANSWERD,CORRECTANSWER,ROUNDID ) VALUES(' 
+                           || ''''||dbms_random.string('U', 20)||''''|| ','
+                           || ''''||dbms_random.string('L', 5)||''''|| ','
+                           || ''''||dbms_random.string('L', 5)||''''|| ','
+                           || ''''||dbms_random.string('L', 5)||''''|| ','
+                           || ''''||dbms_random.string('L', 5)||''''|| ','
+                           || ''''||dbms_random.VALUE(1, 4)||''''|| ','
+                           || ''''||dbms_random.VALUE(1, 100)||''''||
+                           ')';
+  END LOOP;
+END  populate_question;
+
+CREATE OR REPLACE PROCEDURE  populate_rounds AS
+
+  BEGIN
+  
+    FOR i IN 1..200 LOOP
+
+     EXECUTE IMMEDIATE 'INSERT INTO rounds (name,course) VALUES(' 
+                           || ''''||dbms_random.string('L', 20)||''''|| ','
+                           || ''''||dbms_random.string('U', 20)||''''||
+                           ')';
+  END LOOP;
+  
+ 
+END  populate_rounds;
+
+
 
 END data_manipulation;
 /
