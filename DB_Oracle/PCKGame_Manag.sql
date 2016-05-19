@@ -18,14 +18,33 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
        v_skillPoints INT;
        counter INT;
     BEGIN
-        SELECT count(playerID) INTO counter FROM Players
-          WHERE playerID=p_playerID;
+    
+    SELECT CASE
+         WHEN EXISTS(SELECT playerID
+                     FROM Players
+                     WHERE playerID=p_playerID
+         )
+           THEN 1
+         ELSE 0
+         END
+     INTO counter
+     FROM dual;
+     
     IF counter=0 THEN
           raise TWExceptions.inexistent_user;
     END IF; 
     
-        SELECT count(itemID) INTO counter FROM Items
-          WHERE itemID=p_itemID;
+     SELECT CASE
+         WHEN EXISTS(SELECT itemID
+                     FROM Items
+                     WHERE itemID=p_itemID
+         )
+           THEN 1
+         ELSE 0
+         END
+     INTO counter
+     FROM dual;
+     
     IF counter=0 THEN
           raise TWExceptions.inexistent_item;
     END IF; 
@@ -46,6 +65,7 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
                                 cookies = cookies - :2 
                            WHERE playerID = :3' 
                USING v_skillPoints, v_cookiesCost, p_playerID; 
+       INSERT INTO Inventories VALUES (p_playerID, p_itemID);
                   
     EXCEPTION
     WHEN TWExceptions.inexistent_user 
@@ -61,19 +81,39 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
         v_nr_questions INT;
         counter INT;
     BEGIN
-    IF x=NULL THEN
-      SELECT count(*)INTO counter FROM ROUNDS
-             WHERE roundID=p_roundID;
+    
+    SELECT CASE
+         WHEN EXISTS(SELECT roundID
+                     FROM Rounds
+                     WHERE roundID=p_roundID
+         )
+           THEN 1
+         ELSE 0
+         END
+     INTO counter
+     FROM dual;
         IF counter=0 THEN
           RAISE TWExceptions.inexistent_round; 
         END IF;
         
-        SELECT nrOfQuestions INTO v_nr_questions FROM Rounds;
+    IF x = NULL THEN
+        --## WHEN X IS NULL IT MEANS THAT THE QUESTIONS ARE FOR COURSE ##--
+        
+        SELECT nrOfQuestions INTO v_nr_questions FROM Rounds
+            WHERE ROUNDID = p_roundID;
+        OPEN p_recordset FOR
+          SELECT * FROM (
+                        SELECT *
+                        FROM   Questions
+                        WHERE  roundID=p_roundID
+                        ORDER BY dbms_random.value
+                        )
+          WHERE ROWNUM<=v_nr_questions;
+            
     ELSE    
+        --## WHEN X IS NOT NULL IT MEANS THAT THE QUESTIONS ARE FOR BATTLE ##--
         v_nr_questions:=x;
-    END IF;
-    
-    OPEN p_recordset FOR
+        OPEN p_recordset FOR
           SELECT * FROM (
                         SELECT *
                         FROM   Questions
@@ -81,7 +121,10 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
                         ORDER BY dbms_random.value
                         )
           WHERE ROWNUM<=v_nr_questions;
-                        
+            
+    END IF;
+    
+                
                       
     END loadQuestions;
    

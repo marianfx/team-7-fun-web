@@ -100,12 +100,6 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE TRIGGER GameUsers_ins_After
-AFTER INSERT ON GameUsers
-FOR EACH ROW
-BEGIN
-  AUTHENTICATION.onUserRegister(:new.PLAYERID,:new.username);
-END;
-/
+
 
 COMMIT;

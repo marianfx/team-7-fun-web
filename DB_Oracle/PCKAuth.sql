@@ -34,10 +34,18 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 		v_password GameUsers.password%TYPE;
 
 	BEGIN
-			SELECT count(username) INTO counter
-				FROM GameUsers
-				WHERE username = p_username;
-
+  
+     SELECT CASE
+         WHEN EXISTS(SELECT username
+                     FROM GameUsers
+                     WHERE username = p_username
+         )
+           THEN 1
+         ELSE 0
+         END
+     INTO counter
+     FROM dual;
+         
 			IF counter = 0
 			THEN
 					RAISE TWExceptions.inexistent_user;
@@ -50,14 +58,13 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 					FROM GameUsers
 					WHERE USERNAME = p_username;
 
-			IF (v_password = p_password)
+			IF (v_password <> p_password)
 			THEN
-					AUTHENTICATION.UPDATEONLOGIN(v_playerID);
-					RETURN 1;
-			ELSE
-					RAISE TWExceptions.wrong_password;
-					RETURN 0;
+          RAISE TWExceptions.wrong_password;
 			END IF;
+      
+      AUTHENTICATION.UPDATEONLOGIN(v_playerID);
+			RETURN v_playerID;
 
 			EXCEPTION
 					WHEN TWExceptions.inexistent_user
@@ -156,6 +163,6 @@ BEGIN
   --AUTHENTICATION.UPDATEONLOGIN(1);
   --v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
   --GAME_MANAGAMENT.SAVEGAMEHISTORY(1,3,1);
-  DELETE FROM GAMEUSERS where PLAYERID=1;
+  --DELETE FROM GAMEUSERS where PLAYERID=1;
   SYS.DBMS_OUTPUT.PUT_LINE(v_login);
 END;
