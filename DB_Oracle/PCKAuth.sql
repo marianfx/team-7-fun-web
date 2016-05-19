@@ -153,17 +153,13 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
   END;
 END authentication;
 /
-
-
 DECLARE
-  v_login INT;
+  a INT;
 BEGIN
-
-  --INSERT INTO GameUsers (username, email, password) VALUES ('tuxi','tuxi@gmail.com','123');
-  --AUTHENTICATION.UPDATEONLOGIN(1);
-  --v_login:=AUTHENTICATION.LOGINUSER('pingu','123');
-  --GAME_MANAGAMENT.SAVEGAMEHISTORY(1,3,1);
-  --DELETE FROM GAMEUSERS where PLAYERID=2;
-  SYS.DBMS_OUTPUT.PUT_LINE(v_login);
+  a:=playerID_seq.nextval;
+  DATA_MANIPULATION.POPULATE_PLAYERS;
+  DATA_MANIPULATION.POPULATE_ROUNDS;
+  DATA_MANIPULATION.POPULATE_QUESTIONS;
+  
 END;
-commit;
+

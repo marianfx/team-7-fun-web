@@ -5,6 +5,7 @@ IS
     TYPE general_cursor is REF CURSOR;
     PROCEDURE itemTransaction(p_playerID INT, p_itemID INT);
     PROCEDURE loadQuestions(p_roundID INT, x INT, p_recordset OUT Game_Managament.general_cursor);
+    PROCEDURE offsetNextPlayers(pageNumber INT, p_number_rows INT, p_recordset OUT Game_Managament.general_cursor);
     PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT);
 END Game_Managament;
 /
@@ -127,6 +128,26 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
                 
                       
     END loadQuestions;
+   --## procedure for loading pages for top players by experience##--
+  PROCEDURE offsetNextPlayers(pageNumber INT, p_number_rows INT, p_recordset OUT Game_Managament.general_cursor)
+	IS
+		
+		countBefore INT;
+	
+    BEGIN 
+        countBefore:=pageNumber*p_number_rows;
+        OPEN p_recordset FOR
+        SELECT *
+                  FROM ( SELECT experience, playerID, rownum rn
+                           FROM ( SELECT experience, playerID
+                                    FROM Players
+                                   ORDER BY experience DESC
+                                ) tmp
+                          WHERE rownum <=countBefore + p_number_rows
+                       )
+                 WHERE rn > countBefore;
+
+    END offsetNextPlayers;
    
    --## WINER ID OR 0(ZERO) WHEN RESULT IS EQUAL ##--
    PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT)
