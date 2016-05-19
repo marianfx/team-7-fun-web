@@ -21,6 +21,11 @@ CREATE OR REPLACE PACKAGE data_manipulation IS
 		PROCEDURE LOAD_DATA_FROM_CSV(FILE_NAME VARCHAR2, TAB_NAME VARCHAR2);
 		FUNCTION  ISDATE(P_DATE VARCHAR2) RETURN INTEGER;
 
+		PROCEDURE GET_OBJECT_INFO(OBJECTTYPE IN VARCHAR2, OBJECTNAME IN VARCHAR2, LISTTOADDIN IN OUT KVDICT);
+    PROCEDURE ADD_INDEXES_TO_DICT(DICTIONARY IN OUT KVDICT);
+    PROCEDURE DROP_INDEXES;
+    PROCEDURE ADD_INDEXES_BACK(DICTIONARY IN KVDICT);
+
 		PROCEDURE  populate_players;
 		PROCEDURE  populate_questions;
 		PROCEDURE  populate_rounds;
@@ -269,11 +274,112 @@ IS
 	END LOAD_DATA_FROM_CSV;
 
 
+	-- GETS THE INFO ABOUT AN OBJECT (DDL CODE) AND PUTS IT INSIDE THE LIST TO ADD IN
+  PROCEDURE GET_OBJECT_INFO(
+                              OBJECTTYPE IN VARCHAR2
+                            , OBJECTNAME IN VARCHAR2
+                            , LISTTOADDIN IN OUT KVDICT
+                            )
+  AS
+    METADATA    VARCHAR2(32767);
+    SCHEMA_NAME VARCHAR2(1000);
+  BEGIN
+      -- maybe there is something wrong with the metadata (object deprecately deleted or smth)
+      SELECT USER INTO SCHEMA_NAME FROM DUAL;
+
+      BEGIN
+          METADATA := DBMS_METADATA.GET_DDL(OBJECTTYPE, OBJECTNAME);
+          METADATA := REPLACE(METADATA, '"' || SCHEMA_NAME || '".', '');
+      EXCEPTION
+            WHEN OTHERS THEN
+              METADATA := 'SELECT ''Wrong code metadata for ' || OBJECTNAME || ''' from dual;\';
+              DBMS_OUTPUT.PUT_LINE('EXCEPTION CATCHED:');
+              DBMS_OUTPUT.PUT_LINE( SQLERRM );
+              DBMS_OUTPUT.PUT_LINE( DBMS_UTILITY.FORMAT_ERROR_BACKTRACE );
+      END;
+
+      LISTTOADDIN.EXTEND;
+      LISTTOADDIN(LISTTOADDIN.COUNT).NAME := OBJECTNAME;
+      LISTTOADDIN(LISTTOADDIN.COUNT).OTYPE := OBJECTTYPE;
+      LISTTOADDIN(LISTTOADDIN.COUNT).CODE := METADATA;
+  END;
+
+
+  -- ADDS ALL INDEXES (THE ONES NOT PRIMARY KEYS) TO THE DICTIONARY
+  PROCEDURE ADD_INDEXES_TO_DICT(DICTIONARY IN OUT KVDICT)
+  IS
+    OBJ_CURSOR SYS_REFCURSOR;
+    OBJ_TYPE USER_OBJECTS.OBJECT_TYPE%TYPE;
+    OBJ_NAME USER_OBJECTS.OBJECT_NAME%TYPE;
+    QUERY_STR VARCHAR2(5000);
+  BEGIN
+      QUERY_STR := 'SELECT OBJECT_TYPE, OBJECT_NAME
+                    FROM USER_OBJECTS WHERE OBJECT_TYPE = ''INDEX'' AND OBJECT_NAME NOT LIKE ''SYS_C%'' AND OBJECT_NAME NOT LIKE ''%UNIQUE''';
+
+      QUERY_STR := QUERY_STR || ' ORDER BY OBJECT_ID';
+
+      OPEN OBJ_CURSOR FOR QUERY_STR;
+      LOOP
+          FETCH OBJ_CURSOR INTO OBJ_TYPE, OBJ_NAME;
+          EXIT WHEN OBJ_CURSOR%NOTFOUND;
+
+          -- REPLACE SPACES WITH '-' - FOR DDL
+          OBJ_TYPE := REPLACE(OBJ_TYPE, ' ', '_');
+
+          GET_OBJECT_INFO(OBJ_TYPE, OBJ_NAME, DICTIONARY);
+          dbms_output.PUT_LINE(DICTIONARY(DICTIONARY.COUNT).CODE);
+      END LOOP;
+      CLOSE OBJ_CURSOR;
+  END;
+
+
+  -- DROPS ALL NON PK INDEXES, SILENTLY CATCHING THE ERRORS
+  PROCEDURE DROP_INDEXES
+  IS
+    OBJ_CURSOR SYS_REFCURSOR;
+    OBJ_NAME USER_OBJECTS.OBJECT_NAME%TYPE;
+    QUERY_STR VARCHAR2(5000);
+  BEGIN
+      QUERY_STR := 'SELECT OBJECT_NAME
+                    FROM USER_OBJECTS WHERE OBJECT_TYPE = ''INDEX'' AND OBJECT_NAME NOT LIKE ''SYS_C%'' AND OBJECT_NAME NOT LIKE ''%UNIQUE''';
+
+      QUERY_STR := QUERY_STR || ' ORDER BY OBJECT_ID';
+
+      OPEN OBJ_CURSOR FOR QUERY_STR;
+      LOOP
+          FETCH OBJ_CURSOR INTO OBJ_NAME;
+          EXIT WHEN OBJ_CURSOR%NOTFOUND;
+
+          EXECUTE IMMEDIATE 'DROP INDEX ' || OBJ_NAME;
+      END LOOP;
+
+      CLOSE OBJ_CURSOR;
+
+  EXCEPTION
+      WHEN OTHERS THEN
+          DBMS_OUTPUT.PUT_LINE(SQLERRM);
+  END;
+
+
+  -- ADD THE INDEXES BACK AFTER THE OPERATIONS. SILENTLY DISPLAYS EVENTUAL ERRORS TO NOT INTRERUPT THE EXECUTION
+  PROCEDURE ADD_INDEXES_BACK(DICTIONARY IN KVDICT)
+  IS
+  BEGIN
+      FOR I IN 1..DICTIONARY.COUNT
+      LOOP
+          EXECUTE IMMEDIATE DICTIONARY(I).CODE;
+      END LOOP;
+  EXCEPTION
+      WHEN OTHERS THEN
+          DBMS_OUTPUT.PUT_LINE(SQLERRM);
+  END;
+
+
+	-- POPULATES WITH RANDOM PLAYERS
 	PROCEDURE  populate_players AS
 	  v_level Players.playerlevel%TYPE;
 	  v_max_player Players.playerID%TYPE:=playerID_seq.currval;
 	  BEGIN
-
 	    FOR i IN 1..5000 LOOP
 
 
@@ -287,43 +393,39 @@ IS
 	           UPDATE players
 	           SET experience=50* POWER(2,v_level-1), playerlevel=v_level
 	           WHERE playerid=v_max_player+i;
-
 	  END LOOP;
-
 	END  populate_players;
 
 
-	PROCEDURE  populate_questions AS
-
-	  BEGIN
-
-	  FOR i IN 1 ..1000 LOOP
-	        EXECUTE IMMEDIATE 'INSERT INTO questions (question,ANSWERA, ANSWERB,ANSWERC,ANSWERD,CORRECTANSWER,ROUNDID ) VALUES('
-	                           || ''''||dbms_random.string('U', 20)||''''|| ','
-	                           || ''''||dbms_random.string('L', 5)||''''|| ','
-	                           || ''''||dbms_random.string('L', 5)||''''|| ','
-	                           || ''''||dbms_random.string('L', 5)||''''|| ','
-	                           || ''''||dbms_random.string('L', 5)||''''|| ','
-	                           || ''''||dbms_random.VALUE(1, 4)||''''|| ','
-	                           || ''''||dbms_random.VALUE(1, 100)||''''||
-	                           ')';
-	  END LOOP;
+	-- POPULATES THE QUESTIONS TABLE FROM THE DATABASE
+	PROCEDURE  populate_questions
+	AS
+	BEGIN
+		  FOR i IN 1 ..1000 LOOP
+		        EXECUTE IMMEDIATE 'INSERT INTO questions (question,ANSWERA, ANSWERB,ANSWERC,ANSWERD,CORRECTANSWER,ROUNDID ) VALUES('
+		                           || ''''||dbms_random.string('U', 20)||''''|| ','
+		                           || ''''||dbms_random.string('L', 5)||''''|| ','
+		                           || ''''||dbms_random.string('L', 5)||''''|| ','
+		                           || ''''||dbms_random.string('L', 5)||''''|| ','
+		                           || ''''||dbms_random.string('L', 5)||''''|| ','
+		                           || ''''||dbms_random.VALUE(1, 4)||''''|| ','
+		                           || ''''||dbms_random.VALUE(1, 100)||''''||
+		                           ')';
+		  END LOOP;
 	END  populate_questions;
 
 
-	PROCEDURE  populate_rounds AS
-
-	  BEGIN
-
-	    FOR i IN 1..200 LOOP
+	-- POPULATES THE ROUNDS TABLE FROM THE DATABASE
+	PROCEDURE  populate_rounds
+	AS
+  BEGIN
+			FOR i IN 1..200 LOOP
 
 	     EXECUTE IMMEDIATE 'INSERT INTO rounds (name,course) VALUES('
 	                           || ''''||dbms_random.string('L', 20)||''''|| ','
 	                           || ''''||dbms_random.string('U', 20)||''''||
 	                           ')';
-	  END LOOP;
-
-
+			 END LOOP;
 	END  populate_rounds;
 
 END data_manipulation;
