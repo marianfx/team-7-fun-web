@@ -1,5 +1,6 @@
 --Trigger when user is deleted ( delete from GameUsers => delete from players and playersStatistics)
-CREATE OR REPLACE TRIGGER GameUsers_delet
+
+CREATE OR REPLACE TRIGGER GameUsers_delete
 AFTER DELETE ON GameUsers
 FOR EACH ROW
 BEGIN
@@ -15,4 +16,6 @@ BEGIN
   AUTHENTICATION.onUserRegister(:new.PLAYERID,:new.username);
 END;
 /
+
+
 commit;

@@ -102,7 +102,12 @@ CREATE TABLE GameUsers (
 	, CONSTRAINT email_unique UNIQUE (email)
 	)
 /
-
+ALTER TABLE GameUsers ADD CONSTRAINT CK_EMAIL_VALID CHECK
+(
+  REGEXP_LIKE (email , '^[a-zA-Z][a-zA-Z0-9_\.\-]+@([a-zA-Z0-9-]{2,}\.)+([a-zA-Z]{2,4}|[a-zA-Z]{2}\.[a-zA-Z]{2})$')
+)
+ENABLE;
+/
 -- ############# Players Table ##########
 CREATE TABLE Players (
 	  playerID INT NOT NULL PRIMARY KEY

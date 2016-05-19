@@ -96,7 +96,7 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
           RAISE TWExceptions.inexistent_round; 
         END IF;
         
-    IF x = NULL THEN
+    IF x IS NULL THEN
         --## WHEN X IS NULL IT MEANS THAT THE QUESTIONS ARE FOR COURSE ##--
         
         SELECT nrOfQuestions INTO v_nr_questions FROM Rounds

@@ -159,10 +159,11 @@ DECLARE
   v_login INT;
 BEGIN
 
-  --INSERT INTO GameUsers (username, email,password) VALUES ('pingu','pingu@gmail.com','123');
+  --INSERT INTO GameUsers (username, email, password) VALUES ('tuxi','tuxi@gmail.com','123');
   --AUTHENTICATION.UPDATEONLOGIN(1);
-  --v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
+  --v_login:=AUTHENTICATION.LOGINUSER('pingu','123');
   --GAME_MANAGAMENT.SAVEGAMEHISTORY(1,3,1);
-  --DELETE FROM GAMEUSERS where PLAYERID=1;
+  --DELETE FROM GAMEUSERS where PLAYERID=2;
   SYS.DBMS_OUTPUT.PUT_LINE(v_login);
 END;
+commit;
