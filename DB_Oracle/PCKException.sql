@@ -13,6 +13,13 @@ CREATE OR REPLACE PACKAGE TWExceptions IS
 
   insufficient_funds EXCEPTION;
   PRAGMA EXCEPTION_INIT(insufficient_funds, -20004);
+  
+  inexistent_round EXCEPTION;
+  PRAGMA EXCEPTION_INIT(inexistent_round, -20005);
+  
+  
+  insufficient_points EXCEPTION;
+  PRAGMA EXCEPTION_INIT(insufficient_points, -20006);
 
 
   TABLE_INEXISTENT EXCEPTION;

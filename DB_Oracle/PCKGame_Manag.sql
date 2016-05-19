@@ -1,8 +1,9 @@
 CREATE OR REPLACE PACKAGE Game_Managament
 IS
+    TYPE general_cursor is REF CURSOR;
     PROCEDURE itemTransaction(p_playerID INT, p_itemID INT);
-    --PROCEDURE loadQuestions(p_roundID INT, x INT);
-    --PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT);
+    PROCEDURE loadQuestions(p_roundID INT, x INT, p_recordset OUT Game_Managament.general_cursor);
+    PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT);
 END Game_Managament;
 /
 CREATE OR REPLACE PACKAGE BODY Game_Managament IS
@@ -15,23 +16,23 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
        v_skillPoints INT;
        counter INT;
     BEGIN
-        select count(playerID) into counter from Players
-          where playerID=p_playerID;
-    if counter=0 then
+        SELECT count(playerID) INTO counter FROM Players
+          WHERE playerID=p_playerID;
+    IF counter=0 THEN
           raise TWExceptions.inexistent_user;
     END IF; 
     
-        select count(itemID) into counter from Items
-          where itemID=p_itemID;
-    if counter=0 then
+        SELECT count(itemID) INTO counter FROM Items
+          WHERE itemID=p_itemID;
+    IF counter=0 THEN
           raise TWExceptions.inexistent_item;
     END IF; 
     
-        select cookies into  v_cookiesPlayer from Players 
-          where playerID=p_playerID;
+        SELECT cookies INTO  v_cookiesPlayer FROM Players 
+          WHERE playerID=p_playerID;
           
-        select cookiesCost, skill, skillPoints into v_cookiesCost, v_skill, v_skillPoints from Items
-          where itemID=p_itemID;
+        SELECT cookiesCost, skill, skillPoints INTO v_cookiesCost, v_skill, v_skillPoints from Items
+          WHERE itemID=p_itemID;
         
         IF  v_cookiesPlayer-v_cookiesCost<0 THEN
           raise TWExceptions.insufficient_funds;
@@ -53,7 +54,66 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
         THEN RAISE_APPLICATION_ERROR (-20004,'insufficient_funds');     
           
     END itemTransaction;
-   -- PROCEDURE loadQuestions(p_roundID INT, x INT);
-   -- PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT);
+    PROCEDURE loadQuestions(p_roundID INT, x INT, p_recordset OUT Game_Managament.general_cursor)
+    IS
+        v_nr_questions INT;
+        counter INT;
+    BEGIN
+    IF x=NULL THEN
+      SELECT count(*)INTO counter FROM ROUNDS
+             WHERE roundID=p_roundID;
+        IF counter=0 THEN
+          RAISE TWExceptions.inexistent_round; 
+        END IF;
+        
+        SELECT nrOfQuestions INTO v_nr_questions FROM Rounds;
+    ELSE    
+        v_nr_questions:=x;
+    END IF;
+    
+    OPEN p_recordset FOR
+          SELECT * FROM (
+                        SELECT *
+                        FROM   Questions
+                        WHERE  roundID<=p_roundID
+                        ORDER BY dbms_random.value
+                        )
+          WHERE ROWNUM<=v_nr_questions;
+                        
+                      
+    END loadQuestions;
+   
+   --## WINER ID OR 0(ZERO) WHEN RESULT IS EQUAL ##--
+   PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT)
+   IS
+   
+   BEGIN
+        INSERT INTO BattlesHistory (player1ID, player2ID,winner) VALUES(p_playerID1, p_playerID2 , p_winnerID);
+        
+        IF p_playerID1=p_winnerID 
+        THEN
+            --#### PLAYER 1 WINS ####--
+            PLAYER_PACKAGE.update_battle_end(p_playerID1,1);            
+            PLAYER_PACKAGE.update_battle_end(p_playerID2,-1);     
+                
+        END IF;       
+        
+        IF p_playerID2=p_winnerID 
+        THEN
+            --#### PLAYER 2 WINS ####--
+            PLAYER_PACKAGE.update_battle_end(p_playerID1,-1);            
+            PLAYER_PACKAGE.update_battle_end(p_playerID2,1);     
+                
+        END IF;        
+        
+        IF p_winnerID=0 
+        THEN
+            --#### EQUAL REUSULTS ####--
+            PLAYER_PACKAGE.update_battle_end(p_playerID1,0);            
+            PLAYER_PACKAGE.update_battle_end(p_playerID2,0);     
+                
+        END IF;        
+        
+   END saveGameHistory;
 
 END Game_Managament;

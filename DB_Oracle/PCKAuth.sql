@@ -142,8 +142,9 @@ DECLARE
   v_login INT;
 BEGIN
 
-  --INSERT INTO GameUsers (username, email,password) VALUES ('tuxi','tuxi@gmail.com','123');
+  --INSERT INTO GameUsers (username, email,password) VALUES ('pingu','pingu@gmail.com','123');
   --AUTHENTICATION.UPDATEONLOGIN(1);
-  v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
-  SYS.DBMS_OUTPUT.PUT_LINE(v_login);
+  --v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
+  --GAME_MANAGAMENT.SAVEGAMEHISTORY(1,3,1);
+  --SYS.DBMS_OUTPUT.PUT_LINE(v_login);
 END;

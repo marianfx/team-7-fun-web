@@ -46,6 +46,7 @@ CREATE SEQUENCE battleID_seq
 
 -- ##### Triggers for the sequences ####
 
+
 CREATE OR REPLACE TRIGGER Question_ins
 BEFORE INSERT ON Questions
 FOR EACH ROW

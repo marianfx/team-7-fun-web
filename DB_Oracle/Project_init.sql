@@ -25,6 +25,7 @@ DROP TABLE BattlesHistory CASCADE CONSTRAINTS;/
 CREATE TABLE Rounds (
 	  roundID INT NOT NULL PRIMARY KEY
 	, NAME VARCHAR2(100) NOT NULL
+  , nrOfQuestions INT NOT NULL
 	, course VARCHAR2(4000) NOT NULL
 	)
 /
@@ -271,7 +272,7 @@ CREATE TABLE BattlesHistory
 (
     battleID INT NOT NULL PRIMARY KEY
   , player1ID INT NOT NULL REFERENCES Players(playerID)
-  , player2id INT NOT NULL REFERENCES Players(playerID)
+  , player2ID INT NOT NULL REFERENCES Players(playerID)
   , winner INT
 )
 /
