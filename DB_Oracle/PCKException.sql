@@ -1,6 +1,5 @@
 
 -- ##### The Exceptions Package #####
-DROP PACKAGE TWExceptions;
 CREATE OR REPLACE PACKAGE TWExceptions IS
 
   inexistent_user EXCEPTION;
@@ -14,5 +13,9 @@ CREATE OR REPLACE PACKAGE TWExceptions IS
 
   insufficient_funds EXCEPTION;
   PRAGMA EXCEPTION_INIT(insufficient_funds, -20004);
+
+
+  TABLE_INEXISTENT EXCEPTION;
+  PRAGMA EXCEPTION_INIT(TABLE_INEXISTENT, -20005);
 
 END TWExceptions;
