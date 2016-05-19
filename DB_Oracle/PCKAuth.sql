@@ -1,13 +1,13 @@
 
 -- ########## The Authentication Package - HEAD #########
-
+DROP PACKAGE authentication;
 CREATE OR REPLACE PACKAGE authentication IS
 
 	bonusDaily INT := 5;
 
 	FUNCTION loginUser(p_username VARCHAR2, p_password VARCHAR2)
 		RETURN INT;
-	FUNCTION loginAdmin(p_password VARCHAR2)
+	FUNCTION loginAdmin(p_password GameUsers.password%TYPE)
 		RETURN INT;
 
 	PROCEDURE onUserRegister(p_playerID INT, p_username VARCHAR2);
@@ -130,7 +130,7 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 	PROCEDURE onUserRegister(p_playerID INT, p_username VARCHAR2)
 	IS
 	BEGIN
-			INSERT INTO Players (playerName) VALUES (p_username);
+			INSERT INTO Players (playerID, playerName) VALUES (p_playerID, p_username);
 			INSERT INTO PlayersStatistics (playerID) VALUES (p_playerID);
 	END onUserRegister;
 

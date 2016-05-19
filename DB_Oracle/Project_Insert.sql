@@ -45,22 +45,12 @@ CREATE SEQUENCE battleID_seq
 /
 
 -- ##### Triggers for the sequences ####
-CREATE OR REPLACE TRIGGER Player_ins
-BEFORE INSERT ON Players
-FOR EACH ROW
-
-BEGIN
-  :new.playerID: = playerID_seq.CURRVAL;
-END;
-/
-
 
 CREATE OR REPLACE TRIGGER Question_ins
 BEFORE INSERT ON Questions
 FOR EACH ROW
-
 BEGIN
-  :new.questionID:=questionID_seq.NEXTVAL;
+  :new.questionID := questionID_seq.NEXTVAL;
 END;
 /
 
@@ -68,9 +58,8 @@ END;
 CREATE OR REPLACE TRIGGER Round_ins
 BEFORE INSERT ON Rounds
 FOR EACH ROW
-
 BEGIN
-  :new.roundID:=roundID_seq.NEXTVAL;
+  :new.roundID := roundID_seq.NEXTVAL;
 END;
 /
 
@@ -78,9 +67,8 @@ END;
 CREATE OR REPLACE TRIGGER Item_ins
 BEFORE INSERT ON Items
 FOR EACH ROW
-
 BEGIN
-  :new.itemID:=itemID_seq.NEXTVAL;
+  :new.itemID := itemID_seq.NEXTVAL;
 END;
 /
 
@@ -88,9 +76,8 @@ END;
 CREATE OR REPLACE TRIGGER Guild_ins
 BEFORE INSERT ON Guilds
 FOR EACH ROW
-
 BEGIN
-  :new.guildID:=guildID_seq.NEXTVAL;
+  :new.guildID := guildID_seq.NEXTVAL;
 END;
 /
 
@@ -98,9 +85,8 @@ END;
 CREATE OR REPLACE TRIGGER BattlesHistory_ins
 BEFORE INSERT ON BattlesHistory
 FOR EACH ROW
-
 BEGIN
-  :new.battleID:=battleID_seq.NEXTVAL;
+  :new.battleID := battleID_seq.NEXTVAL;
 END;
 /
 
@@ -110,7 +96,14 @@ BEFORE INSERT ON GameUsers
 FOR EACH ROW
 BEGIN
   :new.playerID := playerID_seq.NEXTVAL;
-  AUTHENTICATION.onUserRegister(playerID_seq.CURRVAL,:new.username);
+END;
+/
+
+CREATE OR REPLACE TRIGGER GameUsers_ins_After
+AFTER INSERT ON GameUsers
+FOR EACH ROW
+BEGIN
+  AUTHENTICATION.onUserRegister(:new.PLAYERID,:new.username);
 END;
 /
 

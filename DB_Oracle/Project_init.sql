@@ -86,6 +86,22 @@ ENABLE;
 /
 
 
+
+
+-- ############# GameUsers Table ##########
+CREATE TABLE GameUsers (
+	  playerID INT NOT NULL PRIMARY KEY
+	, username VARCHAR2(100) NOT NULL
+	, email VARCHAR2(100) NOT NULL
+	, password VARCHAR2(100) NOT NULL
+	, facebookID VARCHAR2(1000)
+	, registrationDate DATE DEFAULT SYSDATE NOT NULL
+
+  , CONSTRAINT user_unique UNIQUE (username)
+	, CONSTRAINT email_unique UNIQUE (email)
+	)
+/
+
 -- ############# Players Table ##########
 CREATE TABLE Players (
 	  playerID INT NOT NULL PRIMARY KEY
@@ -100,6 +116,8 @@ CREATE TABLE Players (
   , skillPoints INT DEFAULT 0 NOT NULL
 	, lastRoundID INT REFERENCES Rounds(roundID)
 	, guildID INT REFERENCES Guilds(guildID)
+
+	, FOREIGN KEY (playerID) REFERENCES GameUsers(playerID)
 	)
 /
 
@@ -144,21 +162,12 @@ ALTER TABLE Players  ADD CONSTRAINT CK_S_CHEAT_POSITIVITY CHECK
   S_CHEAT >= 0
 )
 ENABLE;
-/
 
-
--- ############# GameUsers Table ##########
-CREATE TABLE GameUsers (
-	  playerID INT NOT NULL PRIMARY KEY
-	, username VARCHAR2(100) NOT NULL
-	, email VARCHAR2(100) NOT NULL
-	, password VARCHAR2(100) NOT NULL
-	, facebookID VARCHAR2(1000)
-	, registrationDate DATE DEFAULT SYSDATE NOT NULL
-
-  , CONSTRAINT user_unique UNIQUE (username, email)
-	, FOREIGN KEY (playerID) REFERENCES Players(playerID)
-	)
+ALTER TABLE Players  ADD CONSTRAINT CK_LROUND_POSITIVITY CHECK
+(
+  lastRoundID >= 0
+)
+ENABLE;
 /
 
 
