@@ -12,6 +12,8 @@ CREATE OR REPLACE PACKAGE authentication IS
 
 	PROCEDURE onUserRegister(p_playerID INT, p_username VARCHAR2);
 	PROCEDURE updateOnLogin(p_playerID INT);
+  PROCEDURE onDeleteGameUser(p_playerID INT);
+  
 
 END authentication;
 /
@@ -133,7 +135,15 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 			INSERT INTO Players (playerID, playerName) VALUES (p_playerID, p_username);
 			INSERT INTO PlayersStatistics (playerID) VALUES (p_playerID);
 	END onUserRegister;
-
+  
+  -- Trigger when user is deleted ( delete from GameUsers => delete from players and playersStatistics)
+  
+  PROCEDURE onDeleteGameUser(p_playerID INT)
+  IS
+  BEGIN
+      EXECUTE IMMEDIATE 'DELETE FROM PLAYERSSTATISTICS WHERE PLAYERID = :PID' USING p_playerID;
+      EXECUTE IMMEDIATE 'DELETE FROM PLAYERS WHERE PLAYERID = :PID' USING p_playerID;
+  END;
 END authentication;
 /
 
@@ -146,5 +156,6 @@ BEGIN
   --AUTHENTICATION.UPDATEONLOGIN(1);
   --v_login:=AUTHENTICATION.LOGINUSER('tuxi','123');
   --GAME_MANAGAMENT.SAVEGAMEHISTORY(1,3,1);
-  --SYS.DBMS_OUTPUT.PUT_LINE(v_login);
+  DELETE FROM GAMEUSERS where PLAYERID=1;
+  SYS.DBMS_OUTPUT.PUT_LINE(v_login);
 END;

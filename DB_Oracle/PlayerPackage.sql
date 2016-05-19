@@ -1,3 +1,4 @@
+DROP PACKAGE player_package;/
 CREATE OR REPLACE PACKAGE player_package IS
   
   v_exp_round INT:=50;

@@ -1,3 +1,5 @@
+
+DROP PACKAGE Game_Managament;/
 CREATE OR REPLACE PACKAGE Game_Managament
 IS
     TYPE general_cursor is REF CURSOR;

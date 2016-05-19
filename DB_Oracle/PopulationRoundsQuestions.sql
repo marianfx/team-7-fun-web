@@ -52,3 +52,4 @@ INSERT INTO Questions (question, answerA, answerB,
               , 1
               ,1) ; 
 /
+commit;
