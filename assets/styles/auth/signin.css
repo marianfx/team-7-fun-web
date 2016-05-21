@@ -1,0 +1,26 @@
+.form-div{
+  padding-left: 35%;
+  padding-top: 10%;
+}
+
+.form-form {
+	min-width: 250px;
+	border: 1px solid #7c0c49;
+	padding: 20px;
+	padding-right: 30px;
+	background: #fff;
+}
+
+.righted{
+	float: right;
+}
+
+.lefted {
+	float: left;
+}
+
+body {
+	background: url("images/bg.jpg");
+	background-size: cover;
+	background-repeat: none;
+}
