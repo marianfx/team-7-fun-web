@@ -8,23 +8,17 @@
  */
 module.exports = function(req, res, next) {
 
-   //if not authemticated, die
-   if(req.session.authenticated === false || !req.user) return res.forbidden();
-
-  // Check if an username (to update / delete etc) is provided. Else, Forbidden.
-  var _username = '';
-  if( req.body.username)
-    _username = req.body.username;
-  else {
-
-      var param = req.param('username');
-      if(!param)
+    //if not authemticated, die
+    if(req.session.authenticated === false || !req.user)
         return res.forbidden();
-      _username = param;
-  }
 
-  if(_username == req.user.username)
+    // Check if an username / id (to update / delete etc) is provided. Else, Forbidden.
+    if( req.body.username && req.body.username == req.user.username){
         return next();
+    }
+    else if(req.params.id && req.params.id == req.user.id ){
+        return next();
+    }
 
   // User is not allowed
   // (default res.forbidden() behavior can be overridden in `config/403.js`)

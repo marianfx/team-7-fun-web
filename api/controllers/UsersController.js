@@ -17,7 +17,13 @@ module.exports = {
     },
 
     update: function (req, res, next) {
-        sails.services.passport.protocols.local.updateUser(req.body, function (err, user) {
+        var query;
+        if(req.params.id)
+            query = req.params.id;
+        else
+            query = req.body.id;
+
+        sails.services.passport.protocols.local.updateUser(query, req.body, function (err, user) {
           if (err) return res.negotiate(err);
 
           req.user = user;
@@ -26,7 +32,13 @@ module.exports = {
     },
 
     destroy: function (req, res, next) {
-        sails.services.passport.protocols.local.deleteUser(req.body, function (err) {
+        var query;
+        if(req.params.id)
+            query = req.params.id;
+        else
+            query = req.body;
+
+        sails.services.passport.protocols.local.updateUser(query, function (err) {
           if (err) return res.negotiate(err);
 
           // here we also logout the user

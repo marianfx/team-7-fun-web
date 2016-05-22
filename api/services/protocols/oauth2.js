@@ -18,7 +18,6 @@
  * @param {Object}   profile
  * @param {Function} next
  */
- import _ from 'lodash';
  import bcrypt from 'bcrypt';
 
 module.exports =  function (req, accessToken, refreshToken, profile, next) {

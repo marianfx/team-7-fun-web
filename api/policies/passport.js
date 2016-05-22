@@ -25,7 +25,7 @@
 
 import passport from 'passport';
 import http from 'http';
-import _ from 'lodash';
+
 //list of methods which are put by passport into req
 let methods = ['login', 'logIn', 'logout', 'logOut', 'isAuthenticated', 'isUnauthenticated'];
 

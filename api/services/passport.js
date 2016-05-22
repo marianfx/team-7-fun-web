@@ -8,7 +8,6 @@
  import passport from 'passport';
  import path from 'path';
  import url from 'url';
- import _ from 'lodash';//useful for collection handling
 
 passport.strategiesLoaded = false;
 

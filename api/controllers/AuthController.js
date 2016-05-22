@@ -5,8 +5,6 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/controllers- here, concepts about controllers
  */
 
- import _ from 'lodash';//useful for collection handling
-
 //##################################
 //#### SETTINGS
 //##################################
@@ -77,7 +75,7 @@ let logout = function(req, res) {
          // make sure the server always returns a response to the client
          // i.e passport-local bad username/email or password
         if(message){
-            
+
             if(!_.has(message, 'status'))
                 message.status = 0;
             sails.log.debug('Encountered an error with given message.');

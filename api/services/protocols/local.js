@@ -54,8 +54,8 @@ let createUser = (_user, next, generatePass) => {
 *
 * @description :: The function for user updating. Simply calls the blueprint for update, with the user data. The data will be validated according to the model, and be saved to the db if ok.
 */
-let updateUser = (_user, next) => {
-    return sails.models.users.update({id: _user.id}, _user, (err, user) => {
+let updateUser = (query, _user, next) => {
+    return sails.models.users.update(query, _user, (err, user) => {
         if(err){
             return next(err);
         }
@@ -70,8 +70,8 @@ let updateUser = (_user, next) => {
 *
 * @description :: The function for user updating. Simply calls the blueprint for update, with the user data. The data will be validated according to the model, and be saved to the db if ok.
 */
-let deleteUser = (_user, next) => {
-    return sails.models.users.destroy({id: _user.id}, (err) => {
+let deleteUser = (query, next) => {
+    return sails.models.users.destroy(query, (err) => {
         if(err){
             return next(err);
         }

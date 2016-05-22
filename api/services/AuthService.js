@@ -1,4 +1,3 @@
-import _ from 'lodash';
 
 /**
 *   @description:: Builds the callback url with the access token from the memory (if none exists, none will there be and no login)
