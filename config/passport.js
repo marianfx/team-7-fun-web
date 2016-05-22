@@ -19,10 +19,10 @@
         protocol: 'oauth2',
         strategy: require('passport-facebook').Strategy,
         options: {
-          clientID: '1174669389212743',
-          clientSecret: 'cba879d9a3adbfbaa79afe8b65046efe',
+          clientID: '1706259366298551',
+          clientSecret: '1c2bc70e95da4dab58a2adffeccf4958',
           profileFields: ['id', 'email', 'gender', 'displayName', 'photos'],
-          scope: ['public_profile', 'email', 'user_likes', 'user_photos']
+          scope: ['public_profile', 'email', 'user_photos']
         }
     }
 

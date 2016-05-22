@@ -36,17 +36,19 @@ module.exports = {
 
     //the function with wich i will be able to get my data
     me: function(req, res){
+
         if(req.user)
-            return res.send(req.user);
+            return res.ok(req.user);
+
         return res.forbidden();
+    },
+
+    blueprints: {
+        //Specify if theere will be exposed actions (user-defined functions)
+        actions: true,
+        //Specify if there will be the default RESTful API exposed (can do POST /auth => create object etc)
+        rest: true,
+        //Specify if there will be created shortcuts for the CRUD operations (by default, the RESTfull api can be created, but no shortcuts exposed (eg there will not be an /auth/create for this if this is not set to true, I would have to do POST /auth))
+        shortcuts: true
     }
-    //
-    // blueprints: {
-    //     //Specify if theere will be exposed actions (user-defined functions)
-    //     actions: true,
-    //     //Specify if there will be the default RESTful API exposed (can do POST /auth => create object etc)
-    //     rest: false,
-    //     //Specify if there will be created shortcuts for the CRUD operations (by default, the RESTfull api can be created, but no shortcuts exposed (eg there will not be an /auth/create for this if this is not set to true, I would have to do POST /auth))
-    //     shortcuts: true
-    // }
 };

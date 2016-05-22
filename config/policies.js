@@ -29,10 +29,9 @@ module.exports.policies = {
     // this next polocy allows only authenticated users to find
     UsersController: {
         '*': ['passport', 'sessionAuth'],
+        'me': ['passport', 'sessionAuth'],
         'update': ['passport', 'itsMe'],
         'destroy': ['passport', 'itsMe'],
-        'add': ['passport', 'itsMe'],
-        'remove': ['passport', 'itsMe'],
         'create': true
     }
 

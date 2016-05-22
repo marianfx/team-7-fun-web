@@ -5,6 +5,8 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/controllers- here, concepts about controllers
  */
 
+ import _ from 'lodash';//useful for collection handling
+
 //##################################
 //#### SETTINGS
 //##################################
@@ -44,6 +46,13 @@ let logout = function(req, res) {
  * @param {Object} res
  */
  let provider = function(req, res) {
+
+     //check for strategies load
+     if(sails.services.passport.strategiesLoaded === false){
+         sails.services.passport.loadStrategies();
+         sails.services.passport.strategiesLoaded = true;
+     }
+
      sails.services.passport.endpoint(req, res);
  };
 
@@ -64,9 +73,20 @@ let logout = function(req, res) {
      res.redirect('/signin');
    }
    else {
-     // make sure the server always returns a response to the client
-     // i.e passport-local bad username/email or password
-     res.ok(message);
+
+         // make sure the server always returns a response to the client
+         // i.e passport-local bad username/email or password
+        if(message){
+            
+            if(!_.has(message, 'status'))
+                message.status = 0;
+            sails.log.debug('Encountered an error with given message.');
+            res.ok(message);
+        }
+        else{
+            sails.log.debug('Encountered an bad request error.');
+            res.badRequest(err);
+        }
    }
  };
 
@@ -105,20 +125,22 @@ let callback = function(req, res) {
       }
 
       req.login(user, (err) => {
+
         if (err) {
-          return negotiateError(action, res, err);
+          return negotiateError(action, res, err, {message: 'Cannot log in.', status: 0});
         }
 
+        sails.log.debug("User details: ", user);
         req.session.authenticated = true;
         req.user = user;
 
-        // Upon successful login, optionally redirect the user if there is a
-        // `next` query param
         if (req.query.next) {
           var url = sails.services.authservice.buildCallbackNextUrl(req);
           res.status(302).set('Location', url);
         }
 
+        // informational display
+        sails.log.debug('User logged in: ' + user.username);
         return res.json(message);
       });
     });

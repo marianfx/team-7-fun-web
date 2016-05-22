@@ -8,23 +8,23 @@
  */
 module.exports = function(req, res, next) {
 
-  // User is allowed, proceed to the next policy if he is authenticated, he has data about himself and it's the same as the data he is tryin to modify
-  var _username = req.body.username;
-  var _id = req.param('id');
+   //if not authemticated, die
+   if(req.session.authenticated === false || !req.user) return res.forbidden();
 
-  if (req.session.authenticated && (_username || _id)) {
+  // Check if an username (to update / delete etc) is provided. Else, Forbidden.
+  var _username = '';
+  if( req.body.username)
+    _username = req.body.username;
+  else {
 
-      if(_id !== undefined && _id !== null){
-          if(_id == req.user.id)
-            return next();
-      }
-      else if(_username !== undefined && _username !== null){
-          if(_username == req.user.username)
-            return next();
-    }
+      var param = req.param('username');
+      if(!param)
+        return res.forbidden();
+      _username = param;
   }
 
-  //on account delete must implement logout too
+  if(_username == req.user.username)
+        return next();
 
   // User is not allowed
   // (default res.forbidden() behavior can be overridden in `config/403.js`)

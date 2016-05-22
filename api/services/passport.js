@@ -15,6 +15,212 @@ passport.strategiesLoaded = false;
 passport.protocols = require('./protocols');//import the array of protocols defined in protocols
 
 /**
+* @description Given a profile (obtained from Oauth2 provider), parse info from it into the user.
+* @param profile is object, usually having fields like: id, username, displayName, gender, emails, photos etc.
+*/
+let createUserFromProfileData = function(profile, tokens){
+
+    var user = { };
+
+    // If the profile object contains a list of emails, grab the first one and
+    // add it to the user.
+    if (profile.emails && profile.emails[0]) {
+
+      user.email = profile.emails[0].value;
+
+      // If the profile object contains a username, add it to the user.
+      if (_.has(profile, 'username') && profile.username !== undefined) {
+        user.username = profile.username;
+      }
+      else{
+          user.username = profile.id;//take the facebook id as username
+      }
+
+      // add other fileds from the profile
+
+      // ## access token ##
+      if (tokens) {
+        user.facebookId = tokens.accessToken;
+      }
+
+      // ## photo URL ##
+      let profilePicUrl = 'http://graph.facebook.com/v2.6/' + profile.id + '/picture?type=large';
+      user.photoUrl = profilePicUrl;
+    }
+
+    return user;
+};
+
+/**
+* @description If access tokens have changed, update the user in the Db Accordingly.
+* @param user is the user to update
+*/
+let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, next){
+
+    // If the tokens have changed since the last session, update them
+    if ( queryHasTokens &&
+        (user.facebookId != c_user.facebookId || user.photoUrl != c_user.photoUrl)) {
+
+      user.facebookId = c_user.facebookId;
+      user.photoUrl = c_user.photoUrl;
+
+      // Save any updates to the Passport before moving on
+      return user.save()
+        .then(function () {
+
+          sails.log.debug('Logged in user updated with success.');
+          return next(null, user, {status: 1});
+        })
+        .catch(next);
+    }
+
+    // if nothing changed, just send the same response
+    return next(null, req.user, {status: 1});
+};
+
+
+/**
+ * Connect a third-party profile to a local user
+ *
+ * This is where most of the magic happens when a user is authenticating with a
+ * third-party provider. What it does, is the following:
+ *
+ *   1. Given a provider and an identifier, find a mathcing Passport.
+ *   2. From here, the logic branches into two paths.
+ *
+ *     - A user is not currently logged in:
+ *       1. If a Passport wassn't found, create a new user as well as a new
+ *          Passport that will be assigned to the user.
+ *       2. If a Passport was found, get the user associated with the passport.
+ *
+ *     - A user is currently logged in:
+ *       1. If a Passport wasn't found, create a new Passport and associate it
+ *          with the already logged in user (ie. "Connect")
+ *       2. If a Passport was found, nothing needs to happen.
+ *
+ * As you can see, this function handles both "authentication" and "authori-
+ * zation" at the same time. This is due to the fact that we pass in
+ * `passReqToCallback: true` when loading the strategies, allowing us to look
+ * for an existing session in the request and taking action based on that.
+ *
+ * For more information on auth(entication|rization) in Passport.js, check out:
+ * http://passportjs.org/guide/authenticate/
+ * http://passportjs.org/guide/authorize/
+ *
+ * @param {Object}   req
+ * @param {Object}   query
+ * @param {Object}   profile
+ * @param {Function} next
+ */
+passport.connect = function (req, query, profile, next) {
+
+  var queryHasTokens = _.has(query, 'tokens');
+  req.session.tokens = query.tokens;
+
+  // Get the authentication provider from the query.
+  query.provider = req.param('provider');
+
+  // Use profile.provider or fallback to the query.provider if it is undefined
+  // as is the case for OpenID, for example
+  var provider = profile.provider || query.provider;
+
+  // If the provider cannot be identified we cannot match it to a passport so
+  // throw an error and let whoever's next in line take care of it.
+  if (!provider){
+    return next(new Error('No authentication provider was identified.'), false, {status: 0});
+  }
+
+  // sails.log.debug('Profile received from service: ', profile);
+  var user = createUserFromProfileData(profile, query.tokens);
+  // sails.log.debug('User created from service data: ', user);
+
+  // If an email wasnt available in the profile, we don't
+  // have a way of identifying the user in the future. Throw an error and let
+  // whoever's next in the line take care of it.
+  if (!user.email) {
+    return next(new Error('Cannot identify email. Cannot create account.'), false, { status: 0});
+  }
+
+  // unique search after email
+  sails.models.users.findOne({
+      email: user.email
+    })
+    .then(function (_user) {
+
+      // not logged in, creating an account
+      if (!req.user) {
+
+        // Scenario: A new user is attempting to sign up using a third-party
+        //           authentication provider.
+        // Action:   Create a new user and assign them an facebookId.
+        if (!_user) {
+
+          return sails.services.passport.protocols.local.createUser(user, (err, c_user) => {
+
+                if(err){
+                    sails.log.debug('Error on creating user: ', err);
+                    return next(err, false, {status: 0});
+                }
+
+                sails.log.debug('Success creating user: ', c_user);
+                next(null, c_user, {status: 1});
+            },
+                true);//this means generate password
+
+        }
+        // Scenario: An existing user is trying to log in.
+        // Action:   Get the user associated with the passport.
+        else {
+            return updateUserWithNewProfileData(req, queryHasTokens, _user, user, next);
+        }
+      }
+      else {
+
+        // Scenario: A user is currently logged in and trying to connect a new
+        //           passport.
+        // Action:   Create and assign a new passport to the user.
+        if (_user) {
+
+            return updateUserWithNewProfileData(req, queryHasTokens, _user, user, next);
+        }
+        // Scenario: The user is a nutjob or spammed the back-button.
+        // Action:   Simply pass along the already established session.
+        else {
+
+          sails.log.debug('Logged in user is spamming or doing something wrong.');
+          next(null, req.user, {status: 1});
+        }
+      }
+    })
+    .catch(next);
+};
+
+
+/**
+ * Disconnect user from facebook (remove facebookId?)
+ *
+ * @param  {Object} req
+ * @param  {Object} res
+ */
+passport.disconnect = function (req, res, next) {
+
+  var user = req.user;
+  var provider = req.param('provider');
+
+  return sails.models.users.findOne({
+      email: user.email
+    })
+    .then(function (_user) {
+
+        _user.facebookId = '';
+        _user.save();
+        return next(null, user);
+    })
+    .catch(next);
+};
+
+
+/**
  * This is the endpoint which handles the authentication using passport's authenticate()
  * GET /auth/:provider (provider can be 'local'), through the controller, of course
  *
@@ -25,6 +231,7 @@ passport.protocols = require('./protocols');//import the array of protocols defi
  * @param  {Object} res
  */
  passport.endpoint = function(req, res){
+
      let strategies = sails.config.passport;        //get the strategies from the passport config
      let provider   = req.params.provider;          //see routes for how this is being called (with a provider, doh)
 
@@ -34,6 +241,12 @@ passport.protocols = require('./protocols');//import the array of protocols defi
      if(!_.has(strategies, provider)){
          return res.redirect('/signin');
      }
+
+        // Attach scope if it has been set in the config
+      if (_.has(strategies[provider], 'scope')) {
+        options.scope = strategies[provider].scope;
+      }
+
     // Redirect the user to the provider for authentication. When complete,
     // the provider will redirect the user back to the application at
     //     /auth/:provider/callback
@@ -89,6 +302,7 @@ passport.protocols = require('./protocols');//import the array of protocols defi
 
       //go through all the strategies (key: {content}), see passport config
       _.each(strategies, (strategy, key) => {
+
           let options = { passReqToCallback: true };//this says don't pass the req object to the callback
           var Strategy;
 
@@ -107,7 +321,9 @@ passport.protocols = require('./protocols');//import the array of protocols defi
             }
           }
           else{
+
               let protocol = strategies[key].protocol;              //get the specified protocol
+
               let callback = path.join('auth', key, 'callback');    //build the callback (eg auth/facebook/callback)
               Strategy = strategies[key].strategy;
 
@@ -150,7 +366,7 @@ passport.protocols = require('./protocols');//import the array of protocols defi
 
 
   passport.deserializeUser(function (id, done) {
-    sails.models.user.findOne(id, function (err, user) {
+    sails.models.users.findOne(id, function (err, user) {
       done(err, user);
     });
   });

@@ -89,7 +89,6 @@ let beforeCreate = (user, callback) => {
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {
             if(err){
-                console.log(err);
                 callback(err); //tell the next function we had errors
             }
             user.password = hash;//replace the password with the hashed password

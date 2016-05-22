@@ -5,18 +5,48 @@
  * @docs        :: http://passportjs.org/guide/username-password/
  */
 
+
+
+ //use the bcrypt module for hashing passwords
+ import bcrypt from 'bcrypt';
+
 /**
 * Create an user
 *
 * @description :: The function for user creation. Simply calls the blueprint for create, with the user data. The data will be validated according to the model, and be saved to the db if ok.
 */
-let createUser = (_user, next) => {
-    return sails.models.users.create(_user, (err, user) => {
-        if(err){
-            return next(err);
-        }
-        return next(null, user);
-    });
+let createUser = (_user, next, generatePass) => {
+
+    // two cases - user logs in with facebook => need to generate a random password
+    if(generatePass){
+
+        // put a random password (cause it does not matter, this means logging from a service)
+        bcrypt.genSalt(10, (err, salt) => {
+
+            if(err)
+                sails.log.debug('Error generating random salt.');
+
+            _user.password = salt;
+
+            return sails.models.users.create(_user, (err, user) => {
+                if(err){
+                    return next(err);
+                }
+                return next(null, user);
+            });
+
+        });
+    }
+    else {
+
+        return sails.models.users.create(_user, (err, user) => {
+            if(err){
+                return next(err);
+            }
+            return next(null, user);
+        });
+    }
+
 };
 
 /**
@@ -65,7 +95,7 @@ let login = (req, username, password, next) => {
 
         //no user with that username, so return false
         if(!user){
-            return next(null, false, {text: "Invalid user.", status: 0});
+            return next(null, false, {message: "Invalid user.", status: 0});
         }
 
         //validate the password
@@ -74,11 +104,12 @@ let login = (req, username, password, next) => {
             if(err){
                 return next(err);
             }
+
             //answer: error, user, message
             if(res === false){
-                return next(null, false, {text: "Invalid password.", status: 0});
+                return next(null, false, {message: "Invalid password.", status: 0});
             }
-            return next(null, user, {text: "Success.", status: 1});
+            return next(null, user, {message: "Success.", status: 1});
         });
 
     });
