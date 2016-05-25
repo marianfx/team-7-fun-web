@@ -128,7 +128,7 @@ let callback = function(req, res) {
           return negotiateError(action, res, err, {message: 'Cannot log in.', status: 0});
         }
 
-        sails.log.debug("User details: ", user);
+        // sails.log.debug("User details: ", user);
         req.session.authenticated = true;
         req.user = user;
 

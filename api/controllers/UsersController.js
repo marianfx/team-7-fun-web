@@ -38,7 +38,7 @@ module.exports = {
         else
             query = req.body;
 
-        sails.services.passport.protocols.local.updateUser(query, function (err) {
+        sails.services.passport.protocols.local.deleteUser(query, function (err) {
           if (err) return res.negotiate(err);
 
           // here we also logout the user
@@ -61,6 +61,6 @@ module.exports = {
         //Specify if there will be the default RESTful API exposed (can do POST /auth => create object etc)
         rest: true,
         //Specify if there will be created shortcuts for the CRUD operations (by default, the RESTfull api can be created, but no shortcuts exposed (eg there will not be an /auth/create for this if this is not set to true, I would have to do POST /auth))
-        shortcuts: true
+        shortcuts: false
     }
 };

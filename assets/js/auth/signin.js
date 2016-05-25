@@ -23,7 +23,8 @@ function doLogin()
 
         // the function called on Success (no error returned bu the server)
         success: function (result) {
-            var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + result.text  +'</span>');
+
+            var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + result.message  +'</span>');
     		Materialize.toast($htmlToDisplay, 4000, 'card-panel red col s4');//create a toast 1\with class = card-panel red class, 4 seconds
 
             // success on login, so redirect. This does not affect the session. If user tricks this, still cannot access the game because of the policies.
@@ -34,7 +35,7 @@ function doLogin()
 
         // the function called on error (error returned from server or TimeOut Expired)
         error: function (result) {
-            var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + result.text  +'</span>');
+            var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + result.message  +'</span>');
     		Materialize.toast($htmlToDisplay, 4000, 'card-panel red');//create a toast 1\with class = card-panel red class, 4 seconds
         },
 
