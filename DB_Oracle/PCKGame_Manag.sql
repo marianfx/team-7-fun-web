@@ -135,7 +135,7 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
 		countBefore INT;
 	
     BEGIN 
-        countBefore:=pageNumber*p_number_rows;
+        countBefore := (pageNumber - 1) * p_number_rows;
         OPEN p_recordset FOR
         SELECT *
                   FROM ( SELECT experience, playerID, rownum rn
