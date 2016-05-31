@@ -28,9 +28,13 @@ module.exports.connections = {
   * Installed by default.                                                    *
   *                                                                          *
   ***************************************************************************/
-  localDiskDb: {
+  localdisk: {
     adapter: 'sails-disk'
   },
+
+  // the oracle connection is specified in local.js / oracle_conn (localll)
+  oracle: require('./local').oracle_conn,
+
 
   /***************************************************************************
   *                                                                          *

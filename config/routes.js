@@ -31,21 +31,21 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
-    '/': {
-        view: 'homepage'
+    'GET /': {
+        controller: 'GameController',
+        action: 'render'
     },
-    '/signup': {
+    'GET /signup': {
         view: 'auth/signup'
     },
-    '/signin': {
+    'GET /signin': {
         view: 'auth/signin'
     },
     'POST /register': {
-        controller: 'UsersController',
+        controller: 'UserController',
         action: 'create'
     },
-    'GET /logout': {
+    '/logout': {
         controller: 'AuthController',
         action: 'logout'
     },
@@ -69,6 +69,7 @@ module.exports.routes = {
         controller: 'AuthController',
         action: 'callback'
     }
+
 
 
   /***************************************************************************

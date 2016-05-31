@@ -41,12 +41,3 @@ body {
 .input-field label.active{
     width:100%;
 }
-
-
-.righted{
-	float: right;
-}
-
-.lefted {
-	float: left;
-}

@@ -13,24 +13,25 @@ import bcrypt from 'bcrypt';
 //#### SETTINGS
 //################################## http://sailsjs.org/documentation/concepts/models-and-orm/model-settings
 
+module.exports = {
 //$$$$$$$$$$$$$$$$$$$$$$$$$$
 //$$$ if one uncomments a line below, one should add that parameter name to the 'export' json at the end
 //$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //sails autogenerates the autocreated/updated at fields. uncomment to disable
-// let autoCreatedAt = false;
-// let autoUpdatedAt = false;
+    autoCreatedAt: false,
+    autoUpdatedAt: false,
 
 //sails also generates the id field automatically (autoincrementing)
 //otherwise, if set to false, a column with the PK shall be specified
-//let autoPK = false;
+    autoPK: false,
 
 
 //for the object, there can be specified a connection (configured in /config/connections.js)
 //let connection = 'name-from-/connections.js';
 
 //for the object, there can be specified a table name from the db (can be also used with pre-existing tables)
-//let tableName = 'some-table-name';
+    tableName: 'GAMEUSERS',
 
 
 //jsonify this object - (when will return it to the user)
@@ -40,35 +41,36 @@ import bcrypt from 'bcrypt';
 
 //will represent the attributes of this object
 //username, email and password are required
-let attributes = {
+attributes: {
+      id: {
+          type: 'integer',
+          unique: true,
+          columnName: 'PLAYERID'
+      },
       username: {
           type: 'string',
           required: true,
-          unique: true
+          unique: true,
+          columnName: 'USERNAME'
       },
       email : {
           type: 'string',
           required: true,
-          unique: true
+          unique: true,
+          columnName: 'EMAIL'
       },
       password: {
           type: 'string',
-          required: true
-      },
-      name: {
-          type: 'string',
-          required: false,
-          defaultsTo: () => {
-              return "Unknown";
-          }
-      },
-      photoUrl: {
-          type: 'string',
-          required: false
+          required: true,
+          columnName: 'PASSWORD'
       },
       facebookId: {
           type: 'string',
-          required: false
+          columnName: 'FACEBOOKID'
+      },
+      registrationDate: {
+          type: 'date',
+          columnName: 'REGISTRATIONDATE'
       },
       toJSON: function() {
           let obj = this.toObject();
@@ -78,14 +80,15 @@ let attributes = {
       validatePassword: function(password, next){
           let obj = this.toObject();
           bcrypt.compare(password, obj.password, next);
+
       }
-};
+},
 
 
 //about before's - http://sailsjs.org/documentation/concepts/models-and-orm/lifecycle-callbacks
 
 //override the beforeCreate to hash the password before entering it to the DB
-let beforeCreate = (user, callback) => {
+beforeCreate: function(user, callback) {
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {
             if(err){
@@ -95,10 +98,10 @@ let beforeCreate = (user, callback) => {
             callback(null, user);//callback witn no error and the user object (callback is usually from the res object, with takes at most 2 objects - error, object, true/false sometimes)
         });
     });
-};
+},
 
 //override the beforeUpdate to hash the password before updating it into the database
-let beforeUpdate = (user, callback) => {
+beforeUpdate: function(user, callback) {
     if(user.password){
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
@@ -116,8 +119,8 @@ let beforeUpdate = (user, callback) => {
     else {
         callback(null, user);
     }
-};
+},
 
 //this module will export ('expose') his attributes, the toJson function and will overrite the beforeCreate
 //Obs: Overriting is by default, based on name
-export {attributes, beforeCreate, beforeUpdate};
+};

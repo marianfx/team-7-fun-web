@@ -13,10 +13,10 @@ module.exports = function(req, res, next) {
         return res.forbidden();
 
     // Check if an username / id (to update / delete etc) is provided. Else, Forbidden.
-    if( req.body.username && req.body.username == req.user.username){
+    if( req.body.id && req.body.id == req.user.id){
         return next();
     }
-    else if(req.params.id && req.params.id == req.user.id ){
+    if(req.params.id && req.params.id == req.user.id ){
         return next();
     }
 

@@ -10,12 +10,12 @@
 //##################################
 //The Blueprints (see blueprints in readme) specify which default actions this controller will support
 let blueprints = {
-    //Specify if theere will be exposed actions (user-defined functions)
-    actions: true,
-    //Specify if there will be the default RESTful API exposed (can do POST /auth => create object etc)
-    rest: false,
-    //Specify if there will be created shortcuts for the CRUD operations (by default, the RESTfull api can be created, but no shortcuts exposed (eg there will not be an /auth/create for this if this is not set to true, I would have to do POST /auth))
-    shortcuts: false
+  //Specify if theere will be exposed actions (user-defined functions)
+  actions: false,
+  //Specify if there will be the default RESTful API exposed (can do POST /auth => create object etc)
+  rest: false,
+  //Specify if there will be created shortcuts for the CRUD operations (by default, the RESTfull api can be created, but no shortcuts exposed (eg there will not be an /auth/create for this if this is not set to true, I would have to do POST /auth))
+  shortcuts: false
 };
 
 /**
@@ -33,7 +33,8 @@ let blueprints = {
  * @param {Object} res
  */
 let logout = function(req, res) {
-    sails.services.passport.dosomelogout(req, res);
+  sails.services.passport.dosomelogout(req, res);
+  return res.redirect('/');//redirect to main page
 };
 
 
@@ -43,105 +44,116 @@ let logout = function(req, res) {
  * @param {Object} req
  * @param {Object} res
  */
- let provider = function(req, res) {
+let provider = function(req, res) {
 
-     //check for strategies load
-     if(sails.services.passport.strategiesLoaded === false){
-         sails.services.passport.loadStrategies();
-         sails.services.passport.strategiesLoaded = true;
-     }
+  //check for strategies load
+  if (sails.services.passport.strategiesLoaded === false) {
+    sails.services.passport.loadStrategies();
+    sails.services.passport.strategiesLoaded = true;
+  }
 
-     sails.services.passport.endpoint(req, res);
- };
+  sails.services.passport.endpoint(req, res);
+
+};
 
 
- /**
+/**
  *
  * This function checks out the error which occurred and redirects to the specific endpoint.
  * Eg if I came from register, redirect back there, etc.
  * This is the endpoint with the client, all errors are sent through here
  *
  */
- let negotiateError = function(action, res, err, message){
+let negotiateError = function(action, res, err, message) {
 
-   if (action === 'register') {
-     res.redirect('/register');
-   }
-   else if (action === 'signin') {
-     res.redirect('/signin');
-   }
-   else {
+  if (action === 'register') {
+    res.redirect('/signup');
+  } else if (action === 'signin') {
+    res.redirect('/signin');
+  } else {
 
-         // make sure the server always returns a response to the client
-         // i.e passport-local bad username/email or password
-        if(message){
+    // make sure the server always returns a response to the client
+    // i.e passport-local bad username/email or password
+    if (message) {
 
-            if(!_.has(message, 'status'))
-                message.status = 0;
-            sails.log.debug('Encountered an error with given message.');
-            res.ok(message);
-        }
-        else{
-            sails.log.debug('Encountered an bad request error.');
-            res.badRequest(err);
-        }
-   }
- };
+      if (!_.has(message, 'status'))
+        message.status = 0;
+      sails.log.debug('Sent error with message to user.');
+      sails.log.debug(message);
+
+      res.forbidden(message);
+
+    } else {
+      sails.log.debug('Sent error without message to user.');
+      sails.log.debug(err);
+      res.badRequest(err);
+    }
+  }
+};
 
 
 /**
-* Create a authentication callback endpoint
-*
-* This endpoint handles everything related to creating and verifying Pass-
-* ports and users, both locally and from third-aprty providers.
-*
-* Passport exposes a login() function on req (also aliased as logIn()) that
-* can be used to establish a login session. When the login operation
-* completes, user will be assigned to req.user.
-*
-* For more information on logging in users in Passport.js, check out:
-* http://passportjs.org/guide/login/
-*
-* @param {Object} req
-* @param {Object} res
-*/
+ * Create a authentication callback endpoint
+ *
+ * This endpoint handles everything related to creating and verifying Pass-
+ * ports and users, both locally and from third-aprty providers.
+ *
+ * Passport exposes a login() function on req (also aliased as logIn()) that
+ * can be used to establish a login session. When the login operation
+ * completes, user will be assigned to req.user.
+ *
+ * For more information on logging in users in Passport.js, check out:
+ * http://passportjs.org/guide/login/
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
 let callback = function(req, res) {
 
-    let action = req.param('action');
+  let action = req.param('action');
 
-    //check for strategies load
-    if(sails.services.passport.strategiesLoaded === false){
-        sails.services.passport.loadStrategies();
-        sails.services.passport.strategiesLoaded = true;
+  //check for strategies load
+  if (sails.services.passport.strategiesLoaded === false) {
+    sails.services.passport.loadStrategies();
+    sails.services.passport.strategiesLoaded = true;
+  }
+
+  //calls the passport authenticator, and then handles the next()
+  sails.services.passport.callback(req, res, (err, user, message) => {
+
+    if (err || !user) {
+      return negotiateError(action, res, err, message);
     }
 
-    //calls the passport authenticator, and then handles the next()
-    sails.services.passport.callback(req, res, (err, user, message) => {
+    req.login(user, (err) => {
 
-      if (err || !user) {
-        return negotiateError(action, res, err, message);
+      if (err) {
+        sails.log.debug(err);
+        return negotiateError(action, res, err, {
+          message: 'Cannot log in.',
+          status: 0
+        });
       }
 
-      req.login(user, (err) => {
+      // sails.log.debug("User details: ", user);
+      req.session.authenticated = true;
+      req.user = user;
 
-        if (err) {
-          return negotiateError(action, res, err, {message: 'Cannot log in.', status: 0});
-        }
+      if (!req.wantsJSON) {
+        var url = sails.services.authservice.buildCallbackNextUrl(req);
+        res.status(302).set('Location', url);
+      }
 
-        // sails.log.debug("User details: ", user);
-        req.session.authenticated = true;
-        req.user = user;
-
-        if (req.query.next) {
-          var url = sails.services.authservice.buildCallbackNextUrl(req);
-          res.status(302).set('Location', url);
-        }
-
-        // informational display
-        sails.log.debug('User logged in: ' + user.username);
-        return res.json(message);
-      });
+      // informational display
+      sails.log.debug('User logged in: ' + user.username);
+      return res.json(message);
     });
+  });
 };
 
-export {blueprints, logout, provider, callback};
+export {
+  blueprints,
+  logout,
+  provider,
+  callback
+};

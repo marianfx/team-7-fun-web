@@ -27,12 +27,16 @@ module.exports.policies = {
         '*': ['passport']
     },
     // this next polocy allows only authenticated users to find
-    UsersController: {
+    UserController: {
         '*': ['passport', 'sessionAuth'],
         'me': ['passport', 'sessionAuth'],
         'update': ['passport', 'itsMe'],
         'destroy': ['passport', 'itsMe'],
         'create': true
+    },
+    // policy for the game controller
+    GameController:{
+      'render': ['passport']
     }
 
   /***************************************************************************

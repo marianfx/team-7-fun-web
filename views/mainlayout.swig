@@ -1,39 +1,60 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>
-      {% block title %} Fun@Web {% endblock %}
-    </title>
+<html lang="en">
 
-    <!-- META -->
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta charset="utf-8">
+<!--================================================================================
+  Name:  Main template for the Fun Game.
+	Version: 0.0.1
+	Author: Team 7
+	Author URL: http://marianfx.github.io/team-7-fun-web/
+================================================================================ -->
+
+<head>
+  <!-- Metadata fro the browser(s) -->
+  <!-- Viewport mobile tag for sensible mobile support -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="description" content="Fun Web - the best game for learning Web Technologies. For free! ">
+  <meta name="keywords" content="fun, web, game, learn, free, technologies, fii, iasi, faculty, fun, awesome">
+
+  <title>
+    {% block title %} - Fun@Web {% endblock %}
+  </title>
+
+  <!-- Favicons-->
+  <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+  <!-- Favicons - for iPhone-->
+  <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+  <!-- Favicons - For Windows Phone-->
+  <meta name="msapplication-TileColor" content="#00bcd4">
+  <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+
+  {% block head %}
+  <!--STYLES-->
+  <!--Import Google Icon Font-->
+  <link type="text/css" rel="stylesheet" href="./styles/font.css">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="./styles/materialize.css" media="screen,projection" />
+  <!--Import sweetalert(swal).css-->
+  <link type="text/css" rel="stylesheet" href="./styles/sweetalert.css" media="screen,projection" />
+
+  <!--STYLES END-->
+  {% endblock %}
 
 
+</head>
 
-    {% block head %}
-    <!--STYLES-->
-    <!--Import Google Icon Font-->
-    <link type="text/css" rel="stylesheet" href="styles/font.css">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="styles/materialize.min.css"  media="screen,projection"/>
-    <!--STYLES END-->
-    {% endblock %}
+<body>
 
+  {% block content %}{% endblock %} {% block footer %}
 
-  </head>
+  <!--SCRIPTS-->
+  <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/sweetalert.min.js"></script>
+  <!--SCRIPTS END-->
+  {% endblock %}
+</body>
 
-  <body>
-
-     {% block content %}{% endblock %}
-
-
-     {% block footer %}
-    <!--SCRIPTS-->
-      <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-      <script type="text/javascript" src="js/materialize.min.js"></script>
-    <!--SCRIPTS END-->
-    {% endblock %}
-  </body>
 </html>

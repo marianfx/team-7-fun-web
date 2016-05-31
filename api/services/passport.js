@@ -28,7 +28,7 @@ let createUserFromProfileData = function(profile, tokens){
       user.email = profile.emails[0].value;
 
       // If the profile object contains a username, add it to the user.
-      if (_.has(profile, 'username') && profile.username !== undefined) {
+      if (_.has(profile, 'username') && profile.username) {
         user.username = profile.username;
       }
       else{
@@ -58,19 +58,20 @@ let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, n
 
     // If the tokens have changed since the last session, update them
     if ( queryHasTokens &&
-        (user.facebookId != c_user.facebookId || user.photoUrl != c_user.photoUrl)) {
+        (user.facebookId != c_user.facebookId)) {
 
-      user.facebookId = c_user.facebookId;
-      user.photoUrl = c_user.photoUrl;
+      var query = {id: user.id};
+      var toUpdate = {facebookId: c_user.facebookId};
 
       // Save any updates to the Passport before moving on
-      return user.save()
-        .then(function () {
+      return sails.models.user.update(query, toUpdate)
+        .exec(function (err, updated) {
+          sails.log.debug('Already existing user updated with success.');
+          var _status = 1;
+          if(err) _status = 0;
 
-          sails.log.debug('Logged in user updated with success.');
-          return next(null, user, {status: 1});
-        })
-        .catch(next);
+          return next(err, updated[0], {status: _status});
+        });
     }
 
     // if nothing changed, just send the same response
@@ -141,10 +142,13 @@ passport.connect = function (req, query, profile, next) {
   }
 
   // unique search after email
-  sails.models.users.findOne({
+  sails.models.user.findOne({
       email: user.email
     })
-    .then(function (_user) {
+    .exec(function (errr, _user) {
+
+      if(errr)
+        return next(err, null, {status: 0});
 
       // not logged in, creating an account
       if (!req.user) {
@@ -179,7 +183,6 @@ passport.connect = function (req, query, profile, next) {
         //           passport.
         // Action:   Create and assign a new passport to the user.
         if (_user) {
-
             return updateUserWithNewProfileData(req, queryHasTokens, _user, user, next);
         }
         // Scenario: The user is a nutjob or spammed the back-button.
@@ -187,11 +190,10 @@ passport.connect = function (req, query, profile, next) {
         else {
 
           sails.log.debug('Logged in user is spamming or doing something wrong.');
-          next(null, req.user, {status: 1});
+          return next(null, req.user, {status: 1});
         }
       }
-    })
-    .catch(next);
+    });
 };
 
 
@@ -206,7 +208,7 @@ passport.disconnect = function (req, res, next) {
   var user = req.user;
   var provider = req.param('provider');
 
-  return sails.models.users.findOne({
+  return sails.models.user.findOne({
       email: user.email
     })
     .then(function (_user) {
@@ -365,7 +367,7 @@ passport.disconnect = function (req, res, next) {
 
 
   passport.deserializeUser(function (id, done) {
-    sails.models.users.findOne(id, function (err, user) {
+    sails.models.user.findOne(id, function (err, user) {
       done(err, user);
     });
   });
@@ -378,8 +380,6 @@ passport.disconnect = function (req, res, next) {
       delete req.user;
       delete req.session.passport;
       req.session.authenticated = false;
-
-      return res.redirect('/');//redirect to main page
   };
 
   //YUP, this module exports passport, CONFIGURED
