@@ -34,9 +34,6 @@ module.exports = function() {
     /**
      * Calls a procedure from the database and fetches the results, passing them to the next function. Warning, does return a cursor. NOT for normal queries.
      * @method procedureFetch
-     * @param  {[type]}   plsql    [The PLSQL Code to EXECUTE]
-     * @param  {[type]}   bindvars [The binded variables]
-     * @param  {Function} next     [The next function in line to call]
      */
     this.procedureFetch = function (plsql, bindvars, next) {
 
@@ -58,7 +55,7 @@ module.exports = function() {
                                 return next(err, null);
                             }
 
-                            fetchRowsFromRS(connection, result.outBinds.cursor, numRows);
+                            fetchRowsFromRS(connection, result.outBinds.cursor, numRows, next);
                         });
 
         });
@@ -130,10 +127,6 @@ module.exports = function() {
         /**
          * Loads the questions
          * @method loadQuestions
-         * @param  {[type]}      req  [description]
-         * @param  {[type]}      res  [description]
-         * @param  {Function}    next [description]
-         * @return {[type]}           [description]
          */
         this.loadQuestions = function (req, res, next) {
 
@@ -148,6 +141,37 @@ module.exports = function() {
             };
 
             this.procedureFetch(plsql, bindvars, next);
+        };
+
+        /**
+         * Parse a possible error from the database.
+         * @method parseError
+         */
+        this.parseError = function (err, next) {
+
+                if(err) {
+
+                var containsORA = err.message.indexOf('ORA');
+
+                if(containsORA >= 0) {
+
+                  var startIndex = err.message.indexOf(':') + 2;
+                  err.message = err.message.substr(startIndex, err.length);
+
+                  var endIndex = err.message.indexOf('ORA');
+
+                  err.message = err.message.substr(0, endIndex);
+
+                  sails.log.debug(err.message);
+
+                }
+                else {
+                  err.message = 'Something very very bad happened on the server.';
+                }
+            }
+
+            next(err);
+
         };
 
 };

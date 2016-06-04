@@ -1,13 +1,15 @@
 /**
  * Player.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+ * @description ::
  */
 
 module.exports = {
 
 	tableName: 'PLAYERS',
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
+  autoPK: false,
 
 	attributes: {
 
@@ -80,13 +82,6 @@ module.exports = {
 		guildID: {
 			type: 'integer',
 			columnName: 'GUILDID'
-		},
-
-		items: {
-			collection: 'item',
-			via: 'playerID',
-			through: 'playeritem'
 		}
   }
 };
-

@@ -2,79 +2,94 @@
  * PlayerController
  *
  * @description :: Server-side logic for managing Players
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 var swig = require('swig');
 
 module.exports = {
 
+  /**
+   * Returns current player's inventory. User must be logged in.
+   * @method function
+   */
 	getInventory: function(req, res) {
 
-		var player_id = req.params.id;
+		var player_id = req.user.id;
 
+		var DB = new sails.services.databaseservice();
+		var query = sails.config.queries.player_inv;
+		var bindParams = {
+				id: player_id
+		};
 
-		Player.find( { playerID : player_id }).
-			populate('items').exec(function (err, data) {
+		DB.executeQuery(query, bindParams, (err, result) => {
+					if(err) {
+						sails.log.debug(err);
+						return res.serverError("Something very very bad happened on the server.");
+					}
 
-				if(err) {
-					sails.log.debug(err);
-					return res.serverError("Something very very bad happened on the server.");
-				}
-				
-				sails.log.debug(data[0].items);
-
-				var result = swig.renderFile('views/game/inventory.swig', { items : data[0].items });
-
-				res.ok( {data : result });
-			});
+					var toRender = swig.renderFile('views/game/inventory.swig', { items : result });
+					res.ok( {data : toRender });
+		});
 	},
 
+
+  /**
+   * User buys an item.
+   * @method function
+   */
 	buyItem: function(req, res) {
 
-		var player_id = req.params.id;
+		var player_id = req.user.id;
 
-		var item_id = req.body.itemID;
+		var itm = null;
+		if(req.body && req.body.itemID)
+				itm = req.body.itemID;
+		else
+			if(req.params.itemID)
+				itm = req.params.itemID;
+
+		//desired item was not transmitted
+    if(!itm)
+      return res.badRequest('One should buy an item which exists.');
 
 		var db = new sails.services.databaseservice();
-		var query = sails.config.queries.buy_item; /*CHANGE*/
+		var query = sails.config.queries.buy_item;
 
 		var bindparams = {
 			playerID : player_id,
-			itemID : item_id
+			itemID : itm
 		};
 
-		db.procedureSimple(null, null, query, bindparams, function(err) {
+		db.procedureSimple(query, bindparams, function(err) {
 
 			if(err) {
-				db.parseError(err, function(error) {
-
-					res.serverError({message: error.message});
-				});
+					return db.parseError(err, function(error) {
+								res.serverError({message: error.message});
+						});
 			}
-
-			else {
-				err.ok(null);
-			}
+			return res.ok(null);
 		});
 	},
 
-	getPlayer: function(req, res, next) {
 
-		var player_id = req.params.id;
+	/**
+	 * Returns a row with all the necessary player data
+	 * @method function
+	 * @param  {Function} next [the function in line to call]
+	 */
+	getPlayer: function(pid, next) {
 
 		var db = new sails.services.databaseservice();
-
 		var query = sails.config.queries.user_details;
+
 		var bindparams = {
-			id : player_id
+			id : pid
 		};
 
 		db.executeQuery(query, bindparams, function(err, data) {
-
-			next(err, data);
+				next(err, data);
 		});
 	}
-	
-};
 
+};
