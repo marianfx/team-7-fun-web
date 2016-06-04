@@ -68,6 +68,14 @@ module.exports.routes = {
     'GET /auth/:provider/:action': {
         controller: 'AuthController',
         action: 'callback'
+    },
+    'POST /friends': {
+        controller: 'FriendController',
+        action: 'create'
+    },
+    'GET /friends/:last/:limit': {
+          controller: 'FriendController',
+          action: 'find'
     }
 
 

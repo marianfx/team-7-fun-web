@@ -36,6 +36,7 @@ function doLogin() {
 			if (result.status == 1) {
 				window.location.href = "/game";
 			}
+
 		},
 		// the function called on error (error returned from server or TimeOut Expired)
 		error: function(err) {
@@ -47,6 +48,7 @@ function doLogin() {
 		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
 	});
 }
+
 
 
 function Validation() {

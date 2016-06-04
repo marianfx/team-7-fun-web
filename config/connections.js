@@ -33,7 +33,9 @@ module.exports.connections = {
   },
 
   // the oracle connection is specified in local.js / oracle_conn (localll)
-  oracle: require('./local').oracle_conn,
+  oracle_conn: require('./local').oracle_conn,
+
+  oracle_user: require('./local').oracle_user,
 
 
   /***************************************************************************

@@ -68,6 +68,10 @@ attributes: {
           type: 'string',
           columnName: 'FACEBOOKID'
       },
+      accessToken: {
+          type: 'string',
+          columnName: 'ACCESSTOKEN'
+      },
       registrationDate: {
           type: 'date',
           columnName: 'REGISTRATIONDATE'
@@ -75,6 +79,7 @@ attributes: {
       toJSON: function() {
           let obj = this.toObject();
           delete obj.password;
+          delete obj.accessToken;
           return obj;
       },
       validatePassword: function(password, next){

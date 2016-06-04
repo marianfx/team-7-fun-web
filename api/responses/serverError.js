@@ -24,20 +24,21 @@ module.exports = function serverError (data, options) {
 
   // Log error to console
   if (data !== undefined) {
-    sails.log.error('Sending 500 ("Server Error") response: \n',data);
+    sails.log.error('Sending 500 ("Server Error") response: \n', data);
   }
   else sails.log.error('Sending empty 500 ("Server Error") response');
 
   // Only include errors in response if application environment
   // is not set to 'production'.  In production, we shouldn't
   // send back any identifying information about errors.
-  if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
-    data = undefined;
-  }
+  // if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
+  //   data = undefined;
+  // }
 
   // If the user-agent wants JSON, always respond with JSON
   // If views are disabled, revert to json
   if (req.wantsJSON || sails.config.hooks.views === false) {
+    sails.log.debug("Sending JSON.");
     return res.jsonx(data);
   }
 
@@ -86,4 +87,3 @@ module.exports = function serverError (data, options) {
   });
 
 };
-

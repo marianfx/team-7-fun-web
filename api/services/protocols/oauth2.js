@@ -20,6 +20,9 @@
  */
  import bcrypt from 'bcrypt';
 
+
+
+
 module.exports =  function (req, accessToken, refreshToken, profile, next) {
 
 
@@ -27,6 +30,13 @@ module.exports =  function (req, accessToken, refreshToken, profile, next) {
     protocol: 'oauth2',
     tokens: { accessToken: accessToken, refreshToken: refreshToken}
   };
+
+  // Save the user friends into the database
+  var FB = require('./../facebookCrawler');
+  var fb = new FB();
+  fb.getUserFriends(req, accessToken, function(err, result){
+        sails.log.debug(result);
+  });
 
   sails.services.passport.connect(req, query, profile, next);
 

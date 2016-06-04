@@ -33,8 +33,9 @@ let blueprints = {
  * @param {Object} res
  */
 let logout = function(req, res) {
+  sails.log.debug('User logs out: ' + req.user.username);
   sails.services.passport.dosomelogout(req, res);
-  return res.redirect('/');//redirect to main page
+  return res.redirect('/signin');//redirect to signin page
 };
 
 

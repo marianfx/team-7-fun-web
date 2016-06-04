@@ -22,5 +22,5 @@ module.exports = function(req, res, next) {
 
   // User is not allowed
   // (default res.forbidden() behavior can be overridden in `config/403.js`)
-  return res.forbidden();
+  return res.forbidden({message: 'Only available to do this on yourself, don\'t destroy other\'s profiles.'});
 };

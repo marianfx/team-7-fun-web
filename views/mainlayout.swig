@@ -23,12 +23,12 @@
   </title>
 
   <!-- Favicons-->
-  <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" href="images/favicon/logo_32x32.png" sizes="32x32">
   <!-- Favicons - for iPhone-->
-  <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon-precomposed" href="images/favicon/logo_152x152.png">
   <!-- Favicons - For Windows Phone-->
   <meta name="msapplication-TileColor" content="#00bcd4">
-  <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+  <meta name="msapplication-TileImage" content="images/favicon/logo_144x144.png">
 
   {% block head %}
   <!--STYLES-->
@@ -38,6 +38,8 @@
   <link type="text/css" rel="stylesheet" href="./styles/materialize.css" media="screen,projection" />
   <!--Import sweetalert(swal).css-->
   <link type="text/css" rel="stylesheet" href="./styles/sweetalert.css" media="screen,projection" />
+  <!--Import perfect scrollbar.css-->
+  <link type="text/css" rel="stylesheet" href="./styles/perfect-scrollbar.css">
 
   <!--STYLES END-->
   {% endblock %}
@@ -51,8 +53,9 @@
 
   <!--SCRIPTS-->
   <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="./js/materialize.min.js"></script>
+  <script type="text/javascript" src="./js/materialize.js"></script>
   <script type="text/javascript" src="./js/sweetalert.min.js"></script>
+  <script type="text/javascript" src="./js/perfect-scrollbar.js"></script>
   <!--SCRIPTS END-->
   {% endblock %}
 </body>

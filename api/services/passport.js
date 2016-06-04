@@ -13,6 +13,7 @@ passport.strategiesLoaded = false;
 
 passport.protocols = require('./protocols');//import the array of protocols defined in protocols
 
+
 /**
 * @description Given a profile (obtained from Oauth2 provider), parse info from it into the user.
 * @param profile is object, usually having fields like: id, username, displayName, gender, emails, photos etc.
@@ -29,17 +30,19 @@ let createUserFromProfileData = function(profile, tokens){
 
       // If the profile object contains a username, add it to the user.
       if (_.has(profile, 'username') && profile.username) {
-        user.username = profile.username;
+          user.username = profile.username;
+          user.facebookId = profile.username;
       }
       else{
           user.username = profile.id;//take the facebook id as username
+          user.facebookId = profile.id;
       }
 
       // add other fileds from the profile
 
       // ## access token ##
       if (tokens) {
-        user.facebookId = tokens.accessToken;
+        user.accessToken = tokens.accessToken;
       }
 
       // ## photo URL ##
@@ -50,6 +53,7 @@ let createUserFromProfileData = function(profile, tokens){
     return user;
 };
 
+
 /**
 * @description If access tokens have changed, update the user in the Db Accordingly.
 * @param user is the user to update
@@ -58,10 +62,13 @@ let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, n
 
     // If the tokens have changed since the last session, update them
     if ( queryHasTokens &&
-        (user.facebookId != c_user.facebookId)) {
+        (user.accessToken != c_user.accessToken)) {
 
       var query = {id: user.id};
-      var toUpdate = {facebookId: c_user.facebookId};
+      var toUpdate = {accessToken: c_user.accessToken};
+
+      if(!user.facebookId)
+        toUpdate.facebookId = c_user.facebookId;
 
       // Save any updates to the Passport before moving on
       return sails.models.user.update(query, toUpdate)
@@ -141,9 +148,13 @@ passport.connect = function (req, query, profile, next) {
     return next(new Error('Cannot identify email. Cannot create account.'), false, { status: 0});
   }
 
-  // unique search after email
+  // search for possible existing user to associate (after email or facebookId)
   sails.models.user.findOne({
-      email: user.email
+      or: [
+        {facebookId: user.facebookId},
+        {email: user.email}
+      ]
+
     })
     .exec(function (errr, _user) {
 
@@ -209,11 +220,16 @@ passport.disconnect = function (req, res, next) {
   var provider = req.param('provider');
 
   return sails.models.user.findOne({
-      email: user.email
+      or: [
+        {facebookId: user.facebookId},
+        {email: user.email}
+      ]
+
     })
     .then(function (_user) {
 
         _user.facebookId = '';
+        _user.accessToken = '';
         _user.save();
         return next(null, user);
     })
