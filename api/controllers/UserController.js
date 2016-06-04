@@ -43,7 +43,7 @@ module.exports = {
       query = req.body.id;
 
     sails.services.passport.protocols.local.updateUser(query, req.body, function(err, user) {
-      if (err) return res.negotiate(err);
+      if (err) return res.serverError("Something bad happend on server");
 
       req.user = user;
       res.ok(user);
@@ -66,7 +66,7 @@ module.exports = {
 
 
     sails.services.passport.protocols.local.deleteUser(query, function(err) {
-      if (err) return res.negotiate(err);
+      if (err) return res.serverError("An error occured  while deleting user");
 
       // here we also logout the user
       sails.services.passport.dosomelogout(req, res);

@@ -35,12 +35,14 @@ module.exports.routes = {
         controller: 'GameController',
         action: 'render'
     },
+
     'GET /signup': {
         view: 'auth/signup'
     },
     'GET /signin': {
         view: 'auth/signin'
     },
+
     'POST /register': {
         controller: 'UserController',
         action: 'create'
@@ -49,6 +51,7 @@ module.exports.routes = {
         controller: 'AuthController',
         action: 'logout'
     },
+
     'POST /auth/local': {
         controller: 'AuthController',
         action: 'callback'
@@ -69,6 +72,20 @@ module.exports.routes = {
         controller: 'AuthController',
         action: 'callback'
     },
+
+    'GET /players/:id': {
+        controller: 'PlayerController',
+        action: 'find'
+    },
+    'GET /players/myinventory': {
+        controller: 'PlayerController',
+        action: 'getInventory'
+    },
+    'POST /players/buy/:itemID': {
+        controller: 'PlayerController',
+        action: 'buyItem'
+    },
+
     'POST /friends': {
         controller: 'FriendController',
         action: 'create'
@@ -76,10 +93,21 @@ module.exports.routes = {
     'GET /friends/:last/:limit': {
           controller: 'FriendController',
           action: 'find'
-    }
+    },
+
+    'GET /questions':{
+        controller: 'QuestionController',
+        action: 'render'
+
+      },
 
 
+      // post for subbmit ansfer in learning module
 
+      'POST /questions/submmit':{
+        controller: "QuestionController",
+        action: 'submmitRoundAnswers'
+      }
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

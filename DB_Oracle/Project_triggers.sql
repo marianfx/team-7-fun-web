@@ -66,7 +66,7 @@ EXCEPTION
           DBMS_OUTPUT.PUT_LINE('Cannot log info about operation because logger table does not exist.');
 END;
 
-
+/
 -- THIS TRIGGER LOGS INFORMATION WHEN AN USER UPGRADES (PLAYERS TABLE)
 CREATE OR REPLACE TRIGGER T_LOGGER_PLAYERS
       AFTER
@@ -96,7 +96,7 @@ EXCEPTION
           DBMS_OUTPUT.PUT_LINE('Cannot log info about operation because logger table does not exist.');
 END;
 
-
+/
 -- THIS TRIGGER LOGS INFORMATION WHEN AN USER wins / loses / logins (PLAYERS TABLE)
 CREATE OR REPLACE TRIGGER T_LOGGER_STATISTICS
       AFTER
@@ -142,7 +142,7 @@ EXCEPTION
           DBMS_OUTPUT.PUT_LINE('Cannot log info about operation because logger table does not exist.');
 END;
 
-
+/
 -- THIS TRIGGER LOGS INFORMATION WHEN two users became friends
 CREATE OR REPLACE TRIGGER T_LOGGER_FRIENDS
       AFTER
@@ -173,5 +173,5 @@ EXCEPTION
           DBMS_OUTPUT.PUT_LINE('Cannot log info about operation because logger table does not exist.');
 END;
 
-
+/
 commit;

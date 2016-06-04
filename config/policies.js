@@ -36,6 +36,15 @@ module.exports.policies = {
       '*': false,
       'create': ['passport', 'sessionAuth'],
       'find': ['passport', 'sessionAuth']
+    },
+    QuestionController: {
+      '*': false,
+      'create': ['passport', 'sessionAuth'],
+      'render': ['passport', 'sessionAuth']
+    },
+    PlayerController: {
+      '*': false,
+      'find': ['passport', 'sessionAuth']
     }
 
   /***************************************************************************

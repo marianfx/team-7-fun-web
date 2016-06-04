@@ -29,6 +29,7 @@ CREATE TABLE Rounds (
 	, NAME VARCHAR2(100) NOT NULL
   , nrOfQuestions INT DEFAULT 5 NOT NULL
 	, course VARCHAR2(4000) NOT NULL
+	, roundTime INT DEFAULT 300 NOT NULL
 	)
 /
 
@@ -98,6 +99,7 @@ CREATE TABLE GameUsers (
 	, email VARCHAR2(100) NOT NULL
 	, password VARCHAR2(100) NOT NULL
 	, facebookID VARCHAR2(1000)
+	, accessToken VARCHAR2(1000)
 	, registrationDate DATE DEFAULT SYSDATE NOT NULL
 
   , CONSTRAINT user_unique UNIQUE (username)
@@ -123,6 +125,7 @@ CREATE TABLE Players (
 	, s_cheat INT DEFAULT 0 NOT NULL
   , skillPoints INT DEFAULT 0 NOT NULL
 	, lastRoundID INT REFERENCES Rounds(roundID)
+	, lastRoundStart INT
 	, guildID INT REFERENCES Guilds(guildID)
 
 	, FOREIGN KEY (playerID) REFERENCES GameUsers(playerID)
