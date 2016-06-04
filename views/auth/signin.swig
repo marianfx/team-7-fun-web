@@ -15,7 +15,7 @@
 
 			<div class="row">
 				<div class="input-field col s12 center">
-						<img src="images/logo.png" alt="" class="circle responsive-img valign profile-image-login">
+						<img src="images/favicon/logo_64x64.png" alt="" class="circle responsive-img valign profile-image-login">
 						<p class="center login-form-text">Log into the Fun Web</p>
 				</div>
 			</div>
