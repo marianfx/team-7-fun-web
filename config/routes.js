@@ -36,6 +36,10 @@ module.exports.routes = {
         action: 'render'
     },
 
+    'GET /game': {
+        view: 'game/game'
+    },
+
     'GET /signup': {
         view: 'auth/signup'
     },
@@ -100,14 +104,12 @@ module.exports.routes = {
         action: 'render'
 
       },
-
-
       // post for subbmit ansfer in learning module
 
-      'POST /questions/submmit':{
-        controller: "QuestionController",
-        action: 'submmitRoundAnswers'
-      }
+    'POST /questions/submmit':{
+      controller: "QuestionController",
+      action: 'submmitRoundAnswers'
+    }
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

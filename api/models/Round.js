@@ -26,7 +26,10 @@ module.exports = {
       columnName: 'COURSE'
     },
     roundTime: {
-      columnName: 'ROUNDTIME'
+        columnName: 'ROUNDTIME'
+    },
+    courseId: {
+        columnName: 'COURSEID'
     }
   }
 };

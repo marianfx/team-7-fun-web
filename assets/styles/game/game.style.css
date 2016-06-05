@@ -253,7 +253,6 @@ li.home:before {
     position: absolute;
     left: 48%;
     top: 46%;
-    background: url("../images/user-bg-2.jpg") no-repeat center center;
     z-index: 1001
 }
 
@@ -588,11 +587,6 @@ ul.side-nav.leftside-navigation li a {
 }
 
 ul.side-nav.leftside-navigation li.user-details {
-    background: url("../images/user-bg.jpg") no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
     margin-bottom: 15px;
     padding: 15px 0 0 15px
 }

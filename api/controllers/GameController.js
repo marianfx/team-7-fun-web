@@ -14,11 +14,11 @@ module.exports = {
 	},
 
 
-	renderPlayerInfo: function(req, res, next){
-			var pid = req.user.id;
+	renderCourse: function(req, res, next){
 
-			sails.controllers.player.getPlayer(pid, (err, data) => {
+			var object = {};
+			object.me = req.user;
 
-			});
+
 	}
 };
