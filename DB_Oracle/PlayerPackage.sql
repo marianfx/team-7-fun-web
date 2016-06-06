@@ -1,14 +1,3 @@
-DROP PACKAGE player_package;/
-CREATE OR REPLACE PACKAGE player_package IS
-  
-  v_exp_round INT:=50;
-  PROCEDURE  update_battle_end  (p_playerID INT, p_winnerflag INT);
-  -- procent 100% = 1 ;
-  PROCEDURE  update_experience  (p_playerid INT, p_roundid INT, p_procent INT, p_punctaj INT);
-  PROCEDURE  update_skill  (p_playerid INT, p_skillname VARCHAR2, p_skillpoints INT);
-  
-END player_package;
-/
 create or replace PACKAGE BODY player_package IS
 
  PROCEDURE  update_battle_end (p_playerID INT,p_winnerflag INT)
@@ -37,11 +26,11 @@ create or replace PACKAGE BODY player_package IS
            UPDATE playersstatistics SET loses=loses+1 WHERE playerid=p_playerid;
           
           IF(v_guild_id IS NOT NULL ) THEN
-              UPDATE GUILDS SET wins=wins+1 WHERE guildid=v_guild_id;
+              UPDATE GUILDS SET loses=loses+1 WHERE guildid=v_guild_id;
           END IF;
            
     END IF;
-    
+    COMMIT;
   
   END update_battle_end;
   
@@ -88,7 +77,7 @@ create or replace PACKAGE BODY player_package IS
       PlayerLevel=PlayerLevel+1 
       WHERE playerid=p_playerid;
     END IF;
-    
+    COMMIT;
   END update_experience;
   
   PROCEDURE  update_skill  (p_playerid INT, p_skillname VARCHAR2, p_skillpoints INT)
@@ -101,17 +90,18 @@ create or replace PACKAGE BODY player_package IS
     IF(p_skillpoints>v_skill_points) THEN -- you don't have such much avaible skillpoints
       RAISE TWExceptions.insufficient_points;
     END IF;
+    
 
        EXECUTE IMMEDIATE 'UPDATE Players 
                             SET '||p_skillname||'='||p_skillname||'+ :1 ,
                                 SKILLPOINTS = SKILLPOINTS - ' || p_skillpoints ||
                            'WHERE playerID = :2' 
                USING p_skillpoints, p_playerid; 
-    
+    COMMIT;
     EXCEPTION
 					WHEN TWExceptions.insufficient_points
 								THEN RAISE_APPLICATION_ERROR(-20006, 'Not avaible this number of skillpoints');
-  END update_skill;
-  
-END player_package;
 
+  END update_skill;
+ 
+END player_package;
