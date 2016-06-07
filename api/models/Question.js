@@ -12,6 +12,11 @@ module.exports = {
   tableName: 'QUESTIONS',
 
   attributes: {
+    questionID: {
+      type: 'integer',
+      unique: true,
+      columnName: 'QUESTIONID'
+    },
     question: {
         type: 'string',
         required: true,

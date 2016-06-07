@@ -34,8 +34,12 @@ CREATE TABLE COURSES
     PHOTOURL VARCHAR2(500) DEFAULT '/images/courses/defaultCourse.png',
     AUTHOR VARCHAR2(200) DEFAULT 'Community',
     CREATIONDATE DATE DEFAULT sysdate
-
 )
+/
+
+INSERT INTO COURSES(TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES('Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , 'images/courses/welcome.png')
+/
+COMMIT;
 /
 
 -- ############# Rounds Table ##########
@@ -44,10 +48,18 @@ CREATE TABLE Rounds (
 	, NAME VARCHAR2(100) NOT NULL
   , nrOfQuestions INT DEFAULT 5 NOT NULL
 	, course VARCHAR2(4000) NOT NULL
-	, roundTime INT DEFAULT 300 NOT NULL
+	, roundTime DATE
+  , courseId INT NOT NULL
+  , points INT DEFAULT 100 NOT NULL
+
+  ,  FOREIGN KEY (courseId) REFERENCES COURSES(courseId)
 	)
 /
 
+INSERT INTO ROUNDS(NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES('DEFAULT', 5, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
+/
+COMMIT;
+/
 
 -- ############# Questions Table ##########
 CREATE TABLE Questions (
@@ -139,8 +151,8 @@ CREATE TABLE Players (
 	, s_time INT DEFAULT 0 NOT NULL
 	, s_cheat INT DEFAULT 0 NOT NULL
   , skillPoints INT DEFAULT 0 NOT NULL
-	, lastRoundID INT REFERENCES Rounds(roundID) DEFAULT 1
-	, lastRoundStart INT
+	, lastRoundID INT DEFAULT 1 REFERENCES Rounds(roundID)
+	, lastRoundStart DATE
 	, guildID INT REFERENCES Guilds(guildID)
 
 	, FOREIGN KEY (playerID) REFERENCES GameUsers(playerID)

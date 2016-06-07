@@ -40,18 +40,13 @@ module.exports.policies = {
     QuestionController: {
       '*': false,
       'create': ['passport', 'sessionAuth'],
-      'render': ['passport', 'sessionAuth']
+      'render': ['passport', 'sessionAuth'],
+      'submmitRoundAnswers': ['passport', 'sessionAuth']
     },
     PlayerController: {
       '*': false,
       'find': ['passport', 'sessionAuth']
-    },
-    CourseController: {
-      '*': true
-    },
-    GameController: {
-        '*': true
-    },
+    }
 
   /***************************************************************************
   *                                                                          *

@@ -1,18 +1,3 @@
-{% extends '../mainlayout.swig' %}
-
-{% block title %}Log-into the fun
-	{% parent %}{% endblock %}
-
-{% block head %}
-	{% parent %}
-	<link type="text/css" rel="stylesheet" href="styles/game/rounds.css">
-	<link type="text/css" rel="stylesheet" href="styles/game/flipclock.css">
-	<link rel="stylesheet" href="styles/game/normalize.css"/>
-	<link rel="stylesheet" href="styles/game/ion.rangeSlider.css"/>
-	<link rel="stylesheet" href="styles/game/ion.rangeSlider.skinFlat.css"/>
-{% endblock %}
-
-{% block content %}
 
 	<!-- the timer -->
 	<div class="clock" style="width: 300px; margin: auto;"></div>
@@ -33,24 +18,8 @@
 				</li>
 			{% endfor %}
 		</ul>
+		<button id = "submmitBtn" class="btn waves-effect waves-light" type="submit" name="action">Submit
+			<i class="material-icons right">send</i>
+		</button>
+
 	</div>
-
-	<button id = "submmitBtn" class="btn waves-effect waves-light" type="submit" name="action">Submit
-    <i class="material-icons right">send</i>
-  </button>
-
-
-
-
-
-
-
-{% endblock %}
-
-{% block footer %}
-	{% parent %}
-	<!--Import script for this page-->
-	<script type="text/javascript" src="js/game/flipclock.js"></script>
-	<script type="text/javascript" src="js/game/rounds.js"></script>
-	<script type="text/javascript" src="js/game/ion.rangeSlider.js"></script>
-{% endblock %}

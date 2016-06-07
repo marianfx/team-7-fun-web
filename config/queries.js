@@ -11,4 +11,16 @@ module.exports.queries = {
 
     questions_loader: "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;",
 
+    update_starttime: 'BEGIN UPDATE PLAYERS SET LASTROUNDSTART=SYSDATE WHERE PLAYERID = :id;  COMMIT; END;',
+
+    null_starttime: 'BEGIN UPDATE PLAYERS SET LASTROUNDSTART=NULL WHERE PLAYERID = :id;  COMMIT; END;',
+
+    getpast_roundtime: 'SELECT round((sysdate - LASTROUNDSTART) * (60 * 60 * 24), 2) AS DIFFERENCE from PLAYERS WHERE PLAYERID = :id',
+
+    get_roundrow: 'SELECT * FROM ROUNDS WHERE ROUNDID=:id',
+
+    update_experience: 'BEGIN  PLAYER_PACKAGE.UPDATE_EXPERIENCE(:playerid, :roundid, :precent); COMMIT; END;',
+
+    get_lastroundstart: 'SELECT LASTROUNDSTART FROM PLAYERS WHERE PLAYERID= :id'
+
 };
