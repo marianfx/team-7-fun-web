@@ -32,12 +32,12 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
     'GET /': {
-        controller: 'GameController',
-        action: 'render'
+        view: 'game/game'
     },
 
     'GET /game': {
-        view: 'game/game'
+      controller: 'GameController',
+      action: 'render'
     },
 
     'GET /signup': {
@@ -75,6 +75,15 @@ module.exports.routes = {
     'GET /auth/:provider/:action': {
         controller: 'AuthController',
         action: 'callback'
+    },
+
+    'GET /render/me': {
+        controller: 'PlayerController',
+        action: 'render'
+    },
+    'GET /render/courses': {
+        controller: 'CourseController',
+        action: 'render'
     },
 
     'GET /players/:id': {

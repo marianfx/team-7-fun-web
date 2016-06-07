@@ -79,8 +79,10 @@ module.exports = {
     var roundId = req.param('roundID');
     var nQ = req.param('nrQuestions');
 
-    if (!roundId || !nQ)
+    if (!roundId || !nQ){
+      sails.log.debug('Bad request.');
       return res.badRequest('You should specify all the data for the questions (roundID and nrQuestions).');
+    }
 
     setStartRound(req.user.id);
 
@@ -197,76 +199,81 @@ let sentResultRound = function(req, res, finalList, status, correctAnswers) {
     query = sails.config.queries.null_starttime;
       DB.procedureSimple(query, binds, (err) =>{
         if (err) return res.serverError("Error in server sorry for that");
-      });
-    sails.log.debug("diff=" + diff);
-    ///////////////////////////////////////
-    // load lastRoundId for user witch subbmited answers
-    var PlayerDataLoader = new sails.services.playerdataloader();
-    PlayerDataLoader.getLastRound(req.user.id, (err, roundID)=>{
-      query = sails.config.queries.get_roundrow;
-      binds = {
-        id: roundID
-      };
-      DB.executeQuery(query, binds, (err, result) => {
-        if (err) return res.serverError("Cannot read proprety time for current roundID");
-        roundTime = result[0].ROUNDTIME;
-        nrOfQuestions =  result[0].NROFQUESTIONS;
-        sails.log.debug("RoundTime" + roundTime);
 
-        sails.log.debug("Raspunsuri correcte"+correctAnswers);
-
-        var currPercent=(correctAnswers*100)/nrOfQuestions;
-        var pastCourse;
-        if(currPercent>70)
-            pastCourse=true;
-        else
-            pastCourse=false;
-        if (diff > roundTime){ // user is late and have to repeat
-          status = false;
-          var Json = {
-            flagTime: status,
-            flagnextRound: pastCourse,
-            correctAnswers: finalList
+        sails.log.debug("diff=" + diff);
+        ///////////////////////////////////////
+        // load lastRoundId for user witch subbmited answers
+        var PlayerDataLoader = new sails.services.playerdataloader();
+        PlayerDataLoader.getLastRound(req.user.id, (err, roundID)=>{
+          query = sails.config.queries.get_roundrow;
+          binds = {
+            id: roundID
           };
-          return res.json(Json);
-        }
-        else
-          status = true;
+          DB.executeQuery(query, binds, (err, result) => {
+            if (err)
+              return res.serverError("Cannot read proprety time for current roundID");
 
-        var Json;
-        if(status && pastCourse){
-          query=sails.config.queries.update_experience;
-          binds={
-            playerid: req.user.id,
-            roundid: roundID,
-            precent: currPercent
-          }
-          DB.procedureSimple(query, binds, (err)=>{
-            if(err)
-               res.serverError("Error on update experience, please try to replay that round");
+            roundTime = result[0].ROUNDTIME;
+            nrOfQuestions =  result[0].NROFQUESTIONS;
+            sails.log.debug("RoundTime" + roundTime);
 
-            Json = {
-              flagTime: status,
-              flagnextRound: pastCourse,
-              correctAnswers: finalList
-            };
-            return res.json(Json);
+            sails.log.debug("Raspunsuri correcte"+correctAnswers);
+
+            var currPercent=(correctAnswers*100)/nrOfQuestions;
+            var pastCourse;
+            if(currPercent>70)
+                pastCourse=true;
+            else
+                pastCourse=false;
+            if (diff > roundTime){ // user is late and have to repeat
+              status = false;
+              var Json = {
+                flagTime: status,
+                flagnextRound: pastCourse,
+                correctAnswers: finalList
+              };
+              return res.json(Json);
+            }
+            else
+              status = true;
+
+            var Json;
+            if(status && pastCourse){
+              query=sails.config.queries.update_experience;
+              binds={
+                playerid: req.user.id,
+                roundid: roundID,
+                precent: currPercent
+              };
+              DB.procedureSimple(query, binds, (err)=>{
+                if(err)
+                   res.serverError("Error on update experience, please try to replay that round");
+
+                Json = {
+                  flagTime: status,
+                  flagnextRound: pastCourse,
+                  correctAnswers: finalList
+                };
+                return res.json(Json);
+
+              });
+            }
+            else
+            {
+              Json = {
+                flagTime: status,
+                flagnextRound: pastCourse,
+                correctAnswers: finalList
+              };
+              return res.json(Json);
+            }
+
+        });
 
           });
-        }
-        else
-        {
-          Json = {
-            flagTime: status,
-            flagnextRound: pastCourse,
-            correctAnswers: finalList
-          };
-          return res.json(Json);
-        }
-
     });
 
-      });
+
     });
 
 

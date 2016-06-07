@@ -1,28 +1,12 @@
 
-
 module.exports = function(){
 
-    /**
-     * Given a course ID, load and return all the rounds for it.
-     * @method loadRoundsForCourse
-     * @param  {[type]}            _courseId [The ID of the course]
-     * @param  {Function}          next      [(err, resultRows)]
-     */
-    this.loadRoundsForCourse = function(_courseId, next){
-      Round.find()
-           .where({courseId: _courseId})
-           .then( (_rounds) => {
-                return next(null, _rounds);
-           })
-           .catch(next);
-    };
 
     /**
      * Given a player ID, loads it's round id only from the DB
      * @method function
-     * @param  {[type]}   _playerId [description]
-     * @param  {Function} next      [description]
-     * @return {[type]}             [description]
+     * @param  {[integer]}   _playerId [the player id]
+     * @param  {Function(err, lastRoundId)} next      [(err, lastRoundId)]
      */
     this.getLastRound = function(_playerId, next){
 
@@ -34,6 +18,61 @@ module.exports = function(){
             return next(err);
 
           return next(null, result[0].LASTROUNDID);
+      });
+    };
+
+
+    /**
+     * Gets all of the user friends
+     * @method function
+     */
+    this.getFriendsList = function(_playerId, next) {
+
+      var DB = new sails.services.databaseservice();
+      var query = sails.config.queries.all_friends;
+      var binds = {me: _playerId};
+      DB.executeQuery(query, binds, (err, result) => {
+          if(err)
+            return next(err);
+
+          return next(null, result);
+      });
+    };
+
+
+    /**
+     * Loads all player info (including previous courses)
+     * @method function
+     */
+    this.getAllPlayerInfo = function(_playerId, next){
+
+      var object = {};
+      var CourseLoader     = new sails.services.courseloader();
+
+      // load player data
+      sails.controllers.player.getPlayer(_playerId, (err, players) => {
+          if(err)
+            return next(err);
+
+          object.user = players[0];
+          object.user.nextlvl = 50 * Math.pow(2, object.user.PLAYERLEVEL + 1);//progresie geom
+
+          CourseLoader.renderRoundsUntilX(_playerId, (err, result) => {
+              if(err)
+                return next(err);
+
+              object.courses = result.courses;
+
+              this.getFriendsList(_playerId, (err, friendlist) => {
+                  if(err)
+                    return next(err);
+
+                  object.friends = friendlist;
+                  // sails.log.debug(object);
+                  return next(null, object);
+
+              });
+          });
       });
     };
 };

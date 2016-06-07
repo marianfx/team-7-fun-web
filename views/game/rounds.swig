@@ -1,5 +1,6 @@
 
 	<!-- the timer -->
+	<link type="text/css" rel="stylesheet" href="./styles/game/flipclock.css">
 	<div class="clock" style="width: 300px; margin: auto;"></div>
 
 	<div class="Questions">

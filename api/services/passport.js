@@ -38,6 +38,9 @@ let createUserFromProfileData = function(profile, tokens){
           user.facebookId = profile.id;
       }
 
+      if(profile.displayName)
+        user.name = profile.displayName;
+
       // add other fileds from the profile
 
       // ## access token ##
@@ -83,6 +86,31 @@ let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, n
 
     // if nothing changed, just send the same response
     return next(null, req.user, {status: 1});
+};
+
+
+/**
+ * Updates facebook profile pic and friends
+ * @method function
+ */
+let updateFacebookData = function(req, userData, id, next){
+
+  // Save the user friends into the database
+  var FB = new sails.services.facebookcrawler();
+  FB.getUserFriends(req, userData.accessToken, function(err, result){
+        // sails.log.debug(result);
+        Player.findOne()
+              .where({playerID: id})
+              .then((_playa) => {
+                  _playa.photoURL = userData.photoUrl;
+                  _playa.lastRoundID = 1;
+                  _playa.playerName = userData.name;
+                  _playa.save();
+                  // sails.log.debug(_playa);
+                  return next();
+              })
+              .catch(next);
+  });
 };
 
 
@@ -176,8 +204,12 @@ passport.connect = function (req, query, profile, next) {
                     return next(err, false, {status: 0});
                 }
 
-                sails.log.debug('Success creating user: ', c_user);
-                next(null, c_user, {status: 1});
+                // sails.log.debug('Success creating user: ', c_user);
+
+                // here update facebook profile data, including friends
+                updateFacebookData(req, user, c_user.id, (err) => {
+                    next(err, c_user, {status: 1});
+                });
             },
                 true);//this means generate password
 

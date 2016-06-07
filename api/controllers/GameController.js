@@ -1,24 +1,17 @@
 
 
-var swig = require('swig');
-
 module.exports = {
 
 	render: function(req, res) {
 
-		if (!req.user) {
-			res.redirect('/signin');
-		} else {
-			res.redirect('/game');
-		}
-	},
+		// if (!req.user) {
+		// 	return res.redirect('/signin');
+		// }
 
-
-	renderCourse: function(req, res, next){
-
-			var object = {};
-			object.me = req.user;
-
-
+		var swig = require('swig');
+		var rendered = swig.renderFile('./views/game/game.swig');
+		return res.ok(rendered);
 	}
+
+
 };

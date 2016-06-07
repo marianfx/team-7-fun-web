@@ -1,32 +1,23 @@
 var answers = {};
 var time;
 
-$(document).ready(function() {
+function startRounds() {
 
 
-  var clock = $('.clock').FlipClock(20, {
+  var clock = $('.clock').FlipClock(300, {
     clockFace: 'MinuteCounter',
     countdown: true,
     autoStart: true,
     defaultLanguage: 'ro',
     callbacks: {
       stop: function() {
-        //alert('The clock has stopped!');
+        swal({
+          title: "Sorry..",
+          text: "You exceeded your time!",
+          type: "error"
+        });
       }
     }
-  });
-
-  $("#range").ionRangeSlider({
-    hide_min_max: true,
-    keyboard: true,
-    min: 0,
-    max: 50000,
-    from: 1000,
-    to: 4000,
-    type: 'double',
-    step: 1,
-    prefix: "$",
-    grid: true
   });
 
 
@@ -35,8 +26,7 @@ $(document).ready(function() {
   });
 
   $("#submmitBtn").click(function() {
-    console.log(answers);
-    console.log("am apasat subbmit");
+    // console.log(answers);
     submmitAnswer();
     swal({
       title: "Waiting for checking your answers",
@@ -49,11 +39,11 @@ $(document).ready(function() {
     });
   });
 
-  $("#homeBtn").click(function(){
-    ///Fx's function for going home
-    console.log("FX");
-  });
-});
+};
+//
+//
+// $(document).ready(startRounds);
+
 
 function doSelect(me) {
   var parent = $(me).parent().attr("id");
@@ -70,7 +60,7 @@ function doSelect(me) {
   answers[parent] = value;
 
 
-  console.log(answers);
+  // console.log(answers);
 
 }
 
@@ -104,24 +94,32 @@ function submmitAnswer() {
 function processResponse(result) {
 
   if (!result.flagTime) {
-    console.log("you're missing the bus sorry");
     swal({
-      title: "You're the best!",
-      text: "You passed that exam...",
+      title: "Sorry..",
+      text: "You exceeded your time!",
       type: "error"
     });
   } else {
-    if (result.flagnextRound)
-      console.log("you're the best");
 
-    swal({
-      title: "You're the best!",
-      text: "You passed that exam...",
-      type: "success",
-      timer: 2000,
-      showConfirmButton: false
-    });
-
+    if (result.flagnextRound){
+      // console.log("you're the best");
+      swal({
+        title: "You're the best!",
+        text: "You passed the exam...",
+        type: "success",
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+    else {
+      swal({
+        title: "Oh, snap..",
+        text: "You did not passed the exam...",
+        type: "warning",
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
     var ans = result.correctAnswers;
     for (var x in ans) {
       console.log(x);
@@ -133,11 +131,13 @@ function processResponse(result) {
       console.log(elem);
       $(elem).addClass('green');
 
-
     }
-    var home= $('<a id="homeBtn" class="waves-effect waves-light  btn">home</a>');
-       $(".Questions").append(home);
 
+    var home= $('<a id="homeBtn" class="waves-effect waves-light  btn">HOME</a>');
+     $(".Questions").append(home);
+     $("#homeBtn").click(function(){
+          window.location.href = '/game';
+     });
   }
 
 }

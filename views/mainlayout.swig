@@ -35,9 +35,9 @@
   <!--Import Google Icon Font-->
   <link type="text/css" rel="stylesheet" href="./styles/font.css">
   <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="./styles/materialize.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="./styles/materialize.css" media="screen" />
   <!--Import sweetalert(swal).css-->
-  <link type="text/css" rel="stylesheet" href="./styles/sweetalert.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet" href="./styles/sweetalert.css" media="screen" />
   <!--Import perfect scrollbar.css-->
   <link type="text/css" rel="stylesheet" href="./styles/perfect-scrollbar.css">
 
@@ -52,10 +52,10 @@
   {% block content %}{% endblock %} {% block footer %}
 
   <!--SCRIPTS-->
-  <script type="text/javascript" src="./js/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="./js/materialize.js"></script>
-  <script type="text/javascript" src="./js/sweetalert.min.js"></script>
-  <script type="text/javascript" src="./js/perfect-scrollbar.js"></script>
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/materialize.js"></script>
+  <script src="./js/sweetalert.min.js"></script>
+  <script src="./js/perfect-scrollbar.js"></script>
   <!--SCRIPTS END-->
   {% endblock %}
 </body>

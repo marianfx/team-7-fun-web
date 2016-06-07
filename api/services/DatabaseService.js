@@ -105,7 +105,7 @@ module.exports = function() {
                 function (err, connection) {
                     if(err) {
                         sails.log.debug(err.message);
-                        return next(err, null);
+                        return next(err, []);
                     }
 
                     connection.execute(
@@ -114,7 +114,7 @@ module.exports = function() {
                         function (err, result) {
                             if(err) {
                                 sails.log.debug(err);
-                                return next(err, null);
+                                return next(err, []);
                             }
 
                             return next(err, result.rows);

@@ -1,4 +1,5 @@
-$(function() {
+
+var pluginspreparer = function() {
     "use strict";
 
     function a(a) {
@@ -133,4 +134,6 @@ $(function() {
     }), 480 >= d && $("#trending-line-chart").attr({
         height: "200"
     })
-});
+};
+
+$(pluginspreparer);

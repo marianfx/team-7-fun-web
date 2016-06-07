@@ -4,7 +4,7 @@
  * @description :: Server-side logic for managing Players
  */
 
-var swig = require('swig');
+ var swig             = require('swig');
 
 module.exports = {
 
@@ -90,6 +90,27 @@ module.exports = {
 		db.executeQuery(query, bindparams, function(err, data) {
 				next(err, data);
 		});
-	}
+	},
 
+
+	/**
+	 * [function description]
+	 * @method function
+	 */
+	render: function(req, res, next){
+
+			// load player info
+			// load friends
+			// load courses (smaller than the current one). For each one, add the rounds.
+			var me = req.user.id;
+			var PlayerLoader = new sails.services.playerdataloader();
+			PlayerLoader.getAllPlayerInfo(me, (err, result) => {
+					if(err)
+						return res.serverError(sails.config.messages.server_error_DB_fault);
+
+            var rendered = swig.renderFile('./views/game/playermenu.swig', {data: result});
+            return res.ok(rendered);
+			});
+
+	}
 };

@@ -45,8 +45,16 @@ module.exports.policies = {
     },
     PlayerController: {
       '*': false,
-      'find': ['passport', 'sessionAuth']
-    }
+      'render': ['passport', 'sessionAuth']
+      // '*': true
+    },
+    CourseController: {
+      '*': false,
+      'render': ['passport', 'sessionAuth']
+    },
+    GameController: {
+        '*': true
+    },
 
   /***************************************************************************
   *                                                                          *
