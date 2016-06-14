@@ -16,11 +16,30 @@ DROP TABLE Players CASCADE CONSTRAINTS;/
 
 DROP TABLE Questions CASCADE CONSTRAINTS;/
 
+DROP TABLE COURSES CASCADE CONSTRAINTS;/
+
 DROP TABLE Rounds CASCADE CONSTRAINTS;/
 
 DROP TABLE BattlesHistory CASCADE CONSTRAINTS;/
 
 DROP TABLE LOGGER_TABLE CASCADE CONSTRAINTS;/
+/
+
+CREATE TABLE COURSES
+(
+    COURSEID INT PRIMARY KEY NOT NULL,
+    TITLE VARCHAR2(500) NOT NULL,
+    SHORTDESC VARCHAR2(1000) NOT NULL,
+    HASHTAG VARCHAR2(100) NOT NULL,
+    PHOTOURL VARCHAR2(500) DEFAULT '/images/courses/defaultCourse.png',
+    AUTHOR VARCHAR2(200) DEFAULT 'Community',
+    CREATIONDATE DATE DEFAULT sysdate
+)
+/
+
+INSERT INTO COURSES(TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES('Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , 'images/courses/welcome.png')
+/
+COMMIT;
 /
 
 -- ############# Rounds Table ##########
@@ -29,9 +48,18 @@ CREATE TABLE Rounds (
 	, NAME VARCHAR2(100) NOT NULL
   , nrOfQuestions INT DEFAULT 5 NOT NULL
 	, course VARCHAR2(4000) NOT NULL
+	, roundTime DATE
+  , courseId INT NOT NULL
+  , points INT DEFAULT 100 NOT NULL
+
+  ,  FOREIGN KEY (courseId) REFERENCES COURSES(courseId)
 	)
 /
 
+INSERT INTO ROUNDS(NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES('DEFAULT', 5, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
+/
+COMMIT;
+/
 
 -- ############# Questions Table ##########
 CREATE TABLE Questions (
@@ -98,6 +126,7 @@ CREATE TABLE GameUsers (
 	, email VARCHAR2(100) NOT NULL
 	, password VARCHAR2(100) NOT NULL
 	, facebookID VARCHAR2(1000)
+	, accessToken VARCHAR2(1000)
 	, registrationDate DATE DEFAULT SYSDATE NOT NULL
 
   , CONSTRAINT user_unique UNIQUE (username)
@@ -114,7 +143,7 @@ ENABLE;
 CREATE TABLE Players (
 	  playerID INT NOT NULL PRIMARY KEY
 	, playerName VARCHAR2(100) NOT NULL
-	, photoURL VARCHAR2(1000) DEFAULT 'defaultPlayer.png' NOT NULL
+	, photoURL VARCHAR2(1000) DEFAULT '/images/avatars/defaultPlayer.png' NOT NULL
 	, experience INT DEFAULT 0 NOT NULL
 	, playerLevel INT DEFAULT 0 NOT NULL
 	, cookies INT DEFAULT 0 NOT NULL
@@ -122,7 +151,8 @@ CREATE TABLE Players (
 	, s_time INT DEFAULT 0 NOT NULL
 	, s_cheat INT DEFAULT 0 NOT NULL
   , skillPoints INT DEFAULT 0 NOT NULL
-	, lastRoundID INT REFERENCES Rounds(roundID)
+	, lastRoundID INT DEFAULT 1 REFERENCES Rounds(roundID)
+	, lastRoundStart DATE
 	, guildID INT REFERENCES Guilds(guildID)
 
 	, FOREIGN KEY (playerID) REFERENCES GameUsers(playerID)
@@ -235,7 +265,7 @@ CREATE TABLE Items (
 	, skillPoints INT -- can be null when the item represents course notes
 	, skill VARCHAR2(100) -- same
 	, cookiesCost INT NOT NULL
-	, filePath VARCHAR2(2000) DEFAULT 'item.png' NOT NULL
+	, filePath VARCHAR2(2000) DEFAULT '/images/items/defaultItem.png' NOT NULL
 	)
 /
 

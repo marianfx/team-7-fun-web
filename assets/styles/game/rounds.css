@@ -1,0 +1,25 @@
+html,
+body {
+    height: 100%;
+}
+html {
+    display: table;
+    margin: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+body {
+  display: table-cell;
+  vertical-align: middle;
+	background: url("images/bg.jpg");
+	background-size: cover;
+	background-repeat: none;
+}
+
+.cclock {
+  width: 300px !important;
+  margin: auto !important;
+}

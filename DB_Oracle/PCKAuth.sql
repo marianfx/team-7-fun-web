@@ -13,7 +13,7 @@ CREATE OR REPLACE PACKAGE authentication IS
 	PROCEDURE onUserRegister(p_playerID INT, p_username VARCHAR2);
 	PROCEDURE updateOnLogin(p_playerID INT);
   PROCEDURE onDeleteGameUser(p_playerID INT);
-  
+
 
 END authentication;
 /
@@ -34,7 +34,7 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 		v_password GameUsers.password%TYPE;
 
 	BEGIN
-  
+
      SELECT CASE
          WHEN EXISTS(SELECT username
                      FROM GameUsers
@@ -45,7 +45,7 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
          END
      INTO counter
      FROM dual;
-         
+
 			IF counter = 0
 			THEN
 					RAISE TWExceptions.inexistent_user;
@@ -62,7 +62,7 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 			THEN
           RAISE TWExceptions.wrong_password;
 			END IF;
-      
+
       AUTHENTICATION.UPDATEONLOGIN(v_playerID);
 			RETURN v_playerID;
 
@@ -142,9 +142,9 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
 			INSERT INTO Players (playerID, playerName) VALUES (p_playerID, p_username);
 			INSERT INTO PlayersStatistics (playerID) VALUES (p_playerID);
 	END onUserRegister;
-  
+
   -- Trigger when user is deleted ( delete from GameUsers => delete from players and playersStatistics)
-  
+
   PROCEDURE onDeleteGameUser(p_playerID INT)
   IS
   BEGIN
@@ -153,13 +153,3 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
   END;
 END authentication;
 /
-DECLARE
-  a INT;
-BEGIN
-  a:=playerID_seq.nextval;
-  DATA_MANIPULATION.POPULATE_PLAYERS;
-  DATA_MANIPULATION.POPULATE_ROUNDS;
-  DATA_MANIPULATION.POPULATE_QUESTIONS;
-  
-END;
-
