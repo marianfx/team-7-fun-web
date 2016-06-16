@@ -1,0 +1,1 @@
+<b class="left">Skill points:</b> <b class="right"> {{ skillpoints }} </b>

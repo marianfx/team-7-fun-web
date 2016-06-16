@@ -1,0 +1,1 @@
+<b class="left">Cookies:</b> <b class="right"> {{ cookies }} </b>

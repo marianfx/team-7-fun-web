@@ -4,12 +4,89 @@ CREATE OR REPLACE PACKAGE Game_Managament
 IS
     TYPE general_cursor is REF CURSOR;
     PROCEDURE itemTransaction(p_playerID INT, p_itemID INT);
+    PROCEDURE addSkillTransaction(p_playerID INT, p_skill_name VARCHAR2);
+    PROCEDURE useLuck(p_playerID IN INT, p_random1 OUT INT, p_random2 OUT INT, p_what OUT INT);
     PROCEDURE loadQuestions(p_roundID INT, x INT, p_recordset OUT Game_Managament.general_cursor);
     PROCEDURE offsetNextPlayers(pageNumber INT, p_number_rows INT, p_recordset OUT Game_Managament.general_cursor);
     PROCEDURE saveGameHistory(p_playerID1 INT, p_playerID2 INT, p_winnerID INT);
 END Game_Managament;
 /
 CREATE OR REPLACE PACKAGE BODY Game_Managament IS
+
+    PROCEDURE useLuck(p_playerID IN INT, p_random1 OUT INT, p_random2 OUT INT, p_what OUT INT)
+    IS
+    v_prize_value INT;
+    v_prize VARCHAR2(20);
+    v_luck INT;
+    v_level INT;
+    v_needed_luck INT;
+    BEGIN
+    
+      SELECT S_LUCK, PLAYERLEVEL INTO v_luck, v_level FROM PLAYERS WHERE PLAYERID = p_playerID;
+      
+      v_needed_luck := CEIL(v_level / 3);
+      
+      IF (v_luck < v_needed_luck) THEN
+        raise TWExceptions.insufficient_luck_points;
+      END IF;
+      
+      p_random1 := TRUNC(DBMS_RANDOM.VALUE(1,7));
+      p_random2 := TRUNC(DBMS_RANDOM.VALUE(1,7));
+      
+      UPDATE PLAYERS SET S_LUCK = (S_LUCK - v_needed_luck) WHERE PLAYERID = p_playerID;
+      
+      IF (p_random1 = p_random2) THEN
+      
+        p_what := TRUNC(DBMS_RANDOM.VALUE(0,2));
+        
+        IF (p_what = 0) THEN
+          v_prize := 'COOKIES';
+          v_prize_value := 10 * p_random1;
+        
+        ELSE
+          v_prize := 'SKILLPOINTS';
+          v_prize_value := 3 * p_random1;
+        END IF;
+        
+        EXECUTE IMMEDIATE 'UPDATE PLAYERS SET ' || v_prize || '= ' || v_prize || '+ :1 WHERE PLAYERID = :2'
+        USING v_prize_value, p_playerID;
+        
+      ELSE
+        p_what := 2;
+      END IF;
+      
+      COMMIT;
+      
+      EXCEPTION
+        WHEN TWExceptions.insufficient_luck_points THEN 
+          RAISE_APPLICATION_ERROR (-20009,'Insufficient luck points.');
+    
+    END useLuck;
+
+    PROCEDURE addSkillTransaction(p_playerID INT, p_skill_name VARCHAR2)
+    IS
+    v_total_skill_points INT;
+    BEGIN
+    
+      SELECT SKILLPOINTS INTO  v_total_skill_points FROM PLAYERS
+          WHERE PLAYERID = p_playerID;
+      
+      IF(v_total_skill_points < 1) THEN
+        raise TWExceptions.insufficient_skill_points;
+      END IF;
+        
+      EXECUTE IMMEDIATE 'UPDATE Players 
+                            SET '||p_skill_name||'='||p_skill_name||'+1 ,
+                                SKILLPOINTS = SKILLPOINTS - 1 
+                           WHERE playerID = :1' 
+               USING p_playerID; 
+               
+      COMMIT;
+      EXCEPTION
+        WHEN TWExceptions.insufficient_skill_points THEN 
+          RAISE_APPLICATION_ERROR (-20008,'Insufficient skill points.');
+               
+    END addSkillTransaction;
 
     PROCEDURE itemTransaction(p_playerID INT, p_itemID INT)
     IS
@@ -67,16 +144,20 @@ CREATE OR REPLACE PACKAGE BODY Game_Managament IS
                            WHERE playerID = :3' 
                USING v_skillPoints, v_cookiesCost, p_playerID; 
        INSERT INTO Inventories VALUES (p_playerID, p_itemID);
+
+    COMMIT;
                   
     EXCEPTION
     WHEN TWExceptions.inexistent_user 
-        THEN RAISE_APPLICATION_ERROR (-20001,'invalid username');
+        THEN RAISE_APPLICATION_ERROR (-20001,'Invalid user.');
     WHEN TWExceptions.inexistent_item
-        THEN RAISE_APPLICATION_ERROR (-20003,'inexistent_item'); 
+        THEN RAISE_APPLICATION_ERROR (-20003,'Invalid item.'); 
     WHEN TWExceptions.insufficient_funds
-        THEN RAISE_APPLICATION_ERROR (-20004,'insufficient_funds');     
+        THEN RAISE_APPLICATION_ERROR (-20004,'Insufficient funds.');     
           
     END itemTransaction;
+    
+    
     PROCEDURE loadQuestions(p_roundID INT, x INT, p_recordset OUT Game_Managament.general_cursor)
     IS
         v_nr_questions INT;

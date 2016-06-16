@@ -7,9 +7,9 @@
 module.exports = {
 
 	tableName: 'PLAYERS',
-  autoCreatedAt: false,
-  autoUpdatedAt: false,
-  autoPK: false,
+    autoCreatedAt: false,
+    autoUpdatedAt: false,
+    autoPK: false,
 
 	attributes: {
 
@@ -82,6 +82,12 @@ module.exports = {
 		guildID: {
 			type: 'integer',
 			columnName: 'GUILDID'
+		},
+
+		items: {
+			collection: 'item',
+			via: 'playerID',
+			through: 'playeritem'
 		}
   }
 };

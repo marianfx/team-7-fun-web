@@ -19,10 +19,21 @@
                  <div class="nav-wrapper">
                      <!-- other stuff here. All aligned right. -->
                      <ul class="right">
-                         <!-- fullscreen mode -->
-                         <li>
-                             <a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a>
-                         </li>
+
+                        <span id="toAppendSkills">
+
+                        </span>
+
+                        <!-- START SHOP TRIGGER -->
+                        <li>
+                            <a id="openShopButton" class="modal-trigger waves-effect waves-cyan" href="#shopContent"><i class="material-icons">shopping_cart</i></a>
+                        </li>
+                        <!-- END SHOP TRIGGER -->
+
+                        <!-- fullscreen mode -->
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a>
+                        </li>
                      </ul>
                  </div>
              </nav>
@@ -57,10 +68,79 @@
                  <!--START CONTAINER-->
                  <div class="container" id="contentContainer">
 
+                    <!-- START LUCK MODAL CONTENT -->
+                    <div id="luckContent" class="modal modal-fixed-footer modalsize">
+                        <div class="modal-content">
+                            <h4 class="cyan-text text-darken-2">Test Your Luck</h4>
+                              
+                            <div class="valign-wrapper" id="diceTower" style="height: 70%; font: normal 400 18px/1 'Calibri', sans-serif; box-sizing: border-box;">
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                          
+                          <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Exit</a>
+                          <a href="#!" class="waves-effect waves-cyan btn-flat" id="rollDicesButton">Roll</a>
+                        </div>
+                    </div>
+                    <!-- END LUCK MODAL CONTENT -->
+
+                    <!-- START TOP PLAYERS CONTENT -->
+                    <div id="topPlayersContent" class="modal modal-fixed-footer modalsize">
+
+                        <div class="modal-content" id="toAppendTopPlayers">
+                        
+                        </div>
+
+                        <div class="modal-footer">
+                          <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Exit</a>
+                        </div>
+                    </div>
+                    <!-- END TOP PLAYERS CONTENT -->
+
+                    <!-- START ITEM INVENTORY CONTENT -->
+                    <div id="inventoryContent" class="modal modal-fixed-footer modalsize">
+
+                        <div class="modal-content">
+                            <div class="row" id="toAppendInventory">
+
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Exit</a>
+                        </div>
+                    </div>
+                    <!-- END ITEM INVENTORY CONTENT --> 
+
+                    <!-- START ITEM SHOP-->
+                    <div id="shopContent" class="modal modal-fixed-footer modalsize">
+
+                            <input type="hidden" id="lastItemID" value="0">
+                            <input type="hidden" id="limit" value="2">
+
+                            <div class="modal-content">
+                                <div class="row" id="toAppendShop">
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                
+                              <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Exit</a>
+
+                              <a href="#!" class="waves-effect waves-cyan btn-flat" id="loadShopButton">Load</a> 
+                            </div>
+                    </div>
+                    <!-- END ITEM SHOP -->    
+
+
                      <!--CARD WIDGETS START-->
                      <div id="card-widgets">
                          <div class="row" id="coursesContainer">
-												 			<!-- courses appended here -->
+				 			<!-- courses appended here -->
                          </div>
                      </div>
                  </div>

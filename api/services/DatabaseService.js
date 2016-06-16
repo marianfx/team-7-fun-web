@@ -145,6 +145,43 @@ module.exports = function() {
 
 
       /**
+         * Executes an SQL procedure against the database, passing the result (OUT parameters) to next.
+         * @method executeQuery
+         * @param  {[type]}   plsql    [The SQL Code to EXECUTE]
+         * @param  {[type]}   bindvars [The binded variables]
+         * @param  {Function} next     [The next function in line to call]
+         */
+        this.executeProcedure = function (query, bindparams, next) {
+
+            this.oracledb.getConnection(sails.config.connections.oracleDbServer,
+                function (err, connection) {
+                    if(err) {
+                        sails.log.debug(err.message);
+                        return next(err, null);
+                    }
+
+                    connection.execute(
+                        query,
+                        bindparams,
+                        function (err, result) {
+
+                            connection.release( (err) => {
+                                if (err)
+                                  sails.log.error(err.message);
+                            });
+
+                            if(err) {
+                                return next(err, null);
+                            }
+
+                            return next(err, result.outBinds);
+                        });
+                });
+
+        };
+
+
+      /**
        * Loads the questions
        * @method loadQuestions
        */

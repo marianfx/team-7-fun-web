@@ -23,6 +23,12 @@ CREATE OR REPLACE PACKAGE TWExceptions IS
 
 
   TABLE_INEXISTENT EXCEPTION;
-  PRAGMA EXCEPTION_INIT(TABLE_INEXISTENT, -20005);
+  PRAGMA EXCEPTION_INIT(TABLE_INEXISTENT, -20007);
+  
+  insufficient_skill_points EXCEPTION;
+  PRAGMA EXCEPTION_INIT(insufficient_skill_points, -20008);
+  
+  insufficient_luck_points EXCEPTION;
+  PRAGMA EXCEPTION_INIT(insufficient_luck_points, -20009);
 
 END TWExceptions;

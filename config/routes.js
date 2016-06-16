@@ -90,14 +90,6 @@ module.exports.routes = {
         controller: 'PlayerController',
         action: 'find'
     },
-    'GET /players/myinventory': {
-        controller: 'PlayerController',
-        action: 'getInventory'
-    },
-    'POST /players/buy/:itemID': {
-        controller: 'PlayerController',
-        action: 'buyItem'
-    },
     'POST /player/addTime':{
       controller:'PlayerController',
       action: 'addTime'
@@ -117,24 +109,74 @@ module.exports.routes = {
 
       },
 
-      'GET /course':{
-          controller:'CourseController',
-          action: 'renderModalCourse'
-      },
+    'GET /course':{
+        controller:'CourseController',
+        action: 'renderModalCourse'
+    },
       // post for subbmit ansfer in learning module
 
     'POST /questions/submmit':{
       controller: "QuestionController",
       action: 'submmitRoundAnswers'
+    },
+
+    /*for testing*/
+
+    'POST /shop' : {
+      controller: 'ItemController',
+      action: 'loadShop'
+    },
+ 
+    'GET /inventory' : {
+      controller: 'PlayerController',
+      action: 'loadInventory'
+    },
+
+    'GET /player' : {
+      controller: 'PlayerController',
+      action: 'getPlayer'
+    },
+
+    'POST /shop/buy' : {
+      controller: 'PlayerController',
+      action: 'buyItem'
+    },
+
+    'POST /reloadshop' : {
+      controller: 'ItemController',
+      action: 'reloadShop'
+    },
+
+    'POST /player/top' : {
+      controller: 'PlayerController',
+      action: 'loadTopPlayersBy'
+    },
+
+    'GET /skills' : {
+      controller: 'PlayerController',
+      action: 'loadSkills'
+    },
+
+    'POST /skills' : {
+      controller: 'PlayerController',
+      action: 'addSkill'
+    },
+
+    'GET /roll' : {
+      controller: 'PlayerController',
+      action: 'rollDice'
+    },
+
+    'GET /cookies' : {
+      controller: 'PlayerController',
+      action: 'loadCookies'
+    },
+
+    'GET /skillpoints' : {
+      controller: 'PlayerController',
+      action: 'loadSkillpoints'
     }
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
+
+  
 
 };

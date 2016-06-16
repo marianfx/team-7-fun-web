@@ -35,6 +35,25 @@ module.exports.queries = {
 
     add_time_player:'BEGIN PLAYER_PACKAGE.ADD_TIME(:playerid); COMMIT; END;',
 
-    update_skill:'BEGIN PLAYER_PACKAGE.UPDATE_SKILL(:playerid, :skillname, :skillpoints ); COMMIT; END;'
+    update_skill:'BEGIN PLAYER_PACKAGE.UPDATE_SKILL(:playerid, :skillname, :skillpoints ); COMMIT; END;',
+
+    // queries for shop, items, player
+    use_luck: 'BEGIN Game_Managament.useLuck(:id, :random1, :random2, :what); END;',
+
+    add_skill: 'BEGIN Game_Managament.addSkillTransaction(:id,:skillName); END;',
+
+    load_skills: 'SELECT SKILLPOINTS, S_CHEAT, S_LUCK, S_TIME FROM PLAYERS WHERE PLAYERID = :id',
+
+    top_players: 'SELECT PHOTOURL, PLAYERNAME, @COLUMNNAME AS VALUE FROM (SELECT * FROM PLAYERS p JOIN playersstatistics s ON p.PLAYERID = s.PLAYERID ' + 
+                 ' ORDER BY @COLUMNNAME DESC) WHERE ROWNUM <= 10',
+
+    reload_shop: 'SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID <= :last AND ITEMID NOT IN ' + 
+                '(SELECT it.ITEMID FROM ITEMS it JOIN INVENTORIES inv ON it.ITEMID = inv.ITEMID AND inv.PLAYERID = :id)',
+
+    get_shop: 'SELECT * FROM (SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID NOT IN ' + 
+            '(SELECT it.ITEMID FROM ITEMS it JOIN INVENTORIES inv ON it.ITEMID = inv.ITEMID AND inv.PLAYERID = :id) ' +
+            'AND ITEMID > :last ORDER BY ITEMID ASC) WHERE ROWNUM <= :limit',
+
+    buy_item: 'BEGIN Game_Managament.itemTransaction(:playerID,:itemID); END'
 
 };

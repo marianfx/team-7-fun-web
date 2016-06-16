@@ -2,79 +2,179 @@
 
  var swig  = require('swig');
 
- /**
-  * PlayerController - handles all the player operations
-  *
-  * @description :: Server-side logic for managing Players
-  */
+/**
+ * PlayerController
+ *
+ * @description :: Server-side logic for managing Players
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
 module.exports = {
+
+	loadCookies: function(req, res) {
+
+		var player_id = req.user.id;
+
+		PlayerService.getPlayer(player_id, function(err, data) {
+
+			if(err) {
+				sails.log.error(err);
+				return res.serverError("Something very very bad happened on the server.");
+			}
+			else {
+
+				var html = swig.renderFile('views/game/cookies.swig', { cookies : data[0].cookies } );
+				res.ok(html);
+			}
+		});
+	},
+
+	loadSkillpoints: function(req, res) {
+
+		var player_id = req.user.id;
+
+		PlayerService.getPlayer(player_id, function(err, data) {
+
+			if(err) {
+				sails.log.error(err);
+				return res.serverError("Something very very bad happened on the server.");
+			}
+			else {
+
+				var html = swig.renderFile('views/game/skillpoints.swig', { skillpoints : data[0].skillPoints } );
+				res.ok(html);
+			}
+		});
+	},
 
 
   /**
    * Returns current player's inventory. User must be logged in.
    * @method function
    */
-	getInventory: function(req, res) {
+	loadInventory: function(req, res) {
 
 		var player_id = req.user.id;
 
-		var DB = new sails.services.databaseservice();
-		var query = sails.config.queries.player_inv;
-		var bindParams = {
-				id: player_id
-		};
+		PlayerService.getPlayer(player_id, function(err, data) {
 
-		DB.executeQuery(query, bindParams, (err, result) => {
+			if(err) {
+				sails.log.debug(err);
+				return res.serverError("Something very very bad happened on the server.");
+			}
+			else {
 
-					if(err) {
-						sails.log.debug(err);
-						return res.serverError("Something very very bad happened on the server (cannot execute functions for retrieving player inventory from the DB).");
-					}
-
-					var rendered = swig.renderFile('views/game/inventory.swig', { items : result });
-					res.ok( {data : rendered });
+				var html = swig.renderFile('views/game/inventory.swig', { items : data[0].items, playerName : data[0].playerName });
+				res.ok(html);
+			}
 		});
 	},
 
+	loadTopPlayersBy: function(req,res) {
 
-  /**
-   * User buys an item.
-   * @method function
-   */
+		var byWhat = req.body.by;
+
+		PlayerService.getTopPlayersBy(byWhat, function(err, data) {
+
+			if(err) {
+
+				res.serverError("Something very bad happened on the server.");
+			}
+			else {
+
+				if(byWhat === 'PLAYERLEVEL')
+					byWhat = 'LEVEL';
+
+				byWhat = byWhat.charAt(0) + byWhat.slice(1).toLowerCase();
+
+				var html = swig.renderFile('views/game/topplayers.swig', { players : data, header : byWhat });
+				res.ok(html);
+			}
+		});
+	},
+
+	loadSkills: function(req, res) {
+
+		var player_id = req.user.id;
+
+		PlayerService.getSkills(player_id, function(err, data) {
+
+			if(err) {
+				sails.log.debug(err);
+				return res.serverError("Something very very bad happened on the server.");
+			}
+			else {
+
+				var html = swig.renderFile('views/game/skills.swig', { skills : data[0] });
+
+				res.ok(html);
+			}
+		});
+	},
+
 	buyItem: function(req, res) {
 
 		var player_id = req.user.id;
 
-		var itm = null;
-		if(req.body && req.body.itemID)
-				itm = req.body.itemID;
-		else
-			if(req.params.itemID)
-				itm = req.params.itemID;
+		var item_id = req.body.itemID;
 
-		//desired item was not transmitted
-    if(!itm)
-      return res.badRequest('One should buy an item which exists.');
+		PlayerService.buyItem(player_id, item_id, function(err) {
 
-		var db = new sails.services.databaseservice();
-		var query = sails.config.queries.buy_item;
+			if(err) {
 
-		var bindparams = {
-			playerID : player_id,
-			itemID : itm
-		};
-
-		db.procedureSimple(query, bindparams, function(err) {
-
-  			if(err) {
-  					return db.parseError(err, function(error) {
-  								res.serverError({message: error.message});
-  						});
-  			}
-  			return res.ok(null);
+				//sails.log.debug(err);
+				res.serverError({ message: err.message });
+			}
+			else {
+				res.ok(null);
+			}
 		});
 	},
 
+	addSkill: function(req, res) {
+
+		var player_id = req.user.id;
+		var skill = req.body.skill;
+
+		PlayerService.addSkill(player_id, skill, function(err) {
+
+			if(err) {
+
+				sails.log.debug(err);
+				res.serverError({ message: error.message });
+			}
+			else {
+
+				res.ok(null);
+			}
+		});
+	},
+
+	rollDice: function(req, res) {
+
+		var player_id = req.user.id;
+
+		var response = {};
+
+		PlayerService.rollDice(player_id, function(err, data) {
+
+			if(err) {
+				sails.log.debug('error in player controller:');
+				sails.log.debug(err);
+				res.serverError({ message: err.message });
+				return;
+			}
+
+			response.html_firstDie = swig.renderFile('views/game/die.swig', { dieSide :  data.random1 });
+			response.html_secondDie = swig.renderFile('views/game/die.swig', { dieSide :  data.random2 });
+
+			response.what = data.what;
+
+			sails.log.debug(response);
+
+			res.ok(response);
+		});
+	},
+  
 
 	/**
 	 * Returns a row with all the necessary player data
@@ -117,21 +217,21 @@ module.exports = {
 	},
 
 
-  /**
- * [function add time to user witch use that ability]
- * @param  {[request]} req [here i get userID]
- * @param  {[response]} res [description]
- */
-  addTime: function(req,res){
+	  /**
+	 * [function add time to user witch use that ability]
+	 * @param  {[request]} req [here i get userID]
+	 * @param  {[response]} res [description]
+	 */
+	  addTime: function(req,res){
 
-    sails.log.debug("ADDING TIME TO "+ req.user.id);
-    var QS = new sails.services.questionservice();
-    QS.addSomeTime(req.user.id, (err, result) => {
+	    sails.log.debug("ADDING TIME TO "+ req.user.id);
+	    var QS = new sails.services.questionservice();
+	    QS.addSomeTime(req.user.id, (err, result) => {
 
-        if(err)
-          return res.serverError('Something bad happened on the server (' + err.message + ').');
+	        if(err)
+	          return res.serverError('Something bad happened on the server (' + err.message + ').');
 
-        return res.ok(result);
-    });
-  }
+	        return res.ok(result);
+	    });
+	  }
 };

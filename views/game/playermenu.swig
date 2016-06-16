@@ -41,6 +41,17 @@
       <b>{{ data.user.nextlvl }}</b>
     </span>
   </p>
+
+  <!-- PLAYER COOKIES -->
+  <p id="toAppendCookies" class="user-level">
+
+  </p>
+
+  <!-- PLAYER AVAILABLE SKILLPOINTS -->
+  <p id="toAppendSkillPoints" class="user-level">
+
+  </p>
+
 </div>
 </div>
 </li>
@@ -116,9 +127,35 @@
 </ul>
 </li>
 
-<!-- History -->
-<li class="bold">
-<a href="/" class="waves-effect waves-cyan">
-<i class="mdi-action-history"></i>
-Game History
+<!-- START ITEMS INVENTORY TRIGGER-->
+<li>
+       <!-- Modal Trigger -->
+      <a id="loadInventoryButton" class="modal-trigger waves-effect waves-cyan white" href="#inventoryContent"><i class="material-icons">work</i>My Items</a>
+      
 </li>
+<!-- END ITEMS INVENTORY TRIGGER -->
+
+<!-- START TOP PLAYERS BY TRIGGERS -->
+<li>
+    <li class="no-padding">
+    <ul class="collapsible collapsible-accordion">
+        <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="medium material-icons">start_rate</i>Top Players</a>
+            <div class="collapsible-body">
+                <ul>
+                <li>
+                     <a class="modal-trigger waves-effect waves-cyan white loadTopPlayersButton" href="#topPlayersContent"  by="WINS"></i>By Wins</a>
+                </li>
+                <li>
+                     <a class="modal-trigger waves-effect waves-cyan white loadTopPlayersButton" href="#topPlayersContent" by="PLAYERLEVEL"></i>By Level</a>
+                </li>
+                <li>
+                     <a class="modal-trigger waves-effect waves-cyan white loadTopPlayersButton" href="#topPlayersContent"  by="EXPERIENCE"></i>By Experience</a>
+                </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</li>
+</li>
+<!-- END TOP PLAYERS BY TRIGGERS -->
+

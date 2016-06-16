@@ -1,5 +1,5 @@
   <!-- Modal Structure -->
-  <div id="modalCourse" class="modal modal-fixed-footer">
+  <div id="modalCourse" class="modal modal-fixed-footer modalsize">
     <div class="modal-content center-align">
       {{content}}
     </div>
