@@ -36,10 +36,10 @@
 	</script>
 
 	<div class="Questions" style="padding-bottom: 20px;">
-		<ul class="collapsible collapsible-accordion" data-collapsible="accordion">
+		<ul class="collapsible popout collapsible-accordion" data-collapsible="accordion">
 			{% for question in questions %}
 				<li>
-					<div class="collapsible-header {% if loop.first %} active {% endif %}">{{question.QUESTION}}</div>
+					<div class="collapsible-header {% if loop.first %} active {% endif %}"><strong>{{question.QUESTION}}</strong></div>
 					<div class="collapsible-body ">
 						<div id="{{question.QUESTIONID}}" class="collection">
 							<a class="qq collection-item 1" style="cursor: pointer;">{{question.ANSWERA}}</a>

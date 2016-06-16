@@ -1,6 +1,6 @@
 {% for entry in data.courses %}
 <!-- Course card-->
-<div class="col s12 m3 l4">
+<div class="col s12 m3 l3">
   <div class="course-card">
     <div class="card" style="margin-top: 10px; padding-bottom: 20px; margin-bottom: 20px;">
       <!-- Card image -->

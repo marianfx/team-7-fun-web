@@ -3164,12 +3164,12 @@ th {
 }
 
 .collection .collection-item.active {
-    background-color: #ff4081;
-    color: #fff
+    background-color: #00bcd4;
+    color: #fff !important;
 }
 
 .collection .collection-item.active .secondary-content {
-    color: #fff
+    color: #fff;
 }
 
 .collection a.collection-item {
@@ -3179,7 +3179,7 @@ th {
     -o-transition: 0.25s;
     -ms-transition: 0.25s;
     transition: 0.25s;
-    color: #ff4081
+    color: #000;
 }
 
 .collection a.collection-item:not(.active):hover {

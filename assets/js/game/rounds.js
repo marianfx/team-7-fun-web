@@ -179,6 +179,7 @@ function processResponse(result) {
 
       var elem = $('#' + x).children('.' + byClass)[0];
       $(elem).addClass('green');
+      $(elem).addClass('white-text');
     }
 
     var home= $('<a id="homeBtn" class="waves-effect waves-light  btn">HOME</a>');

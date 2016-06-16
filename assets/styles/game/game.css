@@ -26,3 +26,9 @@
       width: 100% !important;
     }
 }
+
+#modalCourse{
+  margin-left: 10% !important;
+  margin-right: 10% !important;
+  width: 80% !important;
+}
