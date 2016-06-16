@@ -48,7 +48,7 @@ CREATE TABLE Rounds (
 	, NAME VARCHAR2(100) NOT NULL
   , nrOfQuestions INT DEFAULT 5 NOT NULL
 	, course VARCHAR2(4000) NOT NULL
-	, roundTime DATE
+	, roundTime INT DEFAULT 300
   , courseId INT NOT NULL
   , points INT DEFAULT 100 NOT NULL
 

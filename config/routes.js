@@ -98,7 +98,10 @@ module.exports.routes = {
         controller: 'PlayerController',
         action: 'buyItem'
     },
-
+    'POST /player/addTime':{
+      controller:'PlayerController',
+      action: 'addTime'
+    },
     'POST /friends': {
         controller: 'FriendController',
         action: 'create'
@@ -112,6 +115,11 @@ module.exports.routes = {
         controller: 'QuestionController',
         action: 'render'
 
+      },
+
+      'GET /course':{
+          controller:'CourseController',
+          action: 'renderModalCourse'
       },
       // post for subbmit ansfer in learning module
 

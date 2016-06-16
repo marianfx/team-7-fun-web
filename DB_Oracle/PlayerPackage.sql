@@ -6,6 +6,7 @@ CREATE OR REPLACE PACKAGE player_package IS
   -- procent 100% = 1 ;
   PROCEDURE  update_experience (p_playerid INT, p_roundid INT, p_procent INT);
   PROCEDURE  update_skill  (p_playerid INT, p_skillname VARCHAR2, p_skillpoints INT);
+  PROCEDURE   add_time (p_playerid INT); 
 
 END player_package;
 /
@@ -52,7 +53,7 @@ create or replace PACKAGE BODY player_package IS
   v_max_experience Players.experience%TYPE;
   v_current_exp Players.experience%TYPE;
   v_level Players.playerlevel%TYPE;
-
+  v_max_round Rounds.roundid%TYPE;
   BEGIN
     SELECT lastRoundId,playerLevel,experience into
            v_lastRoundID,v_level,v_current_exp
@@ -66,16 +67,19 @@ create or replace PACKAGE BODY player_package IS
       v_punctaj:=v_punctaj*0.2;
     END IF;
     -- verifica daca procentul 100%
-    IF(p_procent=1) THEN
+    IF(p_procent=100) THEN
       v_punctaj:=v_punctaj+v_punctaj*0.5;
       UPDATE PlayersStatistics
       SET PerfectRounds=PerfectRounds+1
       WHERE playerid=p_playerid;
     END IF;
-    IF (p_procent>7) THEN
-      UPDATE PLAYERS
-      SET LASTROUNDID = LASTROUNDID+1
-      WHERE PLAYERID=p_playerid;
+    IF (p_procent>70) THEN
+      SELECT max(roundid) INTO v_max_round  FROM rounds;
+        IF(v_lastRoundID+1<=v_max_round)THEN 
+        UPDATE PLAYERS
+          SET LASTROUNDID = LASTROUNDID+1
+        WHERE PLAYERID=p_playerid;
+      END IF;
     END IF;
 
     v_current_exp:=v_current_exp+v_punctaj;
@@ -89,6 +93,12 @@ create or replace PACKAGE BODY player_package IS
       UPDATE Players SET
       PlayerLevel=PlayerLevel+1
       WHERE playerid=p_playerid;
+      
+      UPDATE Players SET
+      SKILLPOINTS=SKILLPOINTS+(3*(v_level+1))
+      WHERE playerid=p_playerid;
+      
+      --have to increment user's money
     END IF;
     COMMIT;
   END update_experience;
@@ -117,4 +127,23 @@ create or replace PACKAGE BODY player_package IS
 
   END update_skill;
 
+  PROCEDURE   add_time (p_playerid INT) 
+  AS
+    v_level_time NUMBER;
+    v_level NUMBER;
+    add_time INT;
+  BEGIN
+    select s_time, PLAYERLEVEL into v_level_time, v_level FROM PLAYERS
+    where playerid=p_playerid;
+    
+    add_time:=5*CEIL(v_level/3);
+    
+    UPDATE players
+    SET LASTROUNDSTART = LASTROUNDSTART + (add_time/(24*60*60)),
+        S_TIME=S_TIME-CEIL(v_level/3)
+    WHERE PLAYERID=p_playerid;
+  EXCEPTION 
+  when NO_DATA_FOUND then
+  null;
+  END add_time;
 END player_package;

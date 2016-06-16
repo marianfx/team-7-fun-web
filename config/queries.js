@@ -29,6 +29,12 @@ module.exports.queries = {
 
     update_experience: 'BEGIN  PLAYER_PACKAGE.UPDATE_EXPERIENCE(:playerid, :roundid, :precent); COMMIT; END;',
 
-    get_lastroundstart: 'SELECT LASTROUNDSTART FROM PLAYERS WHERE PLAYERID= :id'
+    get_lastroundstart: 'SELECT LASTROUNDSTART FROM PLAYERS WHERE PLAYERID= :id',
+
+    get_round_course: 'SELECT COURSE FROM ROUNDS WHERE ROUNDID = :roundid ',
+
+    add_time_player:'BEGIN PLAYER_PACKAGE.ADD_TIME(:playerid); COMMIT; END;',
+
+    update_skill:'BEGIN PLAYER_PACKAGE.UPDATE_SKILL(:playerid, :skillname, :skillpoints ); COMMIT; END;'
 
 };

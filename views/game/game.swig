@@ -64,16 +64,20 @@
                          </div>
                      </div>
                  </div>
+
                  <!--END CONTAINER-->
              </section>
              <!-- END CONTENT SECTION -->
          </div>
+
          <!-- END WRAPPER -->
 
      </div>
      <!-- END MAIN -->
 
+		 <div class="container" id="modalContainer">
 
+		 </div>
 {% endblock %}
 
 {% block footer %}

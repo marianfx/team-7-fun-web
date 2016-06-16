@@ -1,143 +1,191 @@
+
 var answers = {};
 var time;
+var clock;
+var isCancel;
 
+
+/**
+ * Start the single player round
+ */
 function startRounds() {
 
-
-  var clock = $('.clock').FlipClock(300, {
-    clockFace: 'MinuteCounter',
-    countdown: true,
-    autoStart: true,
-    defaultLanguage: 'ro',
-    callbacks: {
-      stop: function() {
-        swal({
-          title: "Sorry..",
-          text: "You exceeded your time!",
-          type: "error"
-        });
-      }
-    }
-  });
-
-
-  $(".qq").click(function() {
-    doSelect(this);
-  });
-
-  $("#submmitBtn").click(function() {
-    // console.log(answers);
-    submmitAnswer();
-    swal({
-      title: "Waiting for checking your answers",
-      text: "",
-      imageUrl: "./images/waiting.gif",
-      imageSize: '180x180',
-      showConfirmButton: false,
-      showCancelButton: false,
-      showLoaderOnConfirm: true,
+    isCancel = null;
+    $(".qq").click(function() {
+        doSelect(this);
     });
-  });
 
-};
-//
-//
-// $(document).ready(startRounds);
+    $("#submmitBtn").click(function() {
 
+      if(Object.keys(answers).length === 0)
+        swal("Hey!", "You cannot submit an empty answer!", "warning");
+      else
+      {
+          submmitAnswer();
+          swal({
+            title: "Wait... while we check your answers",
+            text: "",
+            imageUrl: "./images/waiting.gif",
+            imageSize: '180x180',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showLoaderOnConfirm: true,
+          });
+      }
+    });
 
-function doSelect(me) {
-  var parent = $(me).parent().attr("id");
-  $(me).parent().children(".qq").removeClass("active");
+    $('#timeBtn').click(function(){
 
+          var time = clock.getTime();
+          // post ajax to server for time add
+          // it means that i have to decrement from last round start x seconds on serverside and add x seconds to client's clock
+          // update LASTROUNDSTART + (x / (24 * 60 * 60)) to playerid
+          $.ajax({
+            type: "POST",
+            url: "/player/addTime",
+            data: {message: "addTime"},
+            contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
+            success: function(result) {
+                console.log(result);
+                if(result.flag)
+                  clock.setTime(time.time + result.time);
+                else
+                {
+                  var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + "Insufficient points."  + '</span>');
+                  Materialize.toast($htmlToDisplay, 1000, 'card-panel red');
+                }
 
-  var classList = $(me).attr('class').split(" ");
-  var index = classList.length - 1;
-  var value = classList[index];
+            },
+            error: function(result) {
+              swal({
+                  title:"Error",
+                  text: "Cannot do that.",
+                  type: "error",
+                  allowEscapeKey: true,
+                  allowOutsideClick: true,
+                  showConfirmButton: true
+                });
+            },
+            timeout: 5000
+          });
 
-  $(me).addClass("active");
-
-  answers[parent] = value;
-
-
-  // console.log(answers);
+    });
 
 }
 
+/**
+ * Visual selector for question answers.
+ * @param  {[type]} me [description]
+ * @return {[type]}    [description]
+ */
+function doSelect(me) {
+
+    var parent = $(me).parent().attr("id");
+    $(me).parent().children(".qq").removeClass("active");
+
+    var classList = $(me).attr('class').split(" ");
+    var index = classList.length - 1;
+    var value = classList[index];
+
+    $(me).addClass("active");
+
+    answers[parent] = value;
+}
+
+
+/**
+ * Calls the server for submitting an answer.
+ */
 function submmitAnswer() {
 
-  $.ajax({
-    type: "POST",
-    url: "/questions/submmit",
-    data: answers,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    $.ajax({
+      type: "POST",
+      url: "/questions/submmit",
+      data: answers,
+      contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
-    success: function(result) {
-      setTimeout(swal.close, 1500);
-      setTimeout(function() {
-        processResponse(result);
-      }, 3000);
-    },
+      success: function(result) {
+          setTimeout(swal.close, 1500);
+          setTimeout(function() {
+              processResponse(result);
+            },
+            3000);
+      },
 
-    error: function(result) {
-      setTimeout(swal.close, 1500);
-      setTimeout(function() {
-        swal("you fail this city", "Bad Request", "error");
-      },2000);
-    },
-    timeout: 5000
-  });
+      error: function(result) {
+          setTimeout(swal.close, 1500);
 
+          setTimeout(function() {
+            swal({
+                title:"You failed this city.",
+                text: "You think you're a hacker, ha?",
+                type: "error",
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false
+              });
+          },2000);
 
+          setTimeout(function(){
+              window.location.href = "/game";
+          },
+          3000);
+      },
+      timeout: 5000
+    });
 }
 
+
+/**
+ * After receiving response from server, visually update the answers.
+ */
 function processResponse(result) {
 
+  isCancel = 'yes';
+  clock.stop();//stops the clock, without showing warnings
   if (!result.flagTime) {
-    swal({
-      title: "Sorry..",
-      text: "You exceeded your time!",
-      type: "error"
-    });
-  } else {
-
-    if (result.flagnextRound){
-      // console.log("you're the best");
       swal({
-        title: "You're the best!",
-        text: "You passed the exam...",
-        type: "success",
-        timer: 2000,
+        title: "Sorry..",
+        text: "You exceeded your time!",
+        type: "error",
         showConfirmButton: false
       });
+  }
+  else {
+      if (result.flagnextRound){
+        swal({
+          title: "You're the best!",
+          text: "You passed the exam...",
+          type: "success",
+          timer: 3000,
+          showConfirmButton: false
+        });
     }
     else {
-      swal({
-        title: "Oh, snap..",
-        text: "You did not passed the exam...",
-        type: "warning",
-        timer: 2000,
-        showConfirmButton: false
-      });
+        swal({
+          title: "Oh, snap..",
+          text: "You did not pass the exam... try again later!",
+          type: "warning",
+          timer: 3000,
+          showConfirmButton: false
+        });
     }
+
     var ans = result.correctAnswers;
     for (var x in ans) {
-      console.log(x);
-      console.log(ans[x]);
-      var byID="#"+x;
-      var byClass=ans[x].correctNr;
-      //$(byID).addClass(green);
-      var elem = $('#' + x).children('.' + byClass)[0];
-      console.log(elem);
-      $(elem).addClass('green');
+      var byID = "#" + x;
+      var byClass = ans[x].correctNr;
 
+      var elem = $('#' + x).children('.' + byClass)[0];
+      $(elem).addClass('green');
     }
 
     var home= $('<a id="homeBtn" class="waves-effect waves-light  btn">HOME</a>');
      $(".Questions").append(home);
+
      $("#homeBtn").click(function(){
           window.location.href = '/game';
      });
   }
-
 }

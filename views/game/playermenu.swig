@@ -95,13 +95,13 @@
         <li class="no-padding">
 					<ul class="collapsible collapsible-accordion">
 						<li class="bold">
-            <a class="collapsible-header tooltipped waves-effect waves-cyan" data-position="right" data-tooltip="{{ entry.course.shortdesc }}">
+            <a class="collapsible-header waves-effect waves-cyan">
               {{ entry.course.title }}
             </a>
 							<div class="collapsible-body">
 								<ul>
                   {% for round in entry.rounds %}
-									  <li><a style="color: black;" lessonId="{{ round.roundid }}">{{ round.name }}</a></li>
+									  <li><a lessonId="{{ round.roundid }}" class="lessonLoader" style="color: black; cursor: pointer;">{{ round.name }}</a></li>
                   {% endfor %}
 								</ul>
 							</div>

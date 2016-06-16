@@ -42,15 +42,18 @@ module.exports.policies = {
       'create': ['passport', 'sessionAuth'],
       'render': ['passport', 'sessionAuth'],
       'submmitRoundAnswers': ['passport', 'sessionAuth']
+
     },
     PlayerController: {
       '*': false,
-      'render': ['passport', 'sessionAuth']
+      'render': ['passport', 'sessionAuth'],
+      'addTime': ['passport', 'sessionAuth']
       // '*': true
     },
     CourseController: {
       '*': false,
-      'render': ['passport', 'sessionAuth']
+      'render': ['passport', 'sessionAuth'],
+      'renderModalCourse' : ['passport','sessionAuth']
     },
     GameController: {
         '*': true

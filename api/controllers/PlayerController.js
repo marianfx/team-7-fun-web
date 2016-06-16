@@ -1,12 +1,14 @@
-/**
- * PlayerController
- *
- * @description :: Server-side logic for managing Players
- */
 
- var swig             = require('swig');
 
+ var swig  = require('swig');
+
+ /**
+  * PlayerController - handles all the player operations
+  *
+  * @description :: Server-side logic for managing Players
+  */
 module.exports = {
+
 
   /**
    * Returns current player's inventory. User must be logged in.
@@ -23,13 +25,14 @@ module.exports = {
 		};
 
 		DB.executeQuery(query, bindParams, (err, result) => {
+
 					if(err) {
 						sails.log.debug(err);
-						return res.serverError("Something very very bad happened on the server.");
+						return res.serverError("Something very very bad happened on the server (cannot execute functions for retrieving player inventory from the DB).");
 					}
 
-					var toRender = swig.renderFile('views/game/inventory.swig', { items : result });
-					res.ok( {data : toRender });
+					var rendered = swig.renderFile('views/game/inventory.swig', { items : result });
+					res.ok( {data : rendered });
 		});
 	},
 
@@ -63,12 +66,12 @@ module.exports = {
 
 		db.procedureSimple(query, bindparams, function(err) {
 
-			if(err) {
-					return db.parseError(err, function(error) {
-								res.serverError({message: error.message});
-						});
-			}
-			return res.ok(null);
+  			if(err) {
+  					return db.parseError(err, function(error) {
+  								res.serverError({message: error.message});
+  						});
+  			}
+  			return res.ok(null);
 		});
 	},
 
@@ -94,7 +97,7 @@ module.exports = {
 
 
 	/**
-	 * [function description]
+	 * Renders the player menu to the user (info, friends etc).
 	 * @method function
 	 */
 	render: function(req, res, next){
@@ -111,6 +114,24 @@ module.exports = {
             var rendered = swig.renderFile('./views/game/playermenu.swig', {data: result});
             return res.ok(rendered);
 			});
+	},
 
-	}
+
+  /**
+ * [function add time to user witch use that ability]
+ * @param  {[request]} req [here i get userID]
+ * @param  {[response]} res [description]
+ */
+  addTime: function(req,res){
+
+    sails.log.debug("ADDING TIME TO "+ req.user.id);
+    var QS = new sails.services.questionservice();
+    QS.addSomeTime(req.user.id, (err, result) => {
+
+        if(err)
+          return res.serverError('Something bad happened on the server (' + err.message + ').');
+
+        return res.ok(result);
+    });
+  }
 };

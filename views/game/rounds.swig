@@ -3,17 +3,49 @@
 	<link type="text/css" rel="stylesheet" href="./styles/game/flipclock.css">
 	<div class="clock" style="width: 300px; margin: auto;"></div>
 
-	<div class="Questions">
+	<script>
+	clock = $('.clock').FlipClock({{time}}, {
+		clockFace: 'MinuteCounter',
+		countdown: true,
+		autoStart: true,
+		defaultLanguage: 'ro',
+		callbacks: {
+			stop: function() {
+				if(!isCancel){
+					swal({
+							title: "Sorry..",
+							text: "You exceeded your time!",
+							type: "error",
+							allowEscapeKey: false,
+							allowOutsideClick: false,
+							showConfirmButton: false
+					});
+
+					setTimeout(function(){
+						swal.close();
+						setTimeout(function(){
+							window.location.href = "/game";
+						},
+						1000);
+					},
+					3000);
+				}
+			}
+		}
+	});
+	</script>
+
+	<div class="Questions" style="padding-bottom: 20px;">
 		<ul class="collapsible collapsible-accordion" data-collapsible="accordion">
-			{% for currQ in questions %}
+			{% for question in questions %}
 				<li>
-					<div class="collapsible-header {% if loop.first %} active {% endif %}">{{currQ.QUESTION}}</div>
+					<div class="collapsible-header {% if loop.first %} active {% endif %}">{{question.QUESTION}}</div>
 					<div class="collapsible-body ">
-						<div id="{{currQ.QUESTIONID}}" class="collection">
-							<a class="qq collection-item 1">{{currQ.ANSWERA}}</a>
-							<a class="qq collection-item 2">{{currQ.ANSWERB}}</a>
-							<a class="qq collection-item 3">{{currQ.ANSWERC}}</a>
-							<a class="qq collection-item 4">{{currQ.ANSWERD}}</a>
+						<div id="{{question.QUESTIONID}}" class="collection">
+							<a class="qq collection-item 1" style="cursor: pointer;">{{question.ANSWERA}}</a>
+							<a class="qq collection-item 2" style="cursor: pointer;">{{question.ANSWERB}}</a>
+							<a class="qq collection-item 3" style="cursor: pointer;">{{question.ANSWERC}}</a>
+							<a class="qq collection-item 4" style="cursor: pointer;">{{question.ANSWERD}}</a>
 						</div>
 					</div>
 				</li>
@@ -23,4 +55,6 @@
 			<i class="material-icons right">send</i>
 		</button>
 
+		<button id = "timeBtn" class="btn waves-effect waves-light" type="submit" name="action">AddTime
+		</button>
 	</div>

@@ -4,6 +4,7 @@ DROP SEQUENCE roundID_seq;/
 DROP SEQUENCE itemID_seq;/
 DROP SEQUENCE guildID_seq;/
 DROP SEQUENCE battleID_seq;/
+DROP SEQUENCE courseID_seq;/
 /
 
 -- ##### Sequences for the required tables #####
@@ -37,6 +38,11 @@ CREATE SEQUENCE battleID_seq
   START WITH 1
   INCREMENT BY 1;
 /
+
+CREATE SEQUENCE courseID_seq
+  MINVALUE 1
+  START WITH 1
+  INCREMENT BY 1;
 
 -- ##### Triggers for the sequences ####
 
@@ -94,6 +100,13 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER Courser_ins
+BEFORE INSERT ON Courses
+FOR EACH ROW
+BEGIN
+  :new.CourseID := courseID_seq.NEXTVAL;
+END;
+/
 
 
 COMMIT;
