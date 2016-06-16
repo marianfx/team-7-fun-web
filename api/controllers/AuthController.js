@@ -33,8 +33,12 @@ let blueprints = {
  * @param {Object} res
  */
 let logout = function(req, res) {
-  sails.log.debug('User logs out: ' + req.user.username);
-  sails.services.passport.dosomelogout(req, res);
+
+  if(req.user && req.user.username){
+    sails.log.debug('User logs out: ' + req.user.username);
+    sails.services.passport.dosomelogout(req, res);
+  }
+
   return res.redirect('/signin');//redirect to signin page
 };
 
@@ -87,7 +91,7 @@ let negotiateError = function(action, res, err, message) {
     } else {
       sails.log.debug('Sent error without message to user.');
       sails.log.debug(err);
-      res.badRequest(err);
+      res.badRequest(err.message);
     }
   }
 };
@@ -118,6 +122,11 @@ let callback = function(req, res) {
     sails.services.passport.loadStrategies();
     sails.services.passport.strategiesLoaded = true;
   }
+
+
+  //check if user is already logged in
+  if(req.user)
+    sails.services.passport.dosomelogout(req, res);
 
   //calls the passport authenticator, and then handles the next()
   sails.services.passport.callback(req, res, (err, user, message) => {

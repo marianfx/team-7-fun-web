@@ -193,7 +193,7 @@ module.exports = function() {
    * Adds time for the current player (meaning he plays)
    * @param  {[integer]} _id [The id of the player]
    */
-  this.addSomeTime = function(_id){
+  this.addSomeTime = function(_id, next){
 
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.user_details;
@@ -221,7 +221,7 @@ module.exports = function() {
 
       query = sails.config.queries.add_time_player;
       binds = {
-        playerid : req.user.id
+        playerid : _id
       };
 
        DB.procedureSimple(query, binds, (err) => {

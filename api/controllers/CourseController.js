@@ -1,6 +1,5 @@
 
 
-
  var swig             = require('swig');
  var CourseLoader     = new sails.services.courseloader();
 

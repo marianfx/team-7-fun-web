@@ -163,6 +163,7 @@ module.exports = function() {
           this.procedureFetch(plsql, bindvars, next);
       };
 
+
       /**
        * Parse a possible error from the database.
        * @method parseError

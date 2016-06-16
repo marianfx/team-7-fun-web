@@ -22,7 +22,7 @@
           clientID: '1706259366298551',
           clientSecret: '1c2bc70e95da4dab58a2adffeccf4958',
           profileFields: ['id', 'email', 'gender', 'displayName', 'photos'],
-          scope: ['public_profile', 'email', 'user_photos', 'user_likes']
+          scope: ['public_profile', 'email', 'user_friends']
         }
     }
 

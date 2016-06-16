@@ -3,7 +3,7 @@
 <div class="row">
   <!-- profile picture -->
   <div class="col col s4 m4 l4">
-    <img src="{{ data.user.PHOTOURL }}" alt="{{ data.user.PLAYERNAME }}" class="circle responsive-img valign profile-image" data-pin-nopin="true">
+    <img src="{{ data.user.PHOTOURL }}" alt="{{ data.user.PLAYERNAME }}" class="circle responsive-img valign profile-image" data-pin-nopin="true" style="min-height: 50px;">
   </div>
 
   <div class="col col s8 m8 l8">
@@ -65,7 +65,7 @@
     {% if data.friends.length > 0 %}
       {% for friend in data.friends %}
         <li>
-          <a href="#">friend.PLAYERNAME</a>
+          <a class="profileLoader" href="#">{{ friend.PLAYERNAME }}</a>
         </li>
       {% endfor %}
     {% endif %}

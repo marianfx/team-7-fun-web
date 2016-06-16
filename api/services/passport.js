@@ -61,7 +61,7 @@ let createUserFromProfileData = function(profile, tokens){
 * @description If access tokens have changed, update the user in the Db Accordingly.
 * @param user is the user to update
 */
-let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, next){
+let updateUserWithNewProfileData = function(queryHasTokens, user, c_user, next){
 
     // If the tokens have changed since the last session, update them
     if ( queryHasTokens &&
@@ -85,7 +85,7 @@ let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, n
     }
 
     // if nothing changed, just send the same response
-    return next(null, req.user, {status: 1});
+    return next(null, user, {status: 1});
 };
 
 
@@ -93,14 +93,14 @@ let updateUserWithNewProfileData = function(req, queryHasTokens, user, c_user, n
  * Updates facebook profile pic and friends
  * @method function
  */
-let updateFacebookData = function(req, userData, id, next){
+let updateFacebookData = function(c_user, userData, next){
 
   // Save the user friends into the database
   var FB = new sails.services.facebookcrawler();
-  FB.getUserFriends(req, userData.accessToken, function(err, result){
+  FB.getUserFriends(c_user, userData.accessToken, function(err, result){
         // sails.log.debug(result);
         Player.findOne()
-              .where({playerID: id})
+              .where({playerID: c_user.id})
               .then((_playa) => {
                   _playa.photoURL = userData.photoUrl;
                   _playa.lastRoundID = 1;
@@ -207,7 +207,7 @@ passport.connect = function (req, query, profile, next) {
                 // sails.log.debug('Success creating user: ', c_user);
 
                 // here update facebook profile data, including friends
-                updateFacebookData(req, user, c_user.id, (err) => {
+                updateFacebookData(c_user, user, (err) => {
                     next(err, c_user, {status: 1});
                 });
             },
@@ -217,7 +217,7 @@ passport.connect = function (req, query, profile, next) {
         // Scenario: An existing user is trying to log in.
         // Action:   Get the user associated with the passport.
         else {
-            return updateUserWithNewProfileData(req, queryHasTokens, _user, user, next);
+            return updateUserWithNewProfileData(queryHasTokens, _user, user, next);
         }
       }
       else {
@@ -226,7 +226,7 @@ passport.connect = function (req, query, profile, next) {
         //           passport.
         // Action:   Create and assign a new passport to the user.
         if (_user) {
-            return updateUserWithNewProfileData(req, queryHasTokens, _user, user, next);
+            return updateUserWithNewProfileData(queryHasTokens, _user, user, next);
         }
         // Scenario: The user is a nutjob or spammed the back-button.
         // Action:   Simply pass along the already established session.

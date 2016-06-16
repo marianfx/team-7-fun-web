@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msapplication-tap-highlight" content="no">
-  <meta name="description" content="Fun Web - the best game for learning Web Technologies. For free! ">
+  <meta name="description" content="Fun Web - the best game for learning Web Technologies in a fun way and testing your skills against other players.">
   <meta name="keywords" content="fun, web, game, learn, free, technologies, fii, iasi, faculty, fun, awesome">
 
   <title>
