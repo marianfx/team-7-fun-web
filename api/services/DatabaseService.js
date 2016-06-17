@@ -153,7 +153,7 @@ module.exports = function() {
          */
         this.executeProcedure = function (query, bindparams, next) {
 
-            this.oracledb.getConnection(sails.config.connections.oracleDbServer,
+            this.oracledb.getConnection(sails.config.connections.oracle_user,
                 function (err, connection) {
                     if(err) {
                         sails.log.debug(err.message);
