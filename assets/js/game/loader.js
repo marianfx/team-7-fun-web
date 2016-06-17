@@ -341,7 +341,6 @@ function loadSkills() {
 
 function addSkill() {
 
-  console.log(this);
   var skillName = $(this).attr('skill');
 
   var postForm = {
@@ -408,7 +407,7 @@ function buyItem() {
 
 function loadShop() {
 
-  var lastItemID = $('#lastItemID').attr('value');
+  var lastItemID = parseInt($('#lastItemID').attr('value'));
   var limit = $('#limit').attr('value');
 
   var postForm = {
@@ -425,8 +424,18 @@ function loadShop() {
     success: function(result) {
 
       if(result.lastID !== null) {
+
         $('#toAppendShop').append(result.htmlToAppend);
-        $('.buyButton').click(buyItem);
+
+        var buttonID;
+        for(var i = lastItemID + 1; i <= result.lastID; ++i) {
+          buttonID = '';
+          buttonID += '#buyItem_';
+          buttonID+= i;
+
+          $(buttonID).click(buyItem);
+        }
+
         $("#lastItemID").val(result.lastID);
       }
       else { //no more items to load
@@ -486,8 +495,7 @@ function reloadShop() {
       }
       else { //no more items to load
 
-        var text = 'No more items to load.';
-        displaySwal('No no no...', text, 'error', null);
+        loadShop();
       }
     },
     
