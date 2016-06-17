@@ -48,8 +48,10 @@ function startRounds() {
 
             success: function(result) {
                 console.log(result);
-                if(result.flag)
+                if(result.flag) {
                   clock.setTime(time.time + result.time);
+                  loadSkills();
+                }
                 else
                 {
                   var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + "Insufficient points."  + '</span>');
