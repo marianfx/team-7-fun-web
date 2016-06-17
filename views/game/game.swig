@@ -81,7 +81,7 @@
 
                         <div class="modal-footer">
                           
-                          <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Exit</a>
+                          <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat" id="exitLuckButton">Exit</a>
                           <a href="#!" class="waves-effect waves-cyan btn-flat" id="rollDicesButton">Roll</a>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
 
                             <div class="modal-footer">
                                 
-                              <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Exit</a>
+                              <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat" id="exitShopButton">Exit</a>
 
                               <a href="#!" class="waves-effect waves-cyan btn-flat" id="loadShopButton">Load</a> 
                             </div>
