@@ -7,16 +7,9 @@ $(document).ready(function() {
 
     loadSkills();
 
-    /*so the modal content will respond to the trigger*/
-    $('.modal-trigger').leanModal();
-
-    $('#loadInventoryButton').click(loadInventory);
-    $('.loadTopPlayersButton').click(loadTopPlayersBy);
-
     $('#openShopButton').click(openShop);
-    $('#loadShopButton').click(loadShop);  
-
-    $('#rollDicesButton').click(rollDices); 
+    $('#loadShopButton').click(loadShop);
+    $('#rollDicesButton').click(rollDices);
 
 });
 
@@ -40,6 +33,9 @@ function loadPlayerMenu(){
 
           loadSkillpoints();
           loadCookies();
+
+          $('#loadInventoryButton').click(loadInventory);
+          $('.loadTopPlayersButton').click(loadTopPlayersBy);
 
           // atasez click pt LoadCourse
           $('.lessonLoader').click(function(){
@@ -77,6 +73,7 @@ function loadCourses(){
           $('.playable').click(function(){
               loadRound(this);
           });
+
           // atasez click pt LoadCourse
           // $('.lessonLoader').click(function(){
           //   loadCourse(this);
@@ -319,8 +316,13 @@ function loadSkills() {
 
       /*actions*/
       $('.tooltipped').tooltip({delay: 50});
+
       $('#openLuckButton').leanModal();
-      $('#openLuckButton').click(resetDice);
+
+/*      $('#openLuckButton').leanModal({
+        dismissible: true,
+        complete: function() {$('.lean-overlay').remove(); }
+      });*/
 
       $('.addSkillPoint').click(addSkill);
       $('#cheatButton').click(cheat);
