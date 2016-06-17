@@ -7,6 +7,7 @@ $(document).ready(function() {
 
     loadSkills();
 
+    $('#openShopButton').leanModal();
     $('#openShopButton').click(openShop);
     $('#loadShopButton').click(loadShop);
     $('#rollDicesButton').click(rollDices);
@@ -35,7 +36,9 @@ function loadPlayerMenu(){
           loadCookies();
 
           $('#loadInventoryButton').click(loadInventory);
+          $('#loadInventoryButton').leanModal();
           $('.loadTopPlayersButton').click(loadTopPlayersBy);
+          $('.loadTopPlayersButton').leanModal();
 
           // atasez click pt LoadCourse
           $('.lessonLoader').click(function(){
@@ -303,8 +306,6 @@ function loadTopPlayersBy() {
 
 function loadSkills() {
 
-  $('#toAppendSkills').empty();
-
   $.ajax({
     type: "GET",
     url: '/skills',
@@ -318,6 +319,7 @@ function loadSkills() {
       $('.tooltipped').tooltip({delay: 50});
 
       $('#openLuckButton').leanModal();
+      $('#openLuckButton').click(resetDice);
 
 /*      $('#openLuckButton').leanModal({
         dismissible: true,
