@@ -54,6 +54,6 @@ module.exports.queries = {
             '(SELECT it.ITEMID FROM ITEMS it JOIN INVENTORIES inv ON it.ITEMID = inv.ITEMID AND inv.PLAYERID = :id) ' +
             'AND ITEMID > :last ORDER BY ITEMID ASC) WHERE ROWNUM <= :limit',
 
-    buy_item: 'BEGIN Game_Managament.itemTransaction(:playerID,:itemID); END'
+    buy_item: 'BEGIN Game_Managament.itemTransaction(:playerID,:itemID); END;'
 
 };
