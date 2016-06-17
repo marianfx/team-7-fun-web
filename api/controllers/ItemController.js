@@ -18,7 +18,7 @@ module.exports = {
 
 	loadShop: function(req, res) {
 
-		var player_id = req.params.id, /*TO CHANGE*/
+		var player_id = req.user.id,
 			lastItemID,
 			limit;
 
@@ -56,7 +56,7 @@ module.exports = {
 
 	reloadShop: function(req, res) {
 
-		var player_id = req.params.id, /*TO CHANGE*/
+		var player_id = req.user.id,
 			lastItemID = parseInt(req.body.lastItemID);
 
 		ItemService.reloadShop(player_id, lastItemID, function(err, data) {
