@@ -1,6 +1,7 @@
 
 module.exports.queries = {
 
+    // FX
     friends_paginated: 'SELECT * FROM (SELECT P.PLAYERID, P.PLAYERNAME, P.PHOTOURL FROM FRIENDS F INNER JOIN PLAYERS P ON P.PLAYERID = F.PLAYER2ID WHERE F.PLAYER1ID = :me AND P.PLAYERID > :llast ORDER BY P.PLAYERID ASC) WHERE ROWNUM <= :llimit',
 
     all_friends: 'SELECT P.PLAYERID, P.PLAYERNAME, P.PHOTOURL FROM FRIENDS F INNER JOIN PLAYERS P ON P.PLAYERID = F.PLAYER2ID WHERE F.PLAYER1ID = :me',
@@ -19,6 +20,8 @@ module.exports.queries = {
 
     questions_loader: "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;",
 
+
+    // GRZ
     update_starttime: 'BEGIN UPDATE PLAYERS SET LASTROUNDSTART=SYSDATE WHERE PLAYERID = :id;  COMMIT; END;',
 
     null_starttime: 'BEGIN UPDATE PLAYERS SET LASTROUNDSTART=NULL WHERE PLAYERID = :id;  COMMIT; END;',
@@ -37,23 +40,28 @@ module.exports.queries = {
 
     update_skill:'BEGIN PLAYER_PACKAGE.UPDATE_SKILL(:playerid, :skillname, :skillpoints ); COMMIT; END;',
 
-    // queries for shop, items, player
+    // CZR
     use_luck: 'BEGIN Game_Managament.useLuck(:id, :random1, :random2, :what); END;',
 
     add_skill: 'BEGIN Game_Managament.addSkillTransaction(:id,:skillName); END;',
 
     load_skills: 'SELECT SKILLPOINTS, S_CHEAT, S_LUCK, S_TIME FROM PLAYERS WHERE PLAYERID = :id',
 
-    top_players: 'SELECT PHOTOURL, PLAYERNAME, @COLUMNNAME AS VALUE FROM (SELECT * FROM PLAYERS p JOIN playersstatistics s ON p.PLAYERID = s.PLAYERID ' + 
+    top_players: 'SELECT PHOTOURL, PLAYERNAME, @COLUMNNAME AS VALUE FROM (SELECT * FROM PLAYERS p JOIN playersstatistics s ON p.PLAYERID = s.PLAYERID ' +
                  ' ORDER BY @COLUMNNAME DESC) WHERE ROWNUM <= 10',
 
-    reload_shop: 'SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID <= :last AND ITEMID NOT IN ' + 
+    reload_shop: 'SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID <= :last AND ITEMID NOT IN ' +
                 '(SELECT it.ITEMID FROM ITEMS it JOIN INVENTORIES inv ON it.ITEMID = inv.ITEMID AND inv.PLAYERID = :id)',
 
-    get_shop: 'SELECT * FROM (SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID NOT IN ' + 
+    get_shop: 'SELECT * FROM (SELECT * FROM ITEMS WHERE COOKIESCOST <> 0 AND ITEMID NOT IN ' +
             '(SELECT it.ITEMID FROM ITEMS it JOIN INVENTORIES inv ON it.ITEMID = inv.ITEMID AND inv.PLAYERID = :id) ' +
             'AND ITEMID > :last ORDER BY ITEMID ASC) WHERE ROWNUM <= :limit',
 
-    buy_item: 'BEGIN Game_Managament.itemTransaction(:playerID,:itemID); END;'
+    buy_item: 'BEGIN Game_Managament.itemTransaction(:playerID,:itemID); END;',
+
+    //DRN
+    getminRound: 'BEGIN Game_Managament.getMinRoundID(:str, :cursor); END;',
+
+    update_end_battle:'BEGIN player_package.UPDATE_BATTLE_END(:id, :flag); COMMIT; END;'
 
 };

@@ -37,7 +37,7 @@ CREATE TABLE COURSES
 )
 /
 
-INSERT INTO COURSES(TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES('Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , 'images/courses/welcome.png')
+INSERT INTO COURSES(COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES(1, 'Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , 'images/courses/welcome.png')
 /
 COMMIT;
 /
@@ -56,7 +56,7 @@ CREATE TABLE Rounds (
 	)
 /
 
-INSERT INTO ROUNDS(NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES('DEFAULT', 5, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
+INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 5, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
 /
 COMMIT;
 /

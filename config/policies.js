@@ -45,7 +45,8 @@ module.exports.policies = {
 
     },
     GameController: {
-        '*': true
+        '*': true,
+        'renderArena': ['passport', 'sessionAuth']
     },
 
   /***************************************************************************

@@ -39,6 +39,10 @@ module.exports.routes = {
       controller: 'GameController',
       action: 'render'
     },
+    'GET /arena': {
+      controller: 'GameController',
+      action: 'renderArena'
+    },
 
     'GET /signup': {
         view: 'auth/signup'
@@ -120,13 +124,13 @@ module.exports.routes = {
       action: 'submmitRoundAnswers'
     },
 
-    /*for testing*/
+    /*CZR - SHOP, ITEMS, PLAYER*/
 
     'POST /shop' : {
       controller: 'ItemController',
       action: 'loadShop'
     },
- 
+
     'GET /inventory' : {
       controller: 'PlayerController',
       action: 'loadInventory'
@@ -175,8 +179,33 @@ module.exports.routes = {
     'GET /skillpoints' : {
       controller: 'PlayerController',
       action: 'loadSkillpoints'
+    },
+
+    // DRN - SOCKET
+    'POST /socket_connect': {
+    controller: 'SocketController',
+    action: 'socket_connect'
+    },
+    'POST /socket_challange': {
+      controller: 'SocketController',
+      action: 'socket_challange'
+    },
+
+    'POST /socket_disconnect': {
+      controller: 'SocketController',
+      action: 'socket_disconnect'
+    },
+
+    'POST /socket_response_challenge': {
+      controller: 'SocketController',
+      action: 'socket_response_challenge'
+    },
+
+    'POST /socket_submit_answer': {
+      controller: 'SocketController',
+      action: 'socket_submit_answer'
     }
 
-  
+
 
 };

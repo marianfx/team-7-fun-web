@@ -1,7 +1,6 @@
 
 	<!-- the timer -->
-	<link type="text/css" rel="stylesheet" href="./styles/game/flipclock.css">
-	<div class="clock" time="{{300}}" style="width: 300px; margin: auto;"></div>
+	<div class="clock" style="width: 300px; margin: auto;"></div>
 
 	<script>
 	clock = $('.clock').FlipClock({{time}}, {

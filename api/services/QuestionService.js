@@ -118,12 +118,12 @@ module.exports = function() {
 
             if (diff > roundTime) { // user is late and has to repeat
               status = false;
-              var Json = {
+              var _jsn = {
                 flagTime: status,
                 flagnextRound: pastCourse,
                 correctAnswers: finalList
               };
-              return res.json(Json);
+              return res.json(_jsn);
             }
             else
               status = true;
@@ -131,14 +131,9 @@ module.exports = function() {
             // if everything ok, udate experience, money etc
             var Json;
             if (status && pastCourse) {
-              query = sails.config.queries.update_experience;
-              binds = {
-                playerid: req.user.id,
-                roundid: roundID,
-                precent: currPercent
-              };
 
-              DB.procedureSimple(query, binds, (err) => {
+              var PS = sails.services.playerservice;
+              PS.updateExperience(req.user.id, roundID, currPercent, (err) => {
                 if (err)
                   res.serverError("Something bad happened on the server (Error on updating experience, please try to replay that round).");
 

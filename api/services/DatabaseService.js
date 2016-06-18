@@ -26,6 +26,25 @@ let fetchRowsFromRS = function(connection, resultSet, numRows, next) {
         });
 };
 
+/**
+ * Actual fetch of the rows given an result set. For a given game id.
+ * @method function
+ */
+let fetchRowsFromRS2 = function(connection, resultSet, numRows, gameID, next) {
+
+    resultSet.getRows( // get numRows rows
+        numRows,
+        function (err, rows) {
+            if(err || (rows.length === 0)) {
+                return next(new Error('Could not fetch any rows.'), null,null);
+
+            }
+            sails.log.debug('Got ' + rows.length + ' rows.');
+            return next(null, gameID, rows);
+
+        });
+};
+
 
 /**
  * This is the service responsable with the Oracle Special Procedure Calls and Queries Fetcher
@@ -181,24 +200,54 @@ module.exports = function() {
         };
 
 
-      /**
-       * Loads the questions
-       * @method loadQuestions
-       */
-      this.loadQuestions = function (req, res, next) {
+        /**
+         * Loads the questions
+         * @method loadQuestions
+         */
+        this.loadQuestions = function (lastRound, gameID, next) {
 
-          var plsql = "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;";
-          var bindvars = {
-              p_roundID: req.body.roundID,
-              nr_questions: 0,
-              cursor: {
-                  type: this.oracledb.CURSOR,
-                  dir: this.oracledb.BIND_OUT
-              }
+            var plsql = "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;";
+            var bindvars = {
+                p_roundID: lastRound,
+                nr_questions: 5,
+                cursor: {
+                    type: this.oracledb.CURSOR,
+                    dir: this.oracledb.BIND_OUT
+                }
+            };
+
+            this.procedureFetch2(plsql, bindvars,gameID, next);
+        };
+
+        /**
+         * Calls a procedure from the database and fetches the results, passing them to the next function. Warning, does return a cursor. NOT for normal queries.
+         * @method procedureFetch
+         */
+        this.procedureFetch2 = function (plsql, bindvars,gameID, next) {
+
+                var numRows = 8;
+                var arrRows;
+
+                this.oracledb.getConnection(sails.config.connections.oracle_user,
+                    function (err, connection) {
+                        if(err) {
+                            sails.log.debug(err.message);
+                            return next(err, null);
+                        }
+                        connection.execute(
+                            plsql,
+                            bindvars,
+                            function (err, result) {
+                                if(err) {
+                                    sails.log.debug(err.message);
+                                    return next(err, null);
+                                }
+
+                                fetchRowsFromRS2(connection, result.outBinds.cursor, numRows,gameID, next);
+                            });
+
+            });
           };
-
-          this.procedureFetch(plsql, bindvars, next);
-      };
 
 
       /**

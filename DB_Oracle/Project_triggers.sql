@@ -6,6 +6,7 @@ FOR EACH ROW
 BEGIN
   AUTHENTICATION.onDeleteGameUser(:old.PLAYERID);
 END;
+
 /
 
 --Trigger when user is iserted  in game-user (insert into GameUsers=> insert into playersStatistics and Players)

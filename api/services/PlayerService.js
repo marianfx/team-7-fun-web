@@ -106,5 +106,61 @@ module.exports = {
 				next(error, data);
 			});
 		});
-	}
+	},
+
+
+	// Dorin - for battle / game history
+	updateExperience : function(_id, _round, _percent, next){
+
+    var plsql = sails.config.queries.update_experience;
+    var bindvars = {
+      playerid: _id,
+      roundid: _round,
+      precent: _percent
+    };
+
+		var db = new sails.services.databaseservice();
+    db.procedureSimple(plsql, bindvars, (error) => {
+        return next(error);
+    });
+
+  },
+
+  updateEndBattle : function(req,res){
+
+    var plsql = "BEGIN player_package.update_battle_end  (:p_playerid , :p_flag); END;";
+    var bindvars = {
+      p_playerid : req.user.id,
+      p_flag : req.body.flag
+    };
+
+		var db = new sails.services.databaseservice();
+    db.procedureSimple(plsql, bindvars, (error) => {
+        if(error){
+          return res.json({message: 'Error to dataBase!'});
+        }
+        return res.ok();
+    });
+
+  },
+
+  saveGameHistory: function(req,res){
+    // cand va fi apelata trebuie modificat parametrul al doilea => serverul stie jucatorii
+    var plsql = "BEGIN Game_Managament.saveGameHistory  (:p_playerID1 , :p_playerID2,:p_winnerID); END;";
+    var bindvars = {
+      p_playerID1 : req.user.id,
+      p_playerID2 : req.body.p_playerID2,
+      p_winnerID : req.user.id
+    };
+
+		var db = new sails.services.databaseservice();
+    db.procedureSimple(plsql, bindvars, (error) => {
+        if(error){
+          return res.json({message: 'Error to dataBase!'});
+        }
+        return res.ok();
+    });
+
+  }
+
 };

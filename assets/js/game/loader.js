@@ -1,4 +1,5 @@
-
+var endFlag = false;
+var playing = false;
 
 $(document).ready(function() {
 
@@ -11,6 +12,8 @@ $(document).ready(function() {
     $('#openShopButton').click(openShop);
     $('#loadShopButton').click(loadShop);
     $('#rollDicesButton').click(rollDices);
+
+    $('#arenaBTN').click(loadArena);
 
 });
 
@@ -70,7 +73,7 @@ function loadCourses(){
   		// the function called on Success (no error returned bu the server)
   		success: function(result) {
     			// success on login, so redirect. This does not affect the session. If user tricks this, still cannot access the game because of the policies.
-    			$('#coursesContainer').html(result);
+    			$('#contentContainer').html(result);
 
           // atasez click
           $('.playable').click(function(){
@@ -81,6 +84,47 @@ function loadCourses(){
           // $('.lessonLoader').click(function(){
           //   loadCourse(this);
           // });
+          $('.collapsible').collapsible();
+          pluginspreparer();
+  		},
+  		// the function called on error (error returned from server or TimeOut Expired)
+  		error: function(err) {
+  			   window.location.href = '/500';
+  		},
+  		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
+  	});
+}
+
+
+/**
+ * Loads all the courses available for the current user
+ * @method loadCourses
+ */
+function loadArena(){
+
+    if(playing)
+      return;
+
+    if(endFlag === true){
+      $('#Top').empty();
+      $('#Winners').empty();
+      $('#onlinePlayers').css("display", "");
+      return;
+    }
+
+  	$.ajax({
+  		type: "GET", // type of request
+  		url: '/arena', //path of the request
+  		contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+
+  		// the function called on Success (no error returned bu the server)
+  		success: function(result) {
+    			// success on login, so redirect. This does not affect the session. If user tricks this, still cannot access the game because of the policies.
+    			$('#contentContainer').html(result);
+
+          // js and sails is loaded, so attach all the buttons and connect to the arena
+          startArena();
+
           $('.collapsible').collapsible();
           pluginspreparer();
   		},
@@ -256,21 +300,21 @@ function loadInventory() {
   $('#toAppendInventory').empty();
 
   $.ajax({
-    type: "GET", 
+    type: "GET",
     url: '/inventory',
-    contentType: "application/x-www-form-urlencoded;charset=utf-16", 
+    contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
     success: function(result) {
-      
+
       $('#toAppendInventory').html(result);
     },
-    
+
     error: function(err) {
 
       $('#toAppendInventory').html("Could not load inventory.");
     },
 
-    timeout: 3000 
+    timeout: 3000
   });
 }
 
@@ -278,7 +322,7 @@ function loadTopPlayersBy() {
 
   $('#toAppendTopPlayers').empty();
 
-  var byWhat = $(this).attr('by');  
+  var byWhat = $(this).attr('by');
 
   var postForm = {
     by : byWhat
@@ -291,10 +335,10 @@ function loadTopPlayersBy() {
     contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
     success: function(result) {
-      
+
       $('#toAppendTopPlayers').html(result);
     },
-    
+
     error: function(err) {
 
       $('#toAppendTopPlayers').html("Could not load top players.");
@@ -335,7 +379,7 @@ function loadSkills() {
       window.location.href = '/500'; /*DISPLAY SOMETHING ELSE? TIMEOUT*/
     },
 
-    timeout: 3000 
+    timeout: 3000
   });
 }
 
@@ -363,7 +407,7 @@ function addSkill() {
 
       displaySwal('No no no...', err.responseJSON.message, 'error', null);
     },
-    timeout: 3000 
+    timeout: 3000
 
   });
 }
@@ -379,16 +423,16 @@ function buyItem() {
   };
 
   $.ajax({
-    type: "POST", 
+    type: "POST",
     url: '/shop/buy',
     data: postForm,
     contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
     success: function(result) {
-      
+
       var text = 'Your purchase has been succesful.';
       displaySwal('Congrats!', text, 'success', null);
-      
+
       reloadShop();
 
       loadCookies();
@@ -401,7 +445,7 @@ function buyItem() {
       displaySwal('No no no...', err.responseJSON.message, 'error', null);
     },
 
-    timeout: 3000 
+    timeout: 3000
   });
 }
 
@@ -443,7 +487,7 @@ function loadShop() {
         if($.trim($("#toAppendShop").html()) === '') { //no more item from the start
 
           $('#toAppendShop').html('<h5 class="col s12 cyan-text text-darken-2">Out of stock.</h5>');
-        } 
+        }
         else {
 
           var text = 'No more items to load.';
@@ -451,7 +495,7 @@ function loadShop() {
         }
       }
     },
-    
+
     error: function(err) {
 
       $('#toAppendShop').html("Could not load shop.");
@@ -487,7 +531,7 @@ function reloadShop() {
     contentType: "application/x-www-form-urlencoded;charset=utf-16",
 
     success: function(result) {
-      
+
       if(result) {
 
         $('#toAppendShop').html(result);
@@ -498,7 +542,7 @@ function reloadShop() {
         loadShop();
       }
     },
-    
+
     error: function(err) {
 
       $('#toAppendShop').html("Could not load shop.");

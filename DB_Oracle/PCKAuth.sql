@@ -153,3 +153,6 @@ CREATE OR REPLACE PACKAGE BODY authentication IS
   END;
 END authentication;
 /
+
+
+commit;

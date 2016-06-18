@@ -5,6 +5,7 @@
 
 {% block head %}
 	{% parent %}
+	<link type="text/css" rel="stylesheet" href="./styles/game/flipclock.css">
 	<link type="text/css" rel="stylesheet" href="./styles/game/game.css">
 	<link type="text/css" rel="stylesheet" href="./styles/game/game.style.css">
 {% endblock %}
@@ -56,24 +57,16 @@
 								 		<!-- The user data atached here -->
                  </ul>
 
-           <!-- Button displayed only on small screens (phones) -->
-           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="material-icons">toc</i></a>
+			           <!-- Button displayed only on small screens (phones) -->
+			           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="material-icons">toc</i></a>
              </aside>
              <!-- END LEFT SIDEBAR NAV-->
-
-
 
              <!-- START CONTENT -->
              <section id="content">
                  <!--START CONTAINER-->
                  <div class="container" id="contentContainer">
 
-                     <!--CARD WIDGETS START-->
-                     <div id="card-widgets">
-                         <div class="row" id="coursesContainer">
-				 			<!-- courses appended here -->
-                         </div>
-                     </div>
                  </div>
 
                  <!--END CONTAINER-->
@@ -86,9 +79,17 @@
      </div>
      <!-- END MAIN -->
 
-		 <div class="container" id="modalContainer">
+		 <!-- Floating button for entering the arena -->
+		 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+		    <a id="arenaBTN" class="btn-floating btn-large red tooltipped" data-position="top" data-tooltip="Enter ARENA!">
+		      <i class="large mdi-hardware-security"></i>
+		    </a>
+  	</div>
 
-		 </div>
+				 <!-- The MODAL for course -->
+				 <div class="container" id="modalContainer">
+
+				 </div>
 
          <div class="container" id="otherModalsContainer">
 
@@ -97,7 +98,7 @@
 
                 <div class="modal-content">
                     <h4 class="cyan-text text-darken-2">Test Your Luck</h4>
-                      
+
                     <div class="valign-wrapper" id="diceTower" style="height: 70%; font: normal 400 18px/1 'Calibri', sans-serif; box-sizing: border-box;">
 
                     </div>
@@ -105,7 +106,7 @@
                 </div>
 
                 <div class="modal-footer">
-                  
+
                   <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat" id="exitLuckButton">Exit</a>
                   <a href="#!" class="waves-effect waves-cyan btn-flat" id="rollDicesButton">Roll</a>
                 </div>
@@ -116,7 +117,7 @@
             <div id="topPlayersContent" class="modal modal-fixed-footer modalsize">
 
                 <div class="modal-content" id="toAppendTopPlayers">
-                
+
                 </div>
 
                 <div class="modal-footer">
@@ -138,7 +139,7 @@
                     <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Exit</a>
                 </div>
             </div>
-            <!-- END ITEM INVENTORY CONTENT --> 
+            <!-- END ITEM INVENTORY CONTENT -->
 
             <!-- START ITEM SHOP-->
             <div id="shopContent" class="modal modal-fixed-footer modalsize">
@@ -153,10 +154,10 @@
                     </div>
 
                     <div class="modal-footer">
-                        
+
                       <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat" id="exitShopButton">Exit</a>
 
-                      <a href="#!" class="waves-effect waves-cyan btn-flat" id="loadShopButton">Load</a> 
+                      <a href="#!" class="waves-effect waves-cyan btn-flat" id="loadShopButton">Load</a>
                     </div>
             </div>
             <!-- END ITEM SHOP -->

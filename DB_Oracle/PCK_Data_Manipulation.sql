@@ -430,3 +430,5 @@ IS
 
 END data_manipulation;
 /
+
+commit;
