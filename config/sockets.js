@@ -122,10 +122,19 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // afterDisconnect: function(session, socket, cb) {
-  //   // By default: do nothing.
-  //   return cb();
-  // },
+  afterDisconnect: function(session, socket, cb) {
+
+
+
+    if(session.passport == null)
+      return cb() ;
+    sails.log.debug("User "+session.passport['user'] +" exit from Arena");
+    var userID=session.passport['user'];
+    sails.services.arena.leaveRoom(userID);
+  //  sails.log.debug("Userul s-a deconectat de la joc"+session.user);
+    //scoate-l din toate jocurile si stergel din vectorul de users
+    return cb();
+  },
 
   /***************************************************************************
   *                                                                          *
