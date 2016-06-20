@@ -169,8 +169,8 @@
 {% block footer %}
 	{% parent %}
 	<!--Import script for this page-->
-	<script type="text/javascript" src="./js/game/plugins.preparer.js"></script>
+	<script src="./js/game/plugins.preparer.js"></script>
 	<script src="./js/game/flipclock.js"></script>
 	<script src="./js/game/rounds.js"></script>
-	<script type="text/javascript" src="./js/game/loader.js"></script>
+	<script src="./js/game/loader.js"></script>
 {% endblock %}

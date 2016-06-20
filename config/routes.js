@@ -94,6 +94,11 @@ module.exports.routes = {
         controller: 'PlayerController',
         action: 'find'
     },
+    'POST /player/update': {
+        controller: 'PlayerController',
+        action: 'update'
+    },
+
     'POST /player/addTime':{
       controller:'PlayerController',
       action: 'addTime'
@@ -134,11 +139,6 @@ module.exports.routes = {
     'GET /inventory' : {
       controller: 'PlayerController',
       action: 'loadInventory'
-    },
-
-    'GET /player' : {
-      controller: 'PlayerController',
-      action: 'getPlayer'
     },
 
     'POST /shop/buy' : {

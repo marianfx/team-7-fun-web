@@ -5,7 +5,6 @@ $(document).ready(function() {
 
     loadPlayerMenu();
     loadCourses();
-
     loadSkills();
 
     $('#openShopButton').leanModal();
@@ -17,6 +16,11 @@ $(document).ready(function() {
 
 });
 
+
+/**
+ * Loads the profile of a player
+ * @method loadProfile
+ */
 function loadProfile(element) {
 
   var profile_id = $(element).attr("profileid");
@@ -45,6 +49,9 @@ function loadProfile(element) {
         $('#addFriendButton').click(addFriend);
         $('#addFriendButton').tooltip({delay: 50});
       }
+
+      $('.dropify').dropify();
+      $('#arenaBTN').css('display', 'none');
     },
 
     error: function(err) {

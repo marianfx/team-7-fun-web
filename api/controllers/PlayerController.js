@@ -273,5 +273,78 @@ module.exports = {
 
 	        return res.ok(result);
 	    });
-	  }
+	  },
+
+
+    /**
+   * Update player profile basic info (name & picture)
+   * @method function
+   */
+  update: function(req, res){
+
+    var name = req.param('playerName').toString();
+    name = name.trim();
+    if(name.length < 3)
+        return res.redirect('/game');
+
+    sails.log.debug("Updating " + name);
+    return sails.models.player.update({playerID: req.user.id}, {playerName: name}, (err, player) => {
+
+        if(err)
+            return res.redirect('/game');
+
+        return sails.controllers.player.updatePic(req, res, (err) => {
+            if(err)
+              return res.redirect('/game');
+
+            return res.redirect('/game');
+        });
+    });
+  },
+
+  /**
+   * Upload the profile picture.
+   * @method function
+   */
+  updatePic: function(req, res, next) {
+
+      req.file('avatar')
+          .upload({
+              maxBytes: 2000000, //2MB
+              dirname: require('path').resolve(sails.config.appPath, 'assets/images/avatars')
+          },
+          (err, uploaded) => {
+
+              if(err){
+                sails.log.debug(err);
+                return next('Something very bad happened on the server. Cannot upload your file');
+              }
+
+              if(uploaded.length === 0)
+                return next('No file was uploaded.');
+
+              var tempName = uploaded[0].fd;
+              var index = tempName.lastIndexOf('\\') + 1;
+              tempName = tempName.substr(index);
+              var avatarURL = '/images/avatars/' + tempName;
+              // all ok, update in the db
+              return sails.models.player.update({playerID: req.user.id}, {photoURL: avatarURL}, (err, player) => {
+
+                  if(err){
+                      return next(err.message);
+                  }
+
+                  player = player[0];
+
+                  // update file on client to
+                  var fs = require('fs');
+                  var path1 = require('path').resolve(sails.config.appPath, 'assets' + avatarURL);
+                  var path2 = require('path').resolve(sails.config.appPath, '.tmp/public' + avatarURL);
+                  fs.createReadStream(path1).pipe(fs.createWriteStream(path2));
+                  return next();
+              });
+
+          });
+  }
+
 };

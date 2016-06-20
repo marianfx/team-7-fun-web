@@ -123,7 +123,7 @@ module.exports = {
 			db.parseError(err, function(error) {
 				next(error, data);
 			});
-		});	
+		});
 	},
 
 
@@ -142,7 +142,7 @@ module.exports = {
 			db.parseError(err, function(error) {
 				next(error, data);
 			});
-		});	
+		});
 	},
 
 	getProfile : function(player_id, profile_to_get_id, next) {
@@ -180,11 +180,11 @@ module.exports = {
 				userdata.details = data[0];
 
 				var options = {
-   					weekday: 'long', 
-   					year: 'numeric', 
+   					weekday: 'long',
+   					year: 'numeric',
    					month: 'short',
-    				day: 'numeric', 
-    				hour: '2-digit', 
+    				day: 'numeric',
+    				hour: '2-digit',
     				minute: '2-digit'
 				};
 

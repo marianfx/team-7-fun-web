@@ -28,7 +28,7 @@ module.exports = {
 
       return res.ok(user);
     });
-},
+  },
 
 
   /**
@@ -83,6 +83,7 @@ module.exports = {
       return res.ok(req.user);
 
     return res.forbidden();
-  }
+  },
+
 
 };
