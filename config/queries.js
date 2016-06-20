@@ -41,11 +41,15 @@ module.exports.queries = {
     update_skill:'BEGIN PLAYER_PACKAGE.UPDATE_SKILL(:playerid, :skillname, :skillpoints ); COMMIT; END;',
 
     // CZR
+    get_friends_count: 'SELECT COUNT(*) AS FRIENDSCOUNT FROM FRIENDS WHERE PLAYER1ID = :id',
+
+    are_friends: 'SELECT 1 AS YES FROM FRIENDS WHERE PLAYER1ID = :id1 AND PLAYER2ID = :id2',
+
     use_luck: 'BEGIN Game_Managament.useLuck(:id, :random1, :random2, :what); END;',
 
     add_skill: 'BEGIN Game_Managament.addSkillTransaction(:id,:skillName); END;',
 
-    load_skills: 'SELECT SKILLPOINTS, S_CHEAT, S_LUCK, S_TIME FROM PLAYERS WHERE PLAYERID = :id',
+    load_skills: 'SELECT SKILLPOINTS, S_CHEAT, S_LUCK, S_TIME, PLAYERLEVEL FROM PLAYERS WHERE PLAYERID = :id',
 
     top_players: 'SELECT PHOTOURL, PLAYERNAME, @COLUMNNAME AS VALUE FROM (SELECT * FROM PLAYERS p JOIN playersstatistics s ON p.PLAYERID = s.PLAYERID ' +
                  ' ORDER BY @COLUMNNAME DESC) WHERE ROWNUM <= 10',

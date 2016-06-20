@@ -17,6 +17,46 @@ $(document).ready(function() {
 
 });
 
+function loadProfile(element) {
+
+  var profile_id = $(element).attr("profileid");
+
+  var postForm = {
+    id : profile_id
+  };
+
+  $.ajax({
+    type: 'GET',
+    url: '/profile',
+    data: postForm,
+    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+
+    success: function(result) {
+
+      $('#contentContainer').html(result.html);
+
+      if(result.arefriends) {
+
+        $('#addFriendsButton').addClass('green');
+      }
+      else {
+
+        $('#addFriendsButton').addClass('red');
+        $('#addFriendsButton').click(function() {
+          addFriend(profile_id);
+        });
+      }
+    },
+
+    error: function(err) {
+
+      window.location.href = '/500';$('#toAppendCookies').html('<p>Oops...</p>');
+    },
+
+    timeout: 3000
+  });
+}
+
 
 /**
  * Loads the left aside menu with the player informations
@@ -42,6 +82,10 @@ function loadPlayerMenu(){
           $('#loadInventoryButton').leanModal();
           $('.loadTopPlayersButton').click(loadTopPlayersBy);
           $('.loadTopPlayersButton').leanModal();
+
+          $('.loadProfileButton').click(function() {
+            loadProfile(this);
+          });
 
           // atasez click pt LoadCourse
           $('.lessonLoader').click(function(){

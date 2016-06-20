@@ -174,7 +174,28 @@ module.exports = {
 			res.ok(response);
 		});
 	},
-  
+
+	loadProfile: function(req, res) {
+
+		var player_id = parseInt(req.user.id),
+			profile_to_get_id = parseInt(req.param('id'));
+
+		PlayerService.getProfile(player_id, profile_to_get_id, function(err, data) {
+
+			if(err) {
+
+				res.serverError('Something very bad happened on the server.');
+			}
+			else {
+
+				var response = {};
+				
+				response.arefriends = data.arefriends;
+				response.html = swig.renderFile('views/game/profile.swig', { userdata :  data });
+				res.ok(response);
+			}
+		});
+	},
 
 	/**
 	 * Returns a row with all the necessary player data

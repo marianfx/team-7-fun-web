@@ -181,6 +181,11 @@ module.exports.routes = {
       action: 'loadSkillpoints'
     },
 
+    'GET /profile' : {
+      controller: 'PlayerController',
+      action: 'loadProfile'
+    },
+
     // DRN - SOCKET
     'POST /socket_connect': {
     controller: 'SocketController',

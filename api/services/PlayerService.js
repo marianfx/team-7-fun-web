@@ -109,6 +109,103 @@ module.exports = {
 	},
 
 
+	getFriendsCount : function(player_id, next) {
+
+		var db = new sails.services.databaseservice();
+
+		var query = sails.config.queries.get_friends_count,
+			bindparams = {
+				id : player_id
+			};
+
+		db.executeQuery(query, bindparams, function(err, data) {
+
+			db.parseError(err, function(error) {
+				next(error, data);
+			});
+		});	
+	},
+
+
+	areFriends : function(player_id1, player_id2, next) {
+
+		var db = new sails.services.databaseservice();
+
+		var query = sails.config.queries.are_friends,
+			bindparams = {
+				id1 : player_id1,
+				id2 : player_id2
+			};
+
+		db.executeQuery(query, bindparams, function(err, data) {
+
+			db.parseError(err, function(error) {
+				next(error, data);
+			});
+		});	
+	},
+
+	getProfile : function(player_id, profile_to_get_id, next) {
+
+		var userdata = {};
+		userdata.me = false;
+		userdata.arefriends = false;
+
+		if(player_id === profile_to_get_id) {
+			userdata.me = true;
+		}
+		else {
+
+			PlayerService.areFriends(player_id, profile_to_get_id, function(err, data) {
+
+				if(err) {
+					next(err, null);
+				}
+				else {
+
+					if(data) {
+						userdata.arefriends = true;
+					}
+				}
+			});
+		}
+
+		sails.controllers.player.getPlayer(profile_to_get_id, function(err, data) {
+
+			if(err) {
+				next(err, data);
+			}
+			else {
+
+				userdata.details = data[0];
+
+				var options = {
+   					weekday: 'long', 
+   					year: 'numeric', 
+   					month: 'short',
+    				day: 'numeric', 
+    				hour: '2-digit', 
+    				minute: '2-digit'
+				};
+
+				userdata.details.REGISTRATIONDATE = userdata.details.REGISTRATIONDATE.toLocaleTimeString('en-us', options);
+				userdata.details.LASTLOGINDATE = userdata.details.LASTLOGINDATE.toLocaleTimeString('en-us', options);
+
+				PlayerService.getFriendsCount(profile_to_get_id, function(err, data) {
+
+					if(err) {
+						next(err, null);
+					}
+					else {
+
+						userdata.friendscount = data[0].FRIENDSCOUNT;
+						next(err, userdata);
+					}
+				});
+			}
+		});
+	},
+
 	// Dorin - for battle / game history
 	updateExperience : function(_id, _round, _percent, next){
 
@@ -144,7 +241,7 @@ module.exports = {
 
   },
 
-  saveGameHistory: function(req,res){
+  saveGameHistory : function(req,res) {
     // cand va fi apelata trebuie modificat parametrul al doilea => serverul stie jucatorii
     var plsql = "BEGIN Game_Managament.saveGameHistory  (:p_playerID1 , :p_playerID2,:p_winnerID); END;";
     var bindvars = {
@@ -160,7 +257,5 @@ module.exports = {
         }
         return res.ok();
     });
-
   }
-
 };

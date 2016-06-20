@@ -15,10 +15,10 @@
 
     <!-- Drop down menu with links to profile -->
     <ul id="profile-dropdown" class="dropdown-content" style="width: 128px; position: absolute; top: 57px; left: 101.234px; opacity: 1; display: none;">
-      {# <li>
-        <a href="#">
+       <li>
+        <a href="#" class="loadProfileButton" profileid="{{ data.user.PLAYERID }}">
           <i class="large material-icons">settings</i>Profile</a>
-      </li> #}
+      </li> 
       {# <li>
         <a href="#">
           <i class="material-icons">credit_card</i>
@@ -76,7 +76,7 @@
     {% if data.friends.length > 0 %}
       {% for friend in data.friends %}
         <li>
-          <a class="profileLoader" href="#">{{ friend.PLAYERNAME }}</a>
+          <a class="loadProfileButton" profileid="{{ friend.PLAYERID }}" href="#">{{ friend.PLAYERNAME }}</a>
         </li>
       {% endfor %}
     {% endif %}
