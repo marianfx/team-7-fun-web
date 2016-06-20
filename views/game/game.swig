@@ -77,19 +77,19 @@
 						 <!-- //////////////////////////////////////////////////////////////////////////// -->
 					  <!-- START RIGHT SIDEBAR NAV-->
 					  <aside id="right-sidebar-nav">
-							<ul id="chat-out" class="side-nav rightside-navigation" style="height: 100%">
+							<ul id="chat-out" class="side-nav rightside-navigation" style="height: 100%;">
 								<li class="li-hover" style="height: 100%;">
-									<ul class="chat-collapsible" data-collapsible="expandable">
-									<li style="height:100%;">
+									<ul class="chat-collapsible" data-collapsible="expandable" style="height: 100%;">
+									<li  style="height: 100%;">
 										<div class="collapsible-header white-text active" style="background-color: #0097a7;"><i class="mdi-social-whatshot"></i>Be Social!</div>
-										<div class="collapsible-body recent-activity" style="height: 100%;">
+										<div class="collapsible-body recent-activity fullo" style="height: 100% !important;">
 
 											<div class="recent-activity-list chat-out-list row" style="height: 50%; padding-top: 5px;">
 											  <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fthefunweb07%2F&tabs=timeline&width=300&height=350&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=true&appId=1706259366298551" width="300" style="height: 100%; overflow: scroll;" frameborder="0" allowTransparency="true"></iframe>
 											</div>
 
 											<!-- Facebook Comments -->
-											<div class="recent-activity-list chat-out-list row" style="height: 50% !important;">
+											<div class="recent-activity-list chat-out-list row" style="height: 50%;">
 												  <iframe src='./commsframe.html' frameborder='0' width='300' scrollable="no" style="height: 100%; overflow-x: hidden;">
 													</iframe>
 											</div>
