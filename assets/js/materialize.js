@@ -2806,7 +2806,7 @@ Vel = $ ? $.Velocity : Velocity,
                                     display: "block",
                                     left: "0px",
                                     top: "0px"
-                                }), k.children("span").text(i.attr("data-tooltip"));
+                                }), k.children("span").html(i.attr("data-tooltip"));
                                 var a, c, f, j = i.outerWidth(),
                                     m = i.outerHeight(),
                                     n = i.attr("data-position"),
