@@ -409,13 +409,10 @@ function loadSkills() {
       $('#openLuckButton').leanModal();
       $('#openLuckButton').click(resetDice);
 
-/*      $('#openLuckButton').leanModal({
-        dismissible: true,
-        complete: function() {$('.lean-overlay').remove(); }
-      });*/
-
       $('.addSkillPoint').click(addSkill);
       $('#cheatButton').click(cheat);
+
+      if(isPlaying) { $('#addTimeButton').click(addTime); }
     },
 
     error: function(err) {

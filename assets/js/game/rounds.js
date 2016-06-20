@@ -3,7 +3,46 @@ var answers = {};
 var time;
 var clock;
 var isCancel;
+var isPlaying = false;
 
+function addTime() {
+
+  var time = clock.getTime();
+  // post ajax to server for time add
+  // it means that i have to decrement from last round start x seconds on serverside and add x seconds to client's clock
+  // update LASTROUNDSTART + (x / (24 * 60 * 60)) to playerid
+  $.ajax({
+    type: "POST",
+    url: "/player/addTime",
+    data: {message: "addTime"},
+    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+
+    success: function(result) {
+        console.log(result);
+        if(result.flag) {
+          clock.setTime(time.time + result.time);
+          loadSkills();
+        }
+        else
+        {
+          var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + "Insufficient points."  + '</span>');
+          Materialize.toast($htmlToDisplay, 1000, 'card-panel red');
+        }
+
+    },
+    error: function(result) {
+      swal({
+          title:"Error",
+          text: "Cannot do that.",
+          type: "error",
+          allowEscapeKey: true,
+          allowOutsideClick: true,
+          showConfirmButton: true
+        });
+    },
+    timeout: 5000
+  });
+}
 
 /**
  * Start the single player round
@@ -11,6 +50,9 @@ var isCancel;
 function startRounds() {
 
     isCancel = null;
+    isPlaying = true;
+    $('#addTimeButton').click(addTime);
+
     $(".qq").click(function() {
         doSelect(this);
     });
@@ -33,47 +75,6 @@ function startRounds() {
           });
       }
     });
-
-    $('#timeBtn').click(function(){
-
-          var time = clock.getTime();
-          // post ajax to server for time add
-          // it means that i have to decrement from last round start x seconds on serverside and add x seconds to client's clock
-          // update LASTROUNDSTART + (x / (24 * 60 * 60)) to playerid
-          $.ajax({
-            type: "POST",
-            url: "/player/addTime",
-            data: {message: "addTime"},
-            contentType: "application/x-www-form-urlencoded;charset=utf-16",
-
-            success: function(result) {
-                console.log(result);
-                if(result.flag) {
-                  clock.setTime(time.time + result.time);
-                  loadSkills();
-                }
-                else
-                {
-                  var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + "Insufficient points."  + '</span>');
-                  Materialize.toast($htmlToDisplay, 1000, 'card-panel red');
-                }
-
-            },
-            error: function(result) {
-              swal({
-                  title:"Error",
-                  text: "Cannot do that.",
-                  type: "error",
-                  allowEscapeKey: true,
-                  allowOutsideClick: true,
-                  showConfirmButton: true
-                });
-            },
-            timeout: 5000
-          });
-
-    });
-
 }
 
 /**
@@ -100,6 +101,9 @@ function doSelect(me) {
  * Calls the server for submitting an answer.
  */
 function submmitAnswer() {
+
+    isPlaying = false;
+    $('#addTimeButton').unbind('click', addTime);
 
     $.ajax({
       type: "POST",
