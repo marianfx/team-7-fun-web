@@ -32,7 +32,7 @@
 <!-- TIME -->
 {% if skills.S_TIME >= Math.ceil(skills.PLAYERLEVEL / 3) %}
 <li>
-    <a class="tooltipped waves-effect waves-light cyan" data-position="bottom" data-delay="50" data-tooltip="Lose {{ Math.ceil(skills.PLAYERLEVEL / 3) }} time points to get extra time.<br>You have: {{ skills.S_TIME }} {% if skills.S_TIME == 1 %}point {% else %}points{% endif %}" id="addTimeButton"><i class="material-icons left">av_timer</i>Time</a>
+    <a id="timeBtn" class="tooltipped waves-effect waves-light cyan" data-position="bottom" data-delay="50" data-tooltip="Get extra time per round proportionally to your time points. Points: {{ skills.S_TIME }}"><i class="material-icons left">av_timer</i>Time</a>
 </li>
 {% else %}
 <li>

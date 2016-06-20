@@ -54,7 +54,12 @@ let ArenaUsers = function(res, newUser) {
           name: x.playerName,
           photoURL: x.photoURL
         };
-        data.push(aux);
+
+        var currPlayer = Game.Users.get(String(x.playerID));
+        if(currPlayer.onGame===false)
+        {
+          data.push(aux);
+        }
 
         sails.sockets.broadcast(x.playerID, "inUsersArena", currP);
 
@@ -316,6 +321,7 @@ module.exports = {
 
 
       //add invited players to this game  and send invitations
+        playerCtrl.getPlayer(req.user.id, function(err, data) {
       for (var i = 0; i < opponents.length; i++) {
 
         var rival = Game.Users.get(opponents[i]);
@@ -324,13 +330,14 @@ module.exports = {
         Game.Users.set(opponents[i], rival);
 
         sails.sockets.broadcast(opponents[i], "gameInvite", {
-          from: req.user.username
+          from: data[0].PLAYERNAME
         });
         var aux2 = opponents.length + 1;
 
       }
 
       return res.ok(Messages.res_subscribed + roomName + '!');
+    });
     });
   },
 
@@ -480,8 +487,13 @@ module.exports = {
 
     // if a player want to give another answer
     if (currUser.answerdQ > 0) {
-      return res.json({
+      return res.badRequest({
         message: "You cannot answer two time to the same question!"
+      });
+    }
+    if (currUser.time < 0) {
+      return res.badRequest({
+        message: "You are out of time!"
       });
     }
 

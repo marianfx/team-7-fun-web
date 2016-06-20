@@ -2,7 +2,7 @@
 <ul class="collapsible collapsible-accordion" data-collapsible="accordion">
 
 		<li>
-			<div class="collapsible-header active">{{ top }}</div>
+			<div class="collapsible-header active center-align">{{ top }}</div>
 			<div class="collapsible-body ">
 				<div  class="collection">
 				<p>  {{top}}</p>

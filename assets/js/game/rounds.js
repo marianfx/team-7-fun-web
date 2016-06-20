@@ -49,6 +49,8 @@ function addTime() {
  */
 function startRounds() {
 
+    learnRound=true;
+    $('#arenaBTN').css("display","none");
     isCancel = null;
     isPlaying = true;
     $('#addTimeButton').click(addTime);
@@ -59,6 +61,7 @@ function startRounds() {
 
     $("#submmitBtn").click(function() {
 
+      learnRound=false;
       if(Object.keys(answers).length === 0)
         swal("Hey!", "You cannot submit an empty answer!", "warning");
       else

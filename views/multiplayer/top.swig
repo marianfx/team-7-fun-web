@@ -1,11 +1,9 @@
 
-<div id="Top" style="padding-left: 0px;">
-  <ul class="collection with-header">
+  <ul class="collection with-header center-align class=col s12 m6 l6">
           <li class="collection-header"><h4>{{type}}</h4></li>
 
   					{% for player in top %}
-          <li class="collection-item">{{ player.name }}<span class="badge"> Correct Answers:{{ player.nrAnswer }}</span> </li>
+          <li class="collection-item">{{ player.name }}<span class="left-align green-text"> Correct Answers:{{ player.nrAnswer }}</span> </li>
   					{% endfor %}
 
   </ul>
-</div>

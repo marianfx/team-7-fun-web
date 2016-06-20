@@ -265,6 +265,14 @@ module.exports = {
 	  addTime: function(req,res){
 
 	    sails.log.debug("ADDING TIME TO "+ req.user.id);
+
+      console.log(req.body.message);
+      if(req.body.message==="multiplayer")
+      {
+        sails.services.arena.addTime(req.user.id,res);
+        return;
+      }
+
 	    var QS = new sails.services.questionservice();
 	    QS.addSomeTime(req.user.id, (err, result) => {
 

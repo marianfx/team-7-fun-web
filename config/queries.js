@@ -66,6 +66,8 @@ module.exports.queries = {
     //DRN
     getminRound: 'BEGIN Game_Managament.getMinRoundID(:str, :cursor); END;',
 
-    update_end_battle:'BEGIN player_package.UPDATE_BATTLE_END(:id, :flag); COMMIT; END;'
+    update_end_battle:'BEGIN player_package.UPDATE_BATTLE_END(:id, :flag); COMMIT; END;',
+
+    decremente_S_TIME: 'BEGIN UPDATE PLAYERS SET S_TIME= :timepoints WHERE PLAYERID = :id;  COMMIT; END;'
 
 };

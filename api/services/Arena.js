@@ -1,3 +1,4 @@
+var playerCtrl = require('./../controllers/PlayerController');
 var Messages = sails.config.messages;
 
 
@@ -6,11 +7,168 @@ let getFreeRoom = function() {
   return Game.activeGames;
 };
 
+// this function will be called for every second
+let startClock = function(gameID) {
+  var currentPlayers = Game.games.get(gameID).players;
+  var endRound = true;
+  var auxtimer = null;
+
+  //check if there is at least one player who have time to respond
+  // decrement number of second for every player
+  for (var [key, value] of currentPlayers) {
+    var time = Game.Users.get(String(key)).time;
+    auxtimer = time - 1;
+    changePropertyUser(key, "time", time - 1);
+    if (time > 1) {
+      endRound = false;
+    }
+  }
+  //************
+  //AFISARE!!!
+  //************
+  sails.log.debug(auxtimer);
+
+
+  // if remain one player in game the game si end
+  if (currentPlayers.size === 1) {
+    clearTimeout(Game.games.get(gameID).roundInterval);
+    roundTop(gameID,
+      function(gameID, topPlayers) {
+
+        // create an array with name, answers and id of players of this game
+        var bigTop = [];
+        for (var j in topPlayers) {
+          var myPlayer = Game.Users.get(String(topPlayers[j].id));
+
+          var aux = {
+            id: myPlayer.id,
+            nrAnswer: myPlayer.answers,
+            name: myPlayer.name
+          };
+          bigTop.push(aux);
+        }
+
+        var swig = require('swig');
+        var result = swig.renderFile('./views/multiplayer/top.swig', {
+          top: bigTop,
+          type: "Final Top"
+        });
+
+        // create an array with winners
+        var winners = [];
+        for (j in bigTop) {
+
+          if (bigTop[j].nrAnswer === bigTop[0].nrAnswer) {
+            winners.push(bigTop[j]);
+          } else {
+            break;
+          }
+        }
+        var gamePlayers = [];
+        for (var [key, val] of Game.games.get(gameID).players) {
+          gamePlayers.push(key);
+        }
+
+        //create an array just with  winnersId and update in database number of winners and looses for all players
+        var winnersID = [];
+        for (j in winners) {
+          winnersID.push(winners[j].id);
+        }
+        update_end_battle(gamePlayers, winnersID, 0);
+
+        var WinnerSwig = swig.renderFile('./views/multiplayer/top.swig', {
+          top: winners,
+          type: "Winners"
+        });
+
+        sails.sockets.broadcast("game_" + gameID, "endGame", {
+          data: result,
+          winners: WinnerSwig
+        });
+      });
+
+
+    //************
+    //AFISARE!!!
+    //************
+    sails.log.debug("END ROUND AND GAME");
+    return;
+
+
+  }
+
+
+
+  // check if the round is end: if time had passed for all players or if all give an answer
+  endRound = endRound || sails.services.arena.checkEndRound(gameID);
+
+  // if round is end, reset timer and send all answers
+  if (endRound) {
+    roundTop(gameID,
+      function(gameID, topPlayers) {
+
+        var currentGame = Game.games.get(gameID);
+        var gamePlayers = currentGame.players;
+        var answers = [];
+        // create an array with id an answers
+        for (var [key2, value2] of gamePlayers) {
+          var data = {};
+
+          data.id = value2;
+          data.currAnswer = Game.Users.get(String(value2)).answerdQ;
+
+          answers.push(data);
+        }
+
+
+
+        // create an array with id, number of answers currentAnswer and name
+        var bigTop = [];
+        for (var j in topPlayers) {
+          for (var i in answers)
+
+            if (answers[i].id == topPlayers[j].id) {
+            var myPlayer = Game.Users.get(String(topPlayers[j].id));
+
+            var aux = {
+              id: answers[i].id,
+              nrAnswer: topPlayers[j].nrAnswer,
+              currAnswer: answers[i].currAnswer,
+              name: myPlayer.name
+            };
+            bigTop.push(aux);
+          }
+        }
+
+        var swig = require('swig');
+        var result = swig.renderFile('./views/multiplayer/top.swig', {
+          top: bigTop,
+          type: "Current Top"
+        });
+
+        sails.sockets.broadcast("game_" + gameID, "endRound", {
+          data: result
+        });
+      });
+
+    //
+    clearTimeout(Game.games.get(gameID).roundInterval);
+    sails.log.debug("End Round");
+
+
+    setTimeout(function() {
+      sails.services.arena.startRound(gameID);
+    }, 2000, gameID);
+
+  }
+
+
+};
+
 // recursive function: update  losses and winners to the database
 let update_end_battle = function(gamePlayers, winners, i) {
 
   // stop condition
-
   if (i >= gamePlayers.length)
     return;
 
@@ -78,18 +236,18 @@ let startGame = function(gameID) {
   notifyStartGame(gameID);
 
   var currentGame = Game.games.get(gameID);
-
-
   var currPMap = Game.games.get(gameID).players;
+
+
+  //creat an array with players from this game
   var currP = [];
-
-
   for (var [key, value] of currPMap) {
     currP.push(String(key));
   }
 
   var payersStr = currP.toString();
 
+  //  prepare for get minim RoundID
   var DB = new sails.services.databaseservice();
   var plsql = sails.config.queries.getminRound;
   var oracledb = DB.oracledb;
@@ -124,7 +282,6 @@ let startGame = function(gameID) {
       currentGame.questions = questions;
       Game.games.set(gameID, currentGame);
 
-
       startRound(gameID);
 
     });
@@ -135,39 +292,29 @@ let startGame = function(gameID) {
 
 
 };
-/**functia va returna topul jucatorilor din jocuri cu id-ul gameID
-  body va fi un obiect ce contine alte valtori ce trebuie sa faca broadcast
- */
-//
-//
-// next
-//
+
 /**
  * this function will return top player of game with id's gameID
  * @param  {obj} body will contain values that need to the next function
- * @param  {function} next
+ * @param  {function} next(gameID, topPlayers)
+ *
  *
  */
 
-let roundTop = function(gameID, body, next) {
+let roundTop = function(gameID, next) {
   var currentGame = Game.games.get(gameID);
 
   var currPlayersMap = currentGame.players;
 
-  //conversie de la map la array
+  //create array with players' id who are in this game
   var currPlayers = [];
   sails.log.debug(currPlayersMap);
   for (var [key2, value2] of currPlayersMap) {
     currPlayers.push(Game.Users.get(String(key2)));
   }
 
-  //** simpla afisare la consola
-  for (var i of currPlayers) {
-    sails.log.debug(i.id);
-    sails.log.debug(i.answers);
-  }
 
-  //sortare si returnare a topului
+  //sort players and call next function
   currPlayers.sort(function(a, b) {
     return parseInt(b.answers) - parseInt(a.answers);
   });
@@ -180,13 +327,55 @@ let roundTop = function(gameID, body, next) {
     topPlayers.push(aux);
 
   }
-  return next(gameID, body, topPlayers);
+  return next(gameID, topPlayers);
 
+};
+let addTime = function(userID, res) {
+  var user = Game.Users.get(String(userID))
+  if (user == null) {
+    return;
+  }
+  if (user.gameID !== -1) {
+    playerCtrl.getPlayer(userID, function(err, playerData) {
+
+
+      if (playerData[0].S_TIME > 0) {
+
+        var update_time = user.time + (5 * Math.ceil(playerData[0].PLAYERLEVEL / 3));
+        changePropertyUser(userID, "time", update_time);
+
+        var DB = new sails.services.databaseservice();
+        var plsql = sails.config.queries.decremente_S_TIME;
+        var oracledb = DB.oracledb;
+
+        var bindvars = {
+          id: userID,
+          timepoints: playerData[0].S_TIME - 1
+        };
+        DB.procedureSimple(plsql, bindvars, function(err, rows) {
+
+          if (err)
+            sails.log.debug(err.message);
+          return res.json({
+            time: update_time,
+            flag: true
+          });
+        });
+
+      } else {
+        return res.json({
+          time: user.time,
+          flag: false
+        });
+      }
+
+    });
+  }
 };
 
 /**
- * functia incepe runda din perspectiva serverului
- * @param  {int} gameID [numarul camerei de jog game_(gameID)]
+ * this function start a round
+ * @param  {int} gameID
  *
  */
 let startRound = function(gameID) {
@@ -194,16 +383,16 @@ let startRound = function(gameID) {
 
   var currentGame = Game.games.get(gameID);
 
-  /*
-      Verific daca nu cumva ai terminat rundele;
-   */
+
+  // if lastRound was already played, the game will be stopped
   if (currentGame.currentQuestion >= currentGame.nrOfQuestions) {
 
-    roundTop(gameID, null,
-      function(gameID, body, topPlayers) {
+    // make Final top
+    roundTop(gameID,
+      function(gameID, topPlayers) {
 
+        // create an array with name, answers and id of players of this game
         var bigTop = [];
-
         for (var j in topPlayers) {
           var myPlayer = Game.Users.get(String(topPlayers[j].id));
 
@@ -214,8 +403,6 @@ let startRound = function(gameID) {
           };
           bigTop.push(aux);
         }
-        sails.log.debug("BIG TOP:");
-        sails.log.debug(bigTop);
 
         var swig = require('swig');
         var result = swig.renderFile('./views/multiplayer/top.swig', {
@@ -223,10 +410,10 @@ let startRound = function(gameID) {
           type: "Final Top"
         });
 
+
+        // create an array with winners
         var winners = [];
         for (j in bigTop) {
-          sails.log.debug("&&&&&&&");
-          sails.log.debug(j);
 
           if (bigTop[j].nrAnswer === bigTop[0].nrAnswer) {
             winners.push(bigTop[j]);
@@ -234,17 +421,26 @@ let startRound = function(gameID) {
             break;
           }
         }
-        var gamePlayers = [];
-        for (var [key, val] of Game.games.get(gameID).players) {
+        var gamePlayers =[];
+        for( var [key,val] of Game.games.get(gameID).players)
+        {
           gamePlayers.push(key);
+          resetStatus(key);
         }
+        var playerVec = [];
+        for (var [key, value] of Game.games.get(gameID).players) {
 
+          playerVec.push(key);
+        }
+        console.log("apelez functia recursiva pentru prima data");
+        console.log(playerVec);
+       gameOut(playerVec, 0);
+
+        //create an array just with   winnersId and update in database number of winners for player
         var winnersID = [];
-
         for (j in winners) {
           winnersID.push(winners[j].id);
         }
-        // update in database number of winners for player
         update_end_battle(gamePlayers, winnersID, 0);
 
         var WinnerSwig = swig.renderFile('./views/multiplayer/top.swig', {
@@ -252,137 +448,41 @@ let startRound = function(gameID) {
           type: "Winners"
         });
 
-
-
         sails.sockets.broadcast("game_" + gameID, "endGame", {
           data: result,
           winners: WinnerSwig
         });
+
       });
     return;
   }
 
   /*
-  sunt intr-o runda normala
+    this is a normal round
    */
 
 
-  // resetam timer-ul pentru fiecare jucator din currentGame la inceputul rundei;
-
+  // reset time-limit for every player at start of the round
   for (var [key, value] of currentGame.players) {
-    changeRemainingTime(key, "time", 30);
+    changePropertyUser(key, "time", 30);
     changePropertyUser(key, "answerdQ", false);
 
   }
 
-  // declaram actiunea care scade din secunde in secuda timer-ul pentru fiecare jucator din  currentGame
+  // define a function who call startClock for every second
   var roundInterval = setInterval(function() {
-    var currentPlayers = Game.games.get(gameID).players;
-    var endRound = true;
-    var auxtimer = null;
-
-    //verific daca mai exista macar un jucator care mai are timp disponibil
-    for (var [key, value] of currentPlayers) {
-      var time = Game.Users.get(String(key)).time;
-      auxtimer = time - 1;
-      changeRemainingTime(key, "time", time - 1);
-      if (time > 1) {
-        endRound = false;
-      }
-    }
-    sails.log.debug(auxtimer);
-
-    endRound = endRound || sails.services.arena.checkEndRound(gameID);
-
-
-    var currPlayer = Game.games.get(gameID).players;
-
-    if (currPlayer.size === 1) {
-      clearTimeout(Game.games.get(gameID).roundInterval);
-      sails.log.debug("S-a incheiat runda ");
-
-    }
-    // la finalul unei runde trimit fiecarui jucator o lista cu raspunsurile celorlalti!
-    var gamePlayers = Game.games.get(gameID).players;
-    var answers = [];
-    for (var [key2, value2] of gamePlayers) {
-      var data = {};
-      data.id = value2;
-      data.currAnswer = Game.Users.get(String(value2)).answerdQ;
-      answers.push(data);
-    }
-
-
-
-
-    if (endRound) {
-      roundTop(gameID, answers,
-        function(gameID, answers, topPlayers) {
-
-          var currentGame = Game.games.get(gameID);
-
-
-          var bigTop = [];
-
-          for (var j in topPlayers) {
-
-
-            for (var i in answers)
-
-              if (answers[i].id == topPlayers[j].id) {
-              var myPlayer = Game.Users.get(String(topPlayers[j].id));
-
-              var aux = {
-                id: answers[i].id,
-                nrAnswer: topPlayers[j].nrAnswer,
-                currAnswer: answers[i].currAnswer,
-                name: myPlayer.name
-              };
-              bigTop.push(aux);
-            }
-          }
-
-          sails.log.debug("BIG TOP:");
-          sails.log.debug(bigTop);
-
-          var swig = require('swig');
-          var result = swig.renderFile('./views/multiplayer/top.swig', {
-            top: bigTop,
-            type: "Current Top"
-          });
-          //sails.log.debug(result);
-          sails.sockets.broadcast("game_" + gameID, "endRound", {
-            data: result
-          });
-        });
-
-      sails.log.debug("######## s-a terminat runda");
-      clearTimeout(Game.games.get(gameID).roundInterval);
-      sails.log.debug("S-a iincheiat runda ");
-
-
-      setTimeout(function() {
-        sails.services.arena.startRound(gameID);
-      }, 2000, gameID);
-
-    }
-
-
+    startClock(gameID);
   }, 1000, gameID);
-
   currentGame.roundInterval = roundInterval;
-
 
   var round = currentGame.currentQuestion;
 
-
-
-  //trec la runda urmatoare
+  //increment number of current question
   currentGame.currentQuestion++;
   Game.games.set(gameID, currentGame);
 
 
-  // formam intrebare + raspunsurile pentru runda current din joc si o trimitem la clienti
+  // creat a json object with current question
   var questions = [];
   questions.push({
     QUESTIONID: currentGame.questions[round].QUESTIONID,
@@ -393,13 +493,12 @@ let startRound = function(gameID) {
     ANSWERD: currentGame.questions[round].ANSWERD,
   });
 
-  // construim un randar pentru intrebarea care urmeaza sa o trimitem la jucatorii currentGame-ului;
+
+  //render current question and send to the players
   var swig = require('swig');
   var result = swig.renderFile('./views/multiplayer/rounds.swig', {
     questions
   });
-  //sails.log.debug(result);
-  // trimitem la toti subscriberii intrebarea currenta;
   sails.sockets.broadcast("game_" + gameID, "getQuestion", {
     data: result
   });
@@ -409,17 +508,12 @@ let startRound = function(gameID) {
 };
 
 /**
- * [actualizeaza atributul trimit pirn parametru cu noua valoare pentru userul cu userID din Game.Users]
- * @param  {int} userID   [identificam userul corespunzator ID-ului]
- * @param  {string} prop     [proprietatea care se doreste a fi actualizata ]
- * @param  {depinde de prop} newValue [noua voaloare a propietati
+ *
+ * [update the attribute send by parameter "prop" with new value for userID]
+ * @param  {int} userID   [unique identifier for players]
+ * @param  {string} prop     [the property we want to change ]
+ * @param  {object} newValue [new value of the property]
  */
-let changeRemainingTime = function(userID, prop, newValue) {
-  var user = Game.Users.get(String(userID));
-  user[prop] = newValue;
-  Game.Users.set(String(userID), user);
-  //  sails.log.debug(Game.Users.get(String(userID)));
-};
 
 let changePropertyUser = function(userID, prop, newValue) {
   var user = Game.Users.get(String(userID));
@@ -429,48 +523,63 @@ let changePropertyUser = function(userID, prop, newValue) {
 };
 
 /**
- * [aceasta unctie e apelata cand user-ul iese din arena sau daca e deconectat socket-ul reseteaza statutul jucatorului etc.]
- * @param  {[int]} userID [id-ul user-ului caruia i se actualizeaza statusul;
+ * [this function will be called whenever a player leave arena]
+ * @param  {int} userID [unique identifier for players]
  */
 let leaveRoom = function(userID) {
   var user = Game.Users.get(String(userID));
   if (null == user) {
-    sails.log.debug("Inexistent useer leave room");
+    //************
+    //AFISARE!!!
+    //************
+    sails.log.debug("a user without socket connection leave the arena");
     return null;
   }
 
+  // if user who left arena was in a game: allert his opponents
   if (user.gameID != -1) {
 
-    //the user is in a game now
-    //Avertizez ceilalti jucatori ca jucatorul a plecat
+
     var game = Game.games.get(user.gameID);
     game.players.delete(userID);
-    sails.log.debug("player after leaving room are");
-    sails.log.debug(game.players);
 
-    // the user to leave room need to be unsubscibed of gaame_room
-
+    // the user who leaved room is unsubscibed of game_room
     var roomName = "game_" + user.gameID;
     sails.sockets.leave(user.socket, roomName);
-    //****
-    //trebuie standardizat
-    //
-    //
-    //
-    sails.sockets.broadcast(roomName, "abordGame", {
-      id: userID,
-      message: "sory no one want to play"
+
+
+    // broadcast to the all member of the room and notify that a player left room
+    playerCtrl.getPlayer(userID, function(err, playerData) {
+      sails.sockets.broadcast(roomName, "abordGame", {
+        name: playerData[0].PLAYERNAME
+      });
     });
 
+    // increment number of looses: he abort a game= he looses
+    //
+
+    var DB = new sails.services.databaseservice();
+    var plsql = sails.config.queries.update_end_battle;
+    var oracledb = DB.oracledb;
+    var bindvars = {
+      id: userID,
+      flag: -1
+    };
+
+    DB.procedureSimple(plsql, bindvars, function(err, rows) {
+
+      if (err)
+        sails.log.debug(err.message);
+      return;
+    });
+
+
   }
-  // aici sterg user-ul cu userID din tabela Game.Users => aidca a iesit din arena;
+  // the user who leaved room is delete from Game.Users
   Game.Users.delete(String(userID));
 
+  // notify all players that this player got out from a game
   for (var [key, value] of Game.Users) {
-    //!!!! trebuie standardizat!!! la broadcast sa fie identic cu aux
-    //!!!####################################
-    //######################################
-    sails.log.debug(value.id);
     sails.sockets.broadcast(value.id, "outUsersArena", {
       id: userID
     });
@@ -478,28 +587,24 @@ let leaveRoom = function(userID) {
   }
 };
 
+//notify that the game will be stopped
 let notifyAbortGame = function(gameID) {
   var gamePlayers = Game.games.get(gameID).players;
 
   for (var [key, value] of gamePlayers) {
-    sails.log.debug(value);
     resetStatus(value);
-    ////// nu trebuia leave?
     sails.sockets.removeRoomMembersFromRooms(key, "game_" + gameID);
   }
-
-
-  sails.log.debug("broadcast to all game_" + gameID + " declineChallenge GAME");
-  sails.sockets.broadcast("game_" + gameID, "declineChallenge", {
-    flag: "declineChallenge",
-    message: "sory no one want to play"
-  });
+  //************
+  //AFISARE!!!
+  //************
+  sails.sockets.broadcast("game with id: " + gameID, "is aborted", {});
 };
 
 
-
+//notity all pleyers subscribed to a game that it is ready to Start
 let notifyStartGame = function(gameID) {
-  sails.log.debug("broadcast to all game_" + gameID + "subscribers START GAME");
+  sails.log.debug("game with id: " + gameID + "starts");
   var currPlayers = Game.games.get(gameID).players;
 
   var onGame = [];
@@ -507,21 +612,19 @@ let notifyStartGame = function(gameID) {
     onGame.push(key);
 
   }
-  // trimit lista cu jucatorii care intra intr-un duel tuturor celorlalti jucatori
+  //remove from avaible players those who had subcribed in this game
   for (var [key2, value2] of Game.Users) {
     if (!(currPlayers.has(key2))) {
-      sails.log.debug("trimit lista cu cei care incep jocul la:" + key2);
       sails.sockets.broadcast(key2, 'inGameArena', {
         vec: onGame
       });
     }
   }
 
+  // create Start top
   var bigTop = [];
-
   for (var j in onGame) {
     var myPlayer = Game.Users.get(String(onGame[j]));
-
     var aux = {
       id: myPlayer.id,
       nrAnswer: 0,
@@ -529,8 +632,6 @@ let notifyStartGame = function(gameID) {
     };
     bigTop.push(aux);
   }
-  sails.log.debug("BIG TOP:");
-  sails.log.debug(bigTop);
 
   var swig = require('swig');
   var result = swig.renderFile('./views/multiplayer/top.swig', {
@@ -540,6 +641,41 @@ let notifyStartGame = function(gameID) {
 
   sails.sockets.broadcast("game_" + gameID, "startGame", {
     data: result
+  });
+
+};
+
+let gameOut = function(playerVec, i) {
+  if (i >= playerVec.length)
+  {
+    console.log("am terminat de parcurs functia recursiva!");
+    return;
+  }
+
+  playerCtrl.getPlayer(playerVec[i], function(err, playerData) {
+
+    if(err)
+    {
+      console.log(err.message);
+      return;
+    }
+    var currP = {
+      id: playerVec[i],
+      name: playerData[0].PLAYERNAME,
+      photoURL: playerData[0].PHOTOURL
+    };
+
+    for (var [x, y] of Game.Users) {
+
+      if (y.id != playerVec[i]) {
+        sails.sockets.broadcast(y.id, "inUsersArena", currP);
+      } else {
+        console.log("e acelasi nume");
+        console.log(currP.name);
+      }
+    }
+    console.log("apelez functia recursiva");
+    gameOut(playerVec,i+1);
   });
 
 };
@@ -556,11 +692,11 @@ export {
   resetStatus,
   ceckOnReady,
   startGame,
-  changeRemainingTime,
   leaveRoom,
   notifyAbortGame,
   notifyStartGame,
   changePropertyUser,
   checkEndRound,
-  startRound
+  startRound,
+  addTime
 };

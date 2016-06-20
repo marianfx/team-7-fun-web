@@ -1,4 +1,6 @@
-var answers = [];
+var answer;
+var clock;
+var answerSend=false;
 
 function startArena() {
 
@@ -11,17 +13,156 @@ function startArena() {
   $("#acceptBtn").click(acceptChallenge);
 
   $("#declineBtn").click(declineChallenge);
-
 }
+
+// a user enter in arena
+io.socket.on('inUsersArena', function(msg) {
+  appendArenaUser(msg);
+});
+
+// a user left arena
+io.socket.on('outUsersArena', function(msg) {
+  console.log('User leaved Arena:');
+  console.log(msg.id);
+  $('#' + msg.id).parents('li').remove();
+});
+
+// a user enter in a Game
+io.socket.on('inGameArena', function(msg) {
+  for (var i in msg.vec) {
+    $('#' + msg.vec[i]).parent().remove();
+  }
+
+});
+
+io.socket.on('gameInvite', function(msg) {
+  console.log(msg);
+  swal({
+    title: "A new Challange received",
+    text: "Player " + msg.from + "whants to play with you",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Accept",
+    cancelButtonText: "Decline",
+    closeOnConfirm: false,
+    closeOnCancel: true
+  }, function(isConfirm) {
+    if (isConfirm) {
+      acceptChallenge();
+      swal({
+            title: "Wait...",
+            text: "The game will start",
+            imageUrl: "./images/waiting.gif",
+            imageSize: '180x180',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showLoaderOnConfirm: true,
+          });
+    } else {
+      declineChallenge();
+    }
+  });
+});
+// when a player left a game
+io.socket.on('abordGame', function(msg) {
+  var mesaj = msg.name + ' just left the game';
+  Materialize.toast(mesaj, 4000);
+});
+
+io.socket.on('newAnswer', function(msg) {
+
+  var element = $("#Questions").find("."+msg.answer);
+
+  var insertPic='<img height="21" width="21"  style="position: relative; margin-left: 0px; margin-right: 30px;"\
+  src="' + msg.avatar + '" alt="' + msg.name + '"class="circle right">';
+  $(insertPic).appendTo(element);
+
+});
+
+
+io.socket.on('endRound', function(msg) {
+
+  swal.close();
+
+  $('#Top').html(msg.data);
+
+});
+
+
+
+io.socket.on('invitationExp', function(msg) {
+  console.log("Invitatia a expirat!");
+  swal.close();
+
+});
+
+
+io.socket.on('addTime', function(msg) {
+  console.log('add time');
+  console.log(msg.id);
+  $('#' + msg.id).parents('li').remove();
+});
+
+
+
+io.socket.on('startGame', function(msg) {
+
+  swal.close();
+  $('#clock').html("<div class=clock style=width: 300px; margin: auto;></div>");
+  $('#Top').html(msg.data);
+  $('#onlinePlayers').css("display", "none");
+  endFlag = false;
+  playing = true;
+
+});
+
+io.socket.on('declineChallenge', function(msg) {
+  console.log(msg);
+    swal("Sorry!", "Your invitation was rejected!", "SUCCESS");
+});
+
+io.socket.on('getQuestion', function(msg) {
+  console.log('am primit intrebarea!');
+  clock = $('.clock').FlipClock(30, {
+    clockFace: 'MinuteCounter',
+    countdown: true,
+    autoStart: true,
+    defaultLanguage: 'ro',
+    callbacks: {
+      stop: function() {
+        if(answerSend===false && clock.getTime().time === 0 )
+            Materialize.toast("You are out of time", 4000);
+      }
+    }
+  });
+
+
+  $('#Questions').html(msg.data);
+
+  $('.collapsible').collapsible({
+    accordion: false
+  });
+
+  // assign events
+  $(".qq").click(function() {
+    doSelect(this);
+  });
+
+});
 
 
 io.socket.on('endGame', function(msg) {
 
+    clock.stop();
+    $('#clock').empty();
     swal.close();
     console.log("END GAME");
-    console.log(msg);
+    $('#Questions').empty();
     $('#Top').html(msg.data);
+    $('#Top').addClass("col s12 m6 l6");
     $('#Winners').html(msg.winners);
+    $('#Winners').addClass("col s12 m6 l6");
     endFlag = true;
     playing = false;
 
@@ -29,6 +170,12 @@ io.socket.on('endGame', function(msg) {
 
 
 function challengeOpponent(){
+
+  if(playing)
+  {
+      Materialize.toast("You are already in a game!", 4000);
+      return;
+  }
     var oponentID = $('#userTB').val();
     var vec = [];
 
@@ -76,8 +223,13 @@ function connectToSocket(){
 
 
 function submitAnswer(){
-    var selectedAnswer = answers[0];
-    console.log(selectedAnswer);
+    var selectedAnswer = answer;
+    answer=null;
+    if(selectedAnswer == null)
+    {
+      Materialize.toast("Select an answer", 4000);
+      return;
+    }
     io.socket.post('/socket_submit_answer', {
         answer: selectedAnswer
       },
@@ -85,6 +237,13 @@ function submitAnswer(){
         console.log('Server responded with status code ' + response.statusCode + ' and data: ', body);
         console.log('raspunsul tau este: ' + body.checkAnswer);
         swal.disableButtons();
+
+        if(response.statusCode!=200){
+          Materialize.toast(body.message, 4000);
+        return;
+      }
+      clock.stop();
+      answerSend=true;
 
       //  $('#Questions').empty();
       var myAnswer = $("#Questions").find("."+selectedAnswer);
@@ -110,135 +269,6 @@ function resetArena() {
 }
 
 
-io.socket.on('abordGame', function(msg) {
-  console.log("Un jucator a parasit jocul!");
-  console.log(msg);
-  var mesaj = 'Utilizatorul' + msg.id + 'a parasit jocul';
-  Materialize.toast(mesaj, 4000);
-});
-
-io.socket.on('newAnswer', function(msg) {
-  console.log("raspuns nou!!");
-  console.log(msg);
-
-  var element = $("#Questions").find("."+msg.answer);
-
-  var insertPic='<img height="21" width="21"  style="position: relative; margin-left: 0px; margin-right: 30px;"\
-  src="' + msg.avatar + '" alt="' + msg.name + '"class="circle right">';
-  $(insertPic).appendTo(element);
-
-});
-
-
-io.socket.on('inUsersArena', function(msg) {
-  appendArenaUser(msg);
-});
-
-
-io.socket.on('endRound', function(msg) {
-
-  // cand se activeaza trebuie sa dezactiveze chestiile de la
-  // getQuestion
-  swal.close();
-
-
-  $('#Questions').empty();
-  console.log("SUNT LA FINALUL RUNDEI!!!!");
-  $('#Top').html(msg.data);
-  // $('.collapsible').collapsible({
-  //   accordion: false
-  // });
-
-
-  console.log("s-a terminat runda");
-
-});
-
-
-
-io.socket.on('invitationExp', function(msg) {
-  console.log("Invitatia a expirat!");
-  swal.close();
-
-});
-
-io.socket.on('inGameArena', function(msg) {
-  console.log(msg.vec);
-  for (var i in msg.vec) {
-
-    console.log(msg.vec[i]);
-    $('#' + msg.vec[i]).parent().remove();
-  }
-
-});
-
-io.socket.on('outUsersArena', function(msg) {
-  console.log('User leaved Arena:');
-  console.log(msg.id);
-  $('#' + msg.id).parents('li').remove();
-});
-
-io.socket.on('gameInvite', function(msg) {
-  console.log(msg);
-  swal({
-    title: "A new Challange received",
-    text: "Player " + msg.from + "whants to play with you",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Accept",
-    cancelButtonText: "Decline",
-    closeOnConfirm: true,
-    closeOnCancel: true
-  }, function(isConfirm) {
-    if (isConfirm) {
-      acceptChallenge();
-      swal("Wait", "Wait until the game begin", "SUCCESS");
-    } else {
-      declineChallenge();
-    }
-  });
-});
-
-
-io.socket.on('startGame', function(msg) {
-  console.log(msg);
-  swal.close();
-  $('#Top').html(msg.data);
-  $('#onlinePlayers').css("display", "none");
-  endFlag = false;
-  playing = true;
-
-});
-
-io.socket.on('declineChallenge', function(msg) {
-  console.log(msg);
-  swal.close();
-});
-
-io.socket.on('getQuestion', function(msg) {
-  console.log('am primit intrebarea!');
-
-
-  $('#Questions').html(msg.data);
-  swal.close();
-
-
-  //Trebuiesa sterg ceea ce-mi afiseaza endRound (topul)
-  //$('#Top').empty();
-
-  // restart acordion
-  $('.collapsible').collapsible({
-    accordion: false
-  });
-
-  // assign events
-  $(".qq").click(function() {
-    doSelect(this);
-    console.log("am dat click!!!");
-  });
-
-});
 
 function appendArenaUser(msg) {
   console.log('New user has entered in Arena:');
@@ -323,10 +353,7 @@ function doSelect(me) {
   console.log("numarul raspunsuluu:" + value);
 
   $(me).addClass("active");
-  answers = [];
-  answers.push(value);
+  answer=value;
 
-
-  console.log(answers);
 
 }

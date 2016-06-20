@@ -1,5 +1,7 @@
 var endFlag = false;
 var playing = false;
+var firstArena = false;
+var learnRound= false;
 
 $(document).ready(function() {
 
@@ -13,6 +15,7 @@ $(document).ready(function() {
     $('#rollDicesButton').click(rollDices);
 
     $('#arenaBTN').click(loadArena);
+
 
 });
 
@@ -174,12 +177,67 @@ function loadCourses(){
   	});
 }
 
+function addTime(){
+  var time = 0;
+  var msg = null;
+  if(playing === true)
+  {
+    msg = "multiplayer";
+    time=0;
+  }
+  if (learnRound === true)
+  {
+    time = clock.getTime().time;
+    msg = "addTime";
+  }
+
+  if(!playing && !learnRound)
+  {
+    return;
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "/player/addTime",
+    data: {message: msg},
+    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+
+    success: function(result) {
+        console.log(result);
+        if(result.flag) {
+          clock.setTime(time + result.time);
+          $("#timeBtn").attr("data-tooltip","Running");
+          loadSkills();
+
+        }
+        else
+        {
+          var $htmlToDisplay = $('<span class="white-text" id = "error-message">' + "Insufficient points."  + '</span>');
+          Materialize.toast($htmlToDisplay, 1000, 'card-panel red');
+        }
+
+    },
+    error: function(result) {
+      swal({
+          title:"Error",
+          text: "Cannot do that.",
+          type: "error",
+          allowEscapeKey: true,
+          allowOutsideClick: true,
+          showConfirmButton: true
+        });
+    },
+    timeout: 5000
+  });
+}
 
 /**
  * Loads all the courses available for the current user
  * @method loadCourses
  */
 function loadArena(){
+
+    learnRound=false;
 
     if(playing)
       return;
@@ -191,6 +249,9 @@ function loadArena(){
       return;
     }
 
+    if(firstArena)
+      return;
+
   	$.ajax({
   		type: "GET", // type of request
   		url: '/arena', //path of the request
@@ -200,6 +261,7 @@ function loadArena(){
   		success: function(result) {
     			// success on login, so redirect. This does not affect the session. If user tricks this, still cannot access the game because of the policies.
     			$('#contentContainer').html(result);
+          firstArena=true;
 
           // js and sails is loaded, so attach all the buttons and connect to the arena
           startArena();
@@ -443,6 +505,7 @@ function loadSkills() {
 
       $('#openLuckButton').leanModal();
       $('#openLuckButton').click(resetDice);
+      $('#timeBtn').click(addTime);
 
       $('.addSkillPoint').click(addSkill);
       $('#cheatButton').click(cheat);
