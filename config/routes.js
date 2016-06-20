@@ -186,6 +186,11 @@ module.exports.routes = {
       action: 'loadProfile'
     },
 
+    'POST /profile' : {
+      controller: 'PlayerController',
+      action: 'addFriend'
+    },
+
     // DRN - SOCKET
     'POST /socket_connect': {
     controller: 'SocketController',

@@ -189,10 +189,29 @@ module.exports = {
 			else {
 
 				var response = {};
-				
+
 				response.arefriends = data.arefriends;
 				response.html = swig.renderFile('views/game/profile.swig', { userdata :  data });
 				res.ok(response);
+			}
+		});
+	},
+
+	addFriend: function(req, res) {
+
+		var player1_id = parseInt(req.user.id),
+			player2_id = parseInt(req.body.id);
+
+		PlayerService.addFriend(player1_id, player2_id, function(err, data) {
+
+			if(err) {
+
+				sails.log.debug(err);
+				res.serverError('Something very bad happened on the server.');
+			}
+			else {
+
+				res.ok({ playername : data });
 			}
 		});
 	},

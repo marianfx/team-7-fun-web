@@ -37,26 +37,54 @@ function loadProfile(element) {
 
       if(result.arefriends) {
 
-        $('#addFriendsButton').addClass('green');
+        $('#addFriendButton').addClass('green');
       }
       else {
 
-        $('#addFriendsButton').addClass('red');
-        $('#addFriendsButton').click(function() {
-          addFriend(profile_id);
-        });
+        $('#addFriendButton').addClass('red');
+        $('#addFriendButton').click(addFriend);
+        $('#addFriendButton').tooltip({delay: 50});
       }
     },
 
     error: function(err) {
 
-      window.location.href = '/500';$('#toAppendCookies').html('<p>Oops...</p>');
+      window.location.href = '/500';
     },
 
     timeout: 3000
   });
 }
 
+function addFriend() {
+
+  var id = parseInt($('#addFriendButton').attr('playerid'));
+
+  $.ajax({
+    type: 'POST',
+    url: '/profile',
+    data: { id : id },
+    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+
+    success: function(result) {
+
+      $('#addFriendButton').unbind('click', addFriend);
+      $('#addFriendButton').removeClass('red');
+      $('#addFriendButton').addClass('green');
+      $('#addFriendButton').tooltip('remove');
+
+      var htmlMessage = '<span class="white-text">Congrats!<br>You and ' + result.playername + ' are now friends.</span>';
+      Materialize.toast(htmlMessage, 3000, 'card-panel green');
+    },
+
+    error: function(err) {
+
+      displaySwal('No no no...', 'Could not add friend. Try again later.', 'error', null);
+    },
+
+    timeout: 3000
+  });
+}
 
 /**
  * Loads the left aside menu with the player informations

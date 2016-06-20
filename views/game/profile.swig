@@ -29,7 +29,7 @@
 
       {% if !userdata.me %}
       <div class="col s1 right">
-        <a class="btn-floating waves-effect waves-light darken-2 right" id="addFriendButton">
+        <a class="btn-floating tooltiped waves-effect waves-light darken-2 right" id="addFriendButton" playerid="{{ userdata.details.PLAYERID }}" data-position="top" data-tooltip="Add friend.">
           <i class="mdi-action-perm-identity"></i>
         </a>
       </div>

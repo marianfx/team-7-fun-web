@@ -163,7 +163,7 @@ module.exports = {
 				}
 				else {
 
-					if(data) {
+					if(data.length > 0) {
 						userdata.arefriends = true;
 					}
 				}
@@ -200,6 +200,27 @@ module.exports = {
 
 						userdata.friendscount = data[0].FRIENDSCOUNT;
 						next(err, userdata);
+					}
+				});
+			}
+		});
+	},
+
+	addFriend : function(player1_id, player2_id, next) {
+
+		sails.controllers.friend.createHandler(player1_id, player2_id, function(err) {
+
+			if(err) {
+				next(err, null);
+			}
+			else {
+				PlayerService.getPlayer(player2_id, function(err, data) {
+
+					if(err) {
+						next(err, null);
+					}
+					else {
+						next(err, data[0].playerName);
 					}
 				});
 			}
