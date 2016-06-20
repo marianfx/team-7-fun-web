@@ -18,6 +18,13 @@
          <div class="navbar-fixed">
              <nav class="navbar-color">
                  <div class="nav-wrapper">
+
+									 <ul class="left" style="margin-left: 50px;">
+	                    <li>
+	                      <a href="/"><h1><strong>Fun Web<strong></h1></a>
+	                    </li>
+	                  </ul>
+
                      <!-- other stuff here. All aligned right. -->
                      <ul class="right">
 
@@ -34,6 +41,11 @@
                         <!-- fullscreen mode -->
                         <li>
                             <a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a>
+                        </li>
+                        <li>
+                          <a href="#" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse tooltipped" data-position="bottom" data-tooltip="Be social!">
+                            <i class="mdi-social-whatshot"></i>
+                          </a>
                         </li>
                      </ul>
                  </div>
@@ -61,6 +73,34 @@
 			           <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only cyan"><i class="material-icons">toc</i></a>
              </aside>
              <!-- END LEFT SIDEBAR NAV-->
+
+						 <!-- //////////////////////////////////////////////////////////////////////////// -->
+					  <!-- START RIGHT SIDEBAR NAV-->
+					  <aside id="right-sidebar-nav">
+							<ul id="chat-out" class="side-nav rightside-navigation" style="height: 100%">
+								<li class="li-hover" style="height: 100%;">
+									<ul class="chat-collapsible" data-collapsible="expandable">
+									<li style="height:100%;">
+										<div class="collapsible-header white-text active" style="background-color: #0097a7;"><i class="mdi-social-whatshot"></i>Be Social!</div>
+										<div class="collapsible-body recent-activity" style="height: 100%;">
+
+											<div class="recent-activity-list chat-out-list row" style="height: 50%; padding-top: 5px;">
+											  <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fthefunweb07%2F&tabs=timeline&width=300&height=350&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=true&appId=1706259366298551" width="300" style="height: 100%; overflow: scroll;" frameborder="0" allowTransparency="true"></iframe>
+											</div>
+
+											<!-- Facebook Comments -->
+											<div class="recent-activity-list chat-out-list row" style="height: 50% !important;">
+												  <iframe src='./commsframe.html' frameborder='0' width='300' scrollable="no" style="height: 100%; overflow-x: hidden;">
+													</iframe>
+											</div>
+
+										</div>
+									</li>
+								  </ul>
+								</li>
+							</ul>
+					  </aside>
+					  <!-- end RIGHT SIDEBAR NAV-->
 
              <!-- START CONTENT -->
              <section id="content">
