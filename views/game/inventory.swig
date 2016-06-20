@@ -18,7 +18,10 @@
             </div>
 
             <div class="card-reveal" >
-                <p class="card-title grey-text text-darken-4 itemDescription">{{ item.description }}</p>
+                <p class="card-title grey-text text-darken-4 itemDescription">{{ item.description }}
+                <br>
+                Skill points added: {{ item.skillPoints }}
+                </p>
             </div>
         </div>
     </div>
