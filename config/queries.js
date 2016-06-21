@@ -76,7 +76,7 @@ module.exports.queries = {
 
     insert_course:"BEGIN INSERT INTO  COURSES  (TITLE, SHORTDESC, HASHTAG, PHOTOURL, AUTHOR) VALUES(:title, :shortdesc, :hashtag, :photoUrl, :author ); COMMIT; END;",
 
-    insert_question:"BEGIN INSERT INTO QUESTIONS  (QUESTION, ANSWERA, ANSWERB, ANSWERC, ANSWERD, CORRECTANSWER, ROUNDID ) VALUES(:question, :answerA, :answerB, :answerC, :answerD, :correctAnswer, :roundID ); COMMIT; END;"
+    insert_question:"BEGIN INSERT INTO QUESTIONS  (QUESTION, ANSWERA, ANSWERB, ANSWERC, ANSWERD, CORRECTANSWER, ROUNDID ) VALUES(:question, :answerA, :answerB, :answerC, :answerD, :correctAnswer, :roundID ); COMMIT; END;",
 
     update_experience_battle: 'BEGIN UPDATE PLAYERS SET EXPERIENCE= :myexperience, PLAYERLEVEL=:mylevel WHERE PLAYERID = :id;  COMMIT; END;'
 };

@@ -711,7 +711,7 @@ function rollDices() {
 
       if(result.what != 2) {
 
-        if(result.what === 0) {
+        if(result.what == 0) {
 
           msg = 'You got some some cookies.';
           loadCookies();
