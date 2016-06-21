@@ -480,9 +480,16 @@ module.exports = {
       });
     }
 
+    if (currUser.time < 0) {
+      return res.badRequest({
+        message: "You are out of time!"
+      });
+    }
+
+
     //if answer is null we accept another answer
     if (req.body.answer == null) {
-      return;
+      return res.badRequest({message:"Please choose an answer!"});
     }
 
     // if a player want to give another answer
@@ -491,12 +498,6 @@ module.exports = {
         message: "You cannot answer two time to the same question!"
       });
     }
-    if (currUser.time < 0) {
-      return res.badRequest({
-        message: "You are out of time!"
-      });
-    }
-
 
     var currGame = Game.games.get(currUser.gameID);
     var currQuestion = currGame.questions[currGame.currentQuestion - 1];

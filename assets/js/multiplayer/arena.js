@@ -160,9 +160,9 @@ io.socket.on('endGame', function(msg) {
     console.log("END GAME");
     $('#Questions').empty();
     $('#Top').html(msg.data);
-    $('#Top').addClass("col s12 m6 l6");
+    $('#Top').addClass("col s12 m4");
     $('#Winners').html(msg.winners);
-    $('#Winners').addClass("col s12 m6 l6");
+    $('#Winners').addClass("col s12 m4");
     endFlag = true;
     playing = false;
 
@@ -225,11 +225,6 @@ function connectToSocket(){
 function submitAnswer(){
     var selectedAnswer = answer;
     answer=null;
-    if(selectedAnswer == null)
-    {
-      Materialize.toast("Select an answer", 4000);
-      return;
-    }
     io.socket.post('/socket_submit_answer', {
         answer: selectedAnswer
       },

@@ -1,5 +1,5 @@
 
-  <ul class="collection with-header center-align class=col s12 m6 l6">
+  <ul class="collection with-header center-align ">
           <li class="collection-header"><h4>{{type}}</h4></li>
 
   					{% for player in top %}

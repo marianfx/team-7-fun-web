@@ -202,9 +202,40 @@ let update_end_battle = function(gamePlayers, winners, i) {
     return;
   });
 
+  // update EXPERIENCE
+  plsql = sails.config.queries.update_experience_battle;
+  playerCtrl.getPlayer(gamePlayers[i], function(err, playerData) {
+var user = Game.Users.get(String(gamePlayers[i]));
+
+
+var experience = (25 * user.answers)+ playerData[0].EXPERIENCE;
+var upLevel = playerData[0].PLAYERLEVEL;
+if(experience> 50*Math.pow(2,playerData[0].PLAYERLEVEL))
+{
+  upLevel=upLevel+1;
+}
+
+  var bindvars2={
+    id: gamePlayers[i],
+    myexperience: experience,
+    mylevel: upLevel
+  };
+
+  resetStatus(gamePlayers[i]);
+
+
+  DB.procedureSimple(plsql, bindvars2, function(err, rows) {
+
+    if (err)
+      sails.log.debug(err.message);
+    return;
+  });
+
+
   //call this function for next player
   update_end_battle(gamePlayers, winners, i + 1);
 
+});
 
 };
 
@@ -331,7 +362,7 @@ let roundTop = function(gameID, next) {
 
 };
 let addTime = function(userID, res) {
-  var user = Game.Users.get(String(userID))
+  var user = Game.Users.get(String(userID));
   if (user == null) {
     return;
   }
@@ -425,7 +456,6 @@ let startRound = function(gameID) {
         for( var [key,val] of Game.games.get(gameID).players)
         {
           gamePlayers.push(key);
-          resetStatus(key);
         }
         var playerVec = [];
         for (var [key, value] of Game.games.get(gameID).players) {

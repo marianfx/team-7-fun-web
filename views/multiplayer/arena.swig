@@ -18,7 +18,7 @@
   </ul>
 
 
-    <div id="Questions" class="col s12 m6 l6"></div>
+    <div id="Questions" class="col s12 m8"></div>
 
     <div id="Top">
     </div>

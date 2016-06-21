@@ -78,4 +78,5 @@ module.exports.queries = {
 
     insert_question:"BEGIN INSERT INTO QUESTIONS  (QUESTION, ANSWERA, ANSWERB, ANSWERC, ANSWERD, CORRECTANSWER, ROUNDID ) VALUES(:question, :answerA, :answerB, :answerC, :answerD, :correctAnswer, :roundID ); COMMIT; END;"
 
+    update_experience_battle: 'BEGIN UPDATE PLAYERS SET EXPERIENCE= :myexperience, PLAYERLEVEL=:mylevel WHERE PLAYERID = :id;  COMMIT; END;'
 };
