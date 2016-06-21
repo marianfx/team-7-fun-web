@@ -165,6 +165,9 @@ io.socket.on('endGame', function(msg) {
     $('#Winners').addClass("col s12 m4");
     endFlag = true;
     playing = false;
+    $('.loadProfileButton').click(function() {
+      loadProfile(this);
+    });
 
 });
 

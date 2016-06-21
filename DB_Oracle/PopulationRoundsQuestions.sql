@@ -5,7 +5,56 @@ COMMIT;
 /
 
 
-INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 1, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
+INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 1, '<h1>Welcome to the <strong>Fun<strong>!</h1>
+
+<h1>We glad to se you in our game, let start.</h1>
+
+<h4>This is the game main page</h4>
+<img src="/images/intro/intro0.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+<h4>
+	In left you will found player menu
+</h4>
+	<img src="/images/intro/intro0.1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+<h4>
+In the top you have skill buttons, and other stuff like full-screen, shop, and Facebook social plugin
+</h4>
+<img src="/images/intro/intro0.2.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+
+<h4>
+	And this is the Game Zone where you learn Courses
+</h4>
+	<img src="/images/intro/intro0.3.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+
+
+<h4>
+	And this is <strong>Arena</strong> Button!
+</h4>
+	<img src="/images/intro/intro0.4.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+<hr>
+<h4>
+	And after presing that button you will enter in arena tadam
+</h4>
+	<img src="/images/intro/intro0.4.1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+
+<hr>
+
+<h4>
+	This is you\'r profile Page
+</h4>
+	<img src="/images/intro/intro1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+
+<hr>
+<h4>
+	and how it looks like
+</h4>
+	<img src="/images/intro/intro1.1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
+
+<hr>
+<strong>
+<h1>
+	So to find how all these works pleas click everywere you want and ceckout what you will recieve.
+<h1>
+<strong>' , 1)
 /
 COMMIT;
 /
