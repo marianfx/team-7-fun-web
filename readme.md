@@ -93,6 +93,22 @@
 
     </code>
 
+# _**6. Database scripts**_
+  - the application uses Oracle
+  - for deploying, certains scripts (from DB_Oracle folder) need to be runned
+  - Order:
+      1.	Project-init
+      2.	data_manipulation
+      3.	TWExceptions
+      4. 	Game_Managament
+      5.	player_package
+      6. 	authentication
+      7.	project-triggers
+      8.	project-insert(sequences)
+      9.  populate-items
+      10.	populate-courses-rounds-questions
+      11.	indexes
+
 # _**x. Real time communication**_
 - Best use = multiplayer games (like Fun Web Uses)
 -  [http://sailsjs.org/documentation/concepts/realtime](http://sailsjs.org/documentation/concepts/realtime)
