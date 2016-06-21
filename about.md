@@ -84,8 +84,6 @@
 
 - Anonymous functions `function() {} = functie () => {} = functie anonima`
 
-  - Daca voi incerca sa referentiez 'this' in functia anonima, NU va functiona (duh)
-
 - Basic functions in Javascript
 
   - A function in JS usually looks like this:
@@ -103,8 +101,4 @@
           (myfunc knows what must call in the line of execution, cause they all flow)
         })
     ```
-
-  - Deci am functia `myfunc` care e apelata cu o serie de parametri. Ea executa niste chestii, si trebuie sa stie cand si-a terminat treaba ce sa apeleze in continuare, in linia de executie. Chestia asta o stie pasandu-i parametrul callback, care e de fapt la randul sau o alta functie, cu parametri (cei de la programare functionala vor sti).
-  - Cand vreau sa apelez functia, desigur pot sa-i furnizez aceasta functie de callback. De asemenea, pot sa nu i-o furnizez daca nu am nevoie.
-  - De ex. daca am o functie care returneaza true sau false in functie de anumite conditii, nu am de ce sa-i dau o functie de callback, pentru ca ea imi furnizeaza direct rezultatul.
   - Now see `app_flow`.
