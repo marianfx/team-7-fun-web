@@ -121,7 +121,7 @@
 
 		 <!-- Floating button for entering the arena -->
 		 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-		    <a id="arenaBTN" class="btn-floating btn-large red tooltipped" data-position="top" data-tooltip="Enter ARENA!">
+		    <a id="arenaBTN" class="btn-floating btn-large red">
 		      <i class="large mdi-hardware-security"></i>
 		    </a>
   	</div>

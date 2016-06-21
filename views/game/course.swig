@@ -60,7 +60,7 @@
                       </a>
                     </li>
                     <li>
-                      <a lessonId="{{ round.roundid }}" class="btn-floating tooltipped playable" data-position="right" data-tooltip="Test time!">
+                      <a lessonId="{{ round.roundid }}" class="btn-floating playable">
                         <i class="material-icons red darken-1">query_builder</i>
                       </a>
                     </li>

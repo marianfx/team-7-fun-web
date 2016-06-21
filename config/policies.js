@@ -52,11 +52,7 @@ module.exports.policies = {
     'render': ['passport', 'sessionAuth'],
     'submmitRoundAnswers': ['passport', 'sessionAuth']
 
-  },
-  GameController: {
-    '*': true,
-    'renderArena': ['passport', 'sessionAuth']
-  },
+  }
 
   /***************************************************************************
    *                                                                          *
