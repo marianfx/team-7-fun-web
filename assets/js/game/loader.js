@@ -342,7 +342,8 @@ function loadCourse(me){
       // the function called on Success (no error returned bu the server)
       success: function(result) {
             // success on get course for roundID, so display modal.
-          $('#modalContainer').html(result);
+          var text=result.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&nbsp;/g,' ');
+          $('#modalContainer').html(text);
           $('#modalCourse').openModal();
       },
       // the function called on error (error returned from server or TimeOut Expired)

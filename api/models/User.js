@@ -76,6 +76,10 @@ attributes: {
           type: 'date',
           columnName: 'REGISTRATIONDATE'
       },
+      isAdmin:{
+        type:'integer',
+        columnName:'ISADMIN'
+      }, 
       toJSON: function() {
           let obj = this.toObject();
           delete obj.password;

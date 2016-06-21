@@ -204,12 +204,12 @@ module.exports = function() {
          * Loads the questions
          * @method loadQuestions
          */
-        this.loadQuestions = function (lastRound, gameID, next) {
+         this.loadQuestions = function (lastRound, gameID, next) {
 
             var plsql = "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;";
             var bindvars = {
-                p_roundID: lastRound,
-                nr_questions: 5,
+              p_roundID: lastRound,
+              nr_questions: 5,
                 cursor: {
                     type: this.oracledb.CURSOR,
                     dir: this.oracledb.BIND_OUT

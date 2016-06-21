@@ -23,199 +23,226 @@
 module.exports.routes = {
 
   /***************************************************************************
-  *                                                                          *
-  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-  * etc. depending on your default view engine) your home page.              *
-  *                                                                          *
-  * (Alternatively, remove this and add an `index.html` file in your         *
-  * `assets` directory)                                                      *
-  *                                                                          *
-  ***************************************************************************/
-    'GET /': {
-        view: 'game/game'
-    },
+   *                                                                          *
+   * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
+   * etc. depending on your default view engine) your home page.              *
+   *                                                                          *
+   * (Alternatively, remove this and add an `index.html` file in your         *
+   * `assets` directory)                                                      *
+   *                                                                          *
+   ***************************************************************************/
+  'GET /': {
+    view: 'game/game'
+  },
 
-    'GET /game': {
-      controller: 'GameController',
-      action: 'render'
-    },
-    'GET /arena': {
-      controller: 'GameController',
-      action: 'renderArena'
-    },
+  'GET /game': {
+    controller: 'GameController',
+    action: 'render'
+  },
+  'GET /arena': {
+    controller: 'GameController',
+    action: 'renderArena'
+  },
 
-    'GET /signup': {
-        view: 'auth/signup'
-    },
-    'GET /signin': {
-        view: 'auth/signin'
-    },
+  'GET /signup': {
+    view: 'auth/signup'
+  },
+  'GET /signin': {
+    view: 'auth/signin'
+  },
 
-    'POST /register': {
-        controller: 'UserController',
-        action: 'create'
-    },
-    '/logout': {
-        controller: 'AuthController',
-        action: 'logout'
-    },
+  'POST /register': {
+    controller: 'UserController',
+    action: 'create'
+  },
+  '/logout': {
+    controller: 'AuthController',
+    action: 'logout'
+  },
 
-    'POST /auth/local': {
-        controller: 'AuthController',
-        action: 'callback'
-    },
-    'POST /auth/local/:action': {
-        controller: 'AuthController',
-        action: 'callback'
-    },
-    'GET /auth/:provider': {
-        controller: 'AuthController',
-        action: 'provider'
-    },
-    'GET /auth/:provider/callback': {
-        controller: 'AuthController',
-        action: 'callback'
-    },
-    'GET /auth/:provider/:action': {
-        controller: 'AuthController',
-        action: 'callback'
-    },
+  'POST /auth/local': {
+    controller: 'AuthController',
+    action: 'callback'
+  },
+  'POST /auth/local/:action': {
+    controller: 'AuthController',
+    action: 'callback'
+  },
+  'GET /auth/:provider': {
+    controller: 'AuthController',
+    action: 'provider'
+  },
+  'GET /auth/:provider/callback': {
+    controller: 'AuthController',
+    action: 'callback'
+  },
+  'GET /auth/:provider/:action': {
+    controller: 'AuthController',
+    action: 'callback'
+  },
 
-    'GET /render/me': {
-        controller: 'PlayerController',
-        action: 'render'
-    },
-    'GET /render/courses': {
-        controller: 'CourseController',
-        action: 'render'
-    },
+  'GET /render/me': {
+    controller: 'PlayerController',
+    action: 'render'
+  },
+  'GET /render/courses': {
+    controller: 'CourseController',
+    action: 'render'
+  },
 
-    'GET /players/:id': {
-        controller: 'PlayerController',
-        action: 'find'
-    },
-    'POST /player/update': {
-        controller: 'PlayerController',
-        action: 'update'
-    },
+  'GET /players/:id': {
+    controller: 'PlayerController',
+    action: 'find'
+  },
+  'POST /player/update': {
+    controller: 'PlayerController',
+    action: 'update'
+  },
 
-    'POST /player/addTime':{
-      controller:'PlayerController',
-      action: 'addTime'
-    },
-    'POST /friends': {
-        controller: 'FriendController',
-        action: 'create'
-    },
-    'GET /friends/:last/:limit': {
-          controller: 'FriendController',
-          action: 'find'
-    },
+  'POST /player/addTime': {
+    controller: 'PlayerController',
+    action: 'addTime'
+  },
+  'POST /friends': {
+    controller: 'FriendController',
+    action: 'create'
+  },
+  'GET /friends/:last/:limit': {
+    controller: 'FriendController',
+    action: 'find'
+  },
 
-    'GET /questions':{
-        controller: 'QuestionController',
-        action: 'render'
+  'GET /questions': {
+    controller: 'QuestionController',
+    action: 'render'
 
-      },
+  },
 
-    'GET /course':{
-        controller:'CourseController',
-        action: 'renderModalCourse'
-    },
-      // post for subbmit ansfer in learning module
+  'GET /course': {
+    controller: 'CourseController',
+    action: 'renderModalCourse'
+  },
+  // post for subbmit ansfer in learning module
 
-    'POST /questions/submmit':{
-      controller: "QuestionController",
-      action: 'submmitRoundAnswers'
-    },
+  'POST /questions/submmit': {
+    controller: "QuestionController",
+    action: 'submmitRoundAnswers'
+  },
 
-    /*CZR - SHOP, ITEMS, PLAYER*/
+  /*CZR - SHOP, ITEMS, PLAYER*/
 
-    'POST /shop' : {
-      controller: 'ItemController',
-      action: 'loadShop'
-    },
+  'POST /shop': {
+    controller: 'ItemController',
+    action: 'loadShop'
+  },
 
-    'GET /inventory' : {
-      controller: 'PlayerController',
-      action: 'loadInventory'
-    },
+  'GET /inventory': {
+    controller: 'PlayerController',
+    action: 'loadInventory'
+  },
 
-    'POST /shop/buy' : {
-      controller: 'PlayerController',
-      action: 'buyItem'
-    },
+  'POST /shop/buy': {
+    controller: 'PlayerController',
+    action: 'buyItem'
+  },
 
-    'POST /reloadshop' : {
-      controller: 'ItemController',
-      action: 'reloadShop'
-    },
+  'POST /reloadshop': {
+    controller: 'ItemController',
+    action: 'reloadShop'
+  },
 
-    'POST /player/top' : {
-      controller: 'PlayerController',
-      action: 'loadTopPlayersBy'
-    },
+  'POST /player/top': {
+    controller: 'PlayerController',
+    action: 'loadTopPlayersBy'
+  },
 
-    'GET /skills' : {
-      controller: 'PlayerController',
-      action: 'loadSkills'
-    },
+  'GET /skills': {
+    controller: 'PlayerController',
+    action: 'loadSkills'
+  },
 
-    'POST /skills' : {
-      controller: 'PlayerController',
-      action: 'addSkill'
-    },
+  'POST /skills': {
+    controller: 'PlayerController',
+    action: 'addSkill'
+  },
 
-    'GET /roll' : {
-      controller: 'PlayerController',
-      action: 'rollDice'
-    },
+  'GET /roll': {
+    controller: 'PlayerController',
+    action: 'rollDice'
+  },
 
-    'GET /cookies' : {
-      controller: 'PlayerController',
-      action: 'loadCookies'
-    },
+  'GET /cookies': {
+    controller: 'PlayerController',
+    action: 'loadCookies'
+  },
 
-    'GET /skillpoints' : {
-      controller: 'PlayerController',
-      action: 'loadSkillpoints'
-    },
+  'GET /skillpoints': {
+    controller: 'PlayerController',
+    action: 'loadSkillpoints'
+  },
 
-    'GET /profile' : {
-      controller: 'PlayerController',
-      action: 'loadProfile'
-    },
+  'GET /profile': {
+    controller: 'PlayerController',
+    action: 'loadProfile'
+  },
 
-    'POST /profile' : {
-      controller: 'PlayerController',
-      action: 'addFriend'
-    },
+  'POST /profile': {
+    controller: 'PlayerController',
+    action: 'addFriend'
+  },
 
-    // DRN - SOCKET
-    'POST /socket_connect': {
+  // DRN - SOCKET
+  'POST /socket_connect': {
     controller: 'SocketController',
     action: 'socket_connect'
-    },
-    'POST /socket_challange': {
-      controller: 'SocketController',
-      action: 'socket_challange'
-    },
+  },
+  'POST /socket_challange': {
+    controller: 'SocketController',
+    action: 'socket_challange'
+  },
 
-    'POST /socket_disconnect': {
-      controller: 'SocketController',
-      action: 'socket_disconnect'
-    },
+  'POST /socket_disconnect': {
+    controller: 'SocketController',
+    action: 'socket_disconnect'
+  },
 
-    'POST /socket_response_challenge': {
-      controller: 'SocketController',
-      action: 'socket_response_challenge'
-    },
+  'POST /socket_response_challenge': {
+    controller: 'SocketController',
+    action: 'socket_response_challenge'
+  },
 
-    'POST /socket_submit_answer': {
-      controller: 'SocketController',
-      action: 'socket_submit_answer'
-    }
+  'POST /socket_submit_answer': {
+    controller: 'SocketController',
+    action: 'socket_submit_answer'
+  },
 
+  // ADMINISTRATION
+  'GET /addCourse': {
+    controller: 'AdminController',
+    action: "renderCourse"
+  },
+  'POST /addCourse': {
+    controller: 'AdminController',
+    action: 'createCourse'
+  },
+  'GET /addRound': {
+    controller: 'AdminController',
+    action: 'renderRound'
+  },
+
+  'POST /addRound': {
+    controller: 'AdminController',
+    action: 'createRound'
+  },
+
+  'GET /addQuestion': {
+    controller: 'AdminController',
+    action: 'renderQuestion'
+  },
+  'POST /addQuestion': {
+    controller: 'AdminController',
+    action: 'createQuestion'
+  }
 
 
 };

@@ -22,6 +22,8 @@ module.exports = {
     // create the user
     sails.services.passport.protocols.local.createUser(req.body, function(err, user) {
       if (err || !user){
+        sails.log.debug(err);
+        sails.log.debug(user);
         sails.log.debug('Error on creating account in User Controller.');
         return res.send(400, err.toJSON());
       }

@@ -68,6 +68,14 @@ module.exports.queries = {
 
     update_end_battle:'BEGIN player_package.UPDATE_BATTLE_END(:id, :flag); COMMIT; END;',
 
-    decremente_S_TIME: 'BEGIN UPDATE PLAYERS SET S_TIME= :timepoints WHERE PLAYERID = :id;  COMMIT; END;'
+    decremente_S_TIME: 'BEGIN UPDATE PLAYERS SET S_TIME= :timepoints WHERE PLAYERID = :id;  COMMIT; END;',
+
+    // ADMINISTRATION
+
+    insert_round:"BEGIN INSERT INTO  ROUNDS (NAME, NROFQUESTIONS, COURSE, ROUNDTIME ,COURSEID , POINTS) VALUES(:name, :nrofquestions, :course, :roundTime, :courseId, :points ); COMMIT; END;",
+
+    insert_course:"BEGIN INSERT INTO  COURSES  (TITLE, SHORTDESC, HASHTAG, PHOTOURL, AUTHOR) VALUES(:title, :shortdesc, :hashtag, :photoUrl, :author ); COMMIT; END;",
+
+    insert_question:"BEGIN INSERT INTO QUESTIONS  (QUESTION, ANSWERA, ANSWERB, ANSWERC, ANSWERD, CORRECTANSWER, ROUNDID ) VALUES(:question, :answerA, :answerB, :answerC, :answerD, :correctAnswer, :roundID ); COMMIT; END;"
 
 };

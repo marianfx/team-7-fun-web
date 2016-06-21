@@ -105,6 +105,7 @@ function doSelect(me) {
  */
 function submmitAnswer() {
 
+    $('#submmitBtn').css("display","none");
     isPlaying = false;
     $('#addTimeButton').unbind('click', addTime);
 
@@ -154,6 +155,10 @@ function processResponse(result) {
   isCancel = 'yes';
   clock.stop();//stops the clock, without showing warnings
   if (!result.flagTime) {
+    setTimeout(function(){
+      window.location.href = "/game";
+    },
+    3000);
       swal({
         title: "Sorry..",
         text: "You exceeded your time!",

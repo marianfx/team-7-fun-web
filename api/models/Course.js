@@ -26,12 +26,15 @@ module.exports = {
         columnName: 'SHORTDESC'
     },
     hashtag: {
+        type: 'string',
         columnName: 'HASHTAG'
     },
     photoUrl: {
+          type: 'string',
           columnName: 'PHOTOURL'
     },
     author: {
+        type: 'string',
         columnName: 'AUTHOR'
     },
     creationDate: {

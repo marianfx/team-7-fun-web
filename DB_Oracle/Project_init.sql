@@ -37,10 +37,6 @@ CREATE TABLE COURSES
 )
 /
 
-INSERT INTO COURSES(COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES(1, 'Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , 'images/courses/welcome.png')
-/
-COMMIT;
-/
 
 -- ############# Rounds Table ##########
 CREATE TABLE Rounds (
@@ -56,10 +52,6 @@ CREATE TABLE Rounds (
 	)
 /
 
-INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 5, 'Welcome, we chose a small number of start-up questions for you (PS: You can win some bonuses..)' , 1)
-/
-COMMIT;
-/
 
 -- ############# Questions Table ##########
 CREATE TABLE Questions (
@@ -128,7 +120,7 @@ CREATE TABLE GameUsers (
 	, facebookID VARCHAR2(1000)
 	, accessToken VARCHAR2(1000)
 	, registrationDate DATE DEFAULT SYSDATE NOT NULL
-
+  , isAdmin INT DEFAULT 0 NOT NULL
   , CONSTRAINT user_unique UNIQUE (username)
 	, CONSTRAINT email_unique UNIQUE (email)
 	)

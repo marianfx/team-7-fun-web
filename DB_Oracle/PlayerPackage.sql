@@ -47,61 +47,63 @@ create or replace PACKAGE BODY player_package IS
   END update_battle_end;
 
   PROCEDURE update_experience(p_playerid INT, p_roundid INT, p_procent INT)
-  IS
-  v_lastRoundID Players.lastRoundId%TYPE;
-  v_punctaj Players.experience%TYPE;
-  v_max_experience Players.experience%TYPE;
-  v_current_exp Players.experience%TYPE;
-  v_level Players.playerlevel%TYPE;
-  v_max_round Rounds.roundid%TYPE;
-  BEGIN
-    SELECT lastRoundId,playerLevel,experience into
-           v_lastRoundID,v_level,v_current_exp
-        from Players
-        where playerId=p_playerid;
-    SELECT points into v_punctaj FROM ROUNDS
-      WHERE roundid=p_roundid;
+    IS
+    v_lastRoundID Players.lastRoundId%TYPE;
+    v_punctaj Players.experience%TYPE;
+    v_max_experience Players.experience%TYPE;
+    v_current_exp Players.experience%TYPE;
+    v_level Players.playerlevel%TYPE;
+    v_max_round Rounds.roundid%TYPE;
+    BEGIN
+      SELECT lastRoundId,playerLevel,experience into
+             v_lastRoundID,v_level,v_current_exp
+          from Players
+          where playerId=p_playerid;
+      SELECT points into v_punctaj FROM ROUNDS
+        WHERE roundid=p_roundid;
 
-     --verifica daca a mai facut aceasta runda
-    IF(p_roundid<v_lastRoundID) THEN
-      v_punctaj:=v_punctaj*0.2;
-    END IF;
-    -- verifica daca procentul 100%
-    IF(p_procent=100) THEN
-      v_punctaj:=v_punctaj+v_punctaj*0.5;
-      UPDATE PlayersStatistics
-      SET PerfectRounds=PerfectRounds+1
-      WHERE playerid=p_playerid;
-    END IF;
-    IF (p_procent>70) THEN
-      SELECT max(roundid) INTO v_max_round  FROM rounds;
-        IF(v_lastRoundID+1<=v_max_round)THEN
-        UPDATE PLAYERS
-          SET LASTROUNDID = LASTROUNDID+1
-        WHERE PLAYERID=p_playerid;
+       --verifica daca a mai facut aceasta runda
+      IF(p_roundid<v_lastRoundID) THEN
+        v_punctaj:=v_punctaj*0.2;
       END IF;
-    END IF;
+      -- verifica daca procentul 100%
+      IF(p_procent=100) THEN
+        v_punctaj:=v_punctaj+v_punctaj*0.5;
+        UPDATE PlayersStatistics
+        SET PerfectRounds=PerfectRounds+1
+        WHERE playerid=p_playerid;
+      END IF;
+      IF (p_procent>70) THEN
+        SELECT max(roundid) INTO v_max_round  FROM rounds;
+          IF(v_lastRoundID+1<=v_max_round)THEN
+          UPDATE PLAYERS
+            SET LASTROUNDID = LASTROUNDID+1
+          WHERE PLAYERID=p_playerid;
+        END IF;
+      END IF;
 
-    v_current_exp:=v_current_exp+v_punctaj;
+      v_current_exp:=v_current_exp+v_punctaj;
 
-    v_max_experience:=v_exp_round* POWER(2,v_level);
-    UPDATE Players
-    SET Experience=v_current_exp
-    WHERE playerid=p_playerid;
-
-    if(v_current_exp>v_max_experience) THEN
-      UPDATE Players SET
-      PlayerLevel=PlayerLevel+1
+      v_max_experience:=v_exp_round* POWER(2,v_level);
+      UPDATE Players
+      SET Experience=v_current_exp
       WHERE playerid=p_playerid;
 
-      UPDATE Players SET
-      SKILLPOINTS=SKILLPOINTS+(3*(v_level+1))
-      WHERE playerid=p_playerid;
+      if(v_current_exp>v_max_experience) THEN
+        UPDATE Players SET
+        PlayerLevel=PlayerLevel+1
+        WHERE playerid=p_playerid;
 
-      --have to increment user's money
-    END IF;
-    COMMIT;
-  END update_experience;
+        UPDATE Players SET
+        SKILLPOINTS=SKILLPOINTS+(3*(v_level+1)),
+        COOKIES=COOKIES+10*(v_level+1)
+        WHERE playerid=p_playerid;
+
+        --have to increment user's money
+      END IF;
+      COMMIT;
+    END update_experience;
+
 
   PROCEDURE  update_skill  (p_playerid INT, p_skillname VARCHAR2, p_skillpoints INT)
    IS
@@ -147,5 +149,5 @@ create or replace PACKAGE BODY player_package IS
   null;
   END add_time;
 END player_package;
-
+/
 commit;

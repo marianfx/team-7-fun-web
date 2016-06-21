@@ -208,7 +208,7 @@ module.exports = function() {
       sails.log.debug("COST " + cost);
 
       // cannot add time
-      if(stime < cost)
+      if((stime < cost) && (stime === 0))
         return next(null, {
                         flag : false,
                         time : 0
