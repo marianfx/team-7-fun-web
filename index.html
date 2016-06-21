@@ -404,6 +404,19 @@
             <h2>Modul de desfasurare</h2>
 
 
+            <h4> Organizare </h4>
+
+            <h5>ZenHub </h5>
+            <p>
+                Proiectul a fost impartit in activitati mici, iar fiecarui membru i s-au atribuit anumite issuse pe care a fost nevoit sa le rezolve. Pentru aceasta a primit un deadline in care trebuia sa se incadreze si sa rezolve aceste sarcini. Aceste issues au fost impartite in mai multe categorii si in functie de progresul inregistrat avansa spre stadiul de finalizare. Printre categoriile de la issues enumeram: <b>New Issues, Backlog, To Do, in Progress, Done</b>
+
+            </p>
+            	<img src="./res/zenhub1.png" width="300" height="300">
+
+            <p>
+                Pe langa folosirea Zenhub-ului, am avut intalniri aproape saptamanale in care discutam progresul proiectului, ideile noi sau posibile extinderi ale acestuia. 
+            </p>
+
               <h4>Arhitectural</h4>
             <p>
               Din aspect arhitectural am renuntat la framework express si am preferat sa folosim in realizarea acestui proiect sails.js deoarece ofera mai multe avantaje cum ar fi: modularizare care
@@ -412,7 +425,10 @@
 
             </p>
 
-              <h4>Progressul</h4>
+            
+
+
+
             <p>
               In primele 3 saptamani am avut functionala baza de date din spatele acestui proiect, precum si pagina de logare, si cateva functionalitati marunte ce vizau interactiunea cu oracle.
               Lucru adevarat a inceput acum 3 saptamani cand deadline-ul se furisa pe la spate.
@@ -442,6 +458,112 @@
               Ce pot spune acum e ca mi-a placut lucrul in echipa. Am invatat lucruri chiar faine, si o aplicabilitate a lor in practica foarte puternica.
               Gandire abstracta, modularizare, cooperare, si intelegere. O experienta de neuitat.
             </p>
+
+            <h5>Focsa Marian</h5>
+			<ul>
+	  - sistem autentificare
+	  - sistem routing
+	  - integrare facebook (login, commentarii, poza profil, prieteni care folosesc aplicatia etc.)
+	  - landing page
+	  - most of the design ideas
+	  - profile page (& Cezara)
+	  - player management (& Cezara)
+	  - course managing / loading (AJAX, swig etc.)
+	  - code managing
+	  - github managing
+	  - DB - data manipulation & others
+	  - error handling
+	</ul>
+
+	<h5>Cezara Cobuz</h5>
+	<ul>
+	  - profile page (& Marian)
+	  - player management (& & Marian)
+	  - shop management
+	  - inventory management
+	  - skillpoints & skills & cookies management
+	  - player tops
+	  - DB - player package
+	</ul>
+
+            <ul>
+            	<h5>Groza Vasile: singleplayer:back-end & front-end </h5>
+            <p>Aceasta presupune partea in care jucatorul se afla in learn mode in invata principiile de baza ale Tehnologiilor Web. Fiecarei runde ii corespune un suport de Curs pe care jucatorul il poate accesa. Playerul apasand butonul de citire curs, se face un apel ajax catre server si se primeste un raspuns cu modalul rendat care contine cursul.
+              Dupa care urmeaza un "Examen".</p>
+            <p>Aici utilizatorul primeste intrebarile si are un timp limitat pentru fiecare runda aparte. El alege raspunsurile sale si le trimite la server spre validare, acesta ii spune daca a trecut sau nu la la urmatoarea runda/cursa +primeste cockie-uri skillpointuri daca trece la urmatorul level </p>
+            <p>Playerul mai poate folisi si abilitatea de Time care ii da timp in plus cu un anumit cost per fiecare runda, adaugarea timpului se face atat pe client cat si pe server iar validarea daca utilizatorul a intarziat se face pe server
+            </p>
+            <ul>
+              <li>Modal Course</li>
+              <li>Timer Client/Server</li>
+              <li>DataBase Population</li>
+            </ul>
+            
+            <H5>Miron Dorin Andrei: multiplayer: back-end & front-end</H5>
+            
+            <p> Cea mai mare parte a componentei multiplayer se bazeaza pe comunicarea dintre client si server. Aceasta comunicare se realizeaza, in cea mai mare parte, prin socketi. Dar si folosesti verbe REST (in principal POST).</p>
+
+            <p>
+                Pentru afisarea la client s-a folosit mai mult varianta de creare a HTML-ului pe server (prin render a fisierului swig) si trimiterea la client, iar apoi injectarea acestuia pe pagina clientului. De asemenea, au fost situatii in care html-ul s-a creat direct pe client si a fost injectat prin acelasi procedeu.
+            </p>
+            <li>
+                In partea de back-end s-a facut sincronizarea jucatorilor:
+                <ul>
+                <li>
+                    Fiecare player cand este in arena are la dispozitie o ista cu toti jucatorii pe care poate sa-i provoace la un duel
+                </li>
+                <li>
+                    Invitatia expira dupa 30 de secunde;
+                </li>
+                <li>
+                    Cand un joc incepe acei jucatori nu mai pot fi provocati, nici sa provoace alti jucatori. 
+                </li>
+                <li>
+                 Toti primesc aceeasi intrebare si au acelasi timp de raspuns, pentru inceput. Dar skillpoint-urile pot sa faca diferenta (sa acorde mai mult timp unui anumit jucator).
+                 </li>
+                 <li>
+                    Daca s-a scurs timpul alocat unui anumit jucator, atunci raspunsul lui nu mai este luat in considerare.
+                 </li>
+                 <li>
+                    Fiecarui jucator i se coloreaza raspunsul corect cu verde (doar dupa ce a raspuns), iar in caz ca a raspuns gresit, raspunsul lui va fi colorat cu rosu.
+                 </li>
+                 <li>
+                    Fiecare jucator vede un top actualizat la finalul fiecarei runde
+                 </li>
+                 <li>
+                    In functie de viteza de raspuns a oponentilor, fiecuri jucatori i se va actualiza (doar dupa ce a trimis un raspuns), ce raspuns a dat adversarii sai.
+                 </li>
+                 <li>
+                    Dupa ce s-a raspuns la toate intrebarile, fiecare jucator primeste topul final si lista castigatorilor. Daca mai multi jucatori au acelasi numar de raspunsuri corecte, atunci ei vor fi declarati castigatori
+                 </li>
+                 </ul> 
+            </li>
+            <li>
+                De asemenea, s-au tratat si cazurile de exceptie: in care un jucator poate incerca, prin mijloace mai putin ortodoxe ca obtina diverse castiguri.
+            </li>
+            <ul>
+                <li>
+                    Se permite retrimiterea raspunsului daca s-a apasat din greseala submit, fara sa se aleaga nici un raspuns
+                 </li>
+                 <li>
+                    Nu se accepta raspunsuri de la jucatori care nu sunt intr-un duel
+                 </li>
+                 <li>
+                    Nu se poate intra intr-un duel, daca nu s-a primit invitatie
+                 </li>
+                 <li>
+                    Un jucator poate crea doar un singur duel la un moment dat, invitand maxim 4 jucatori
+                 </li>
+                 <li>
+                    etc..
+                 </li>
+            </ul>
+
+            <p> S-a incercat, crearea unei aplicatii single-page. Astfel atunci cand intra in arena, el ramane pe aceeasi pagina a jocului. Pentru ca aplicatia are doua modalitati de joc (learn-mode and multiplayer) abilitatea  de inghetare a timpului a fost adaptata in functie de contextul in care se foloseste. Daca se foloseste din modul multiplayer aceasta ii va acorda jucatorului un avantaj in fata adversarului sau, iar daca va fi folosita modul de invatare atunci va acorda mai mult timp disponibil pentru a raspunde la intrebarile de la test.
+
+            </ul>
+
+
 
 
 
