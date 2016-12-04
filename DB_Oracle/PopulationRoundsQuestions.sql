@@ -39,7 +39,7 @@ In the top you have skill buttons, and other stuff like full-screen, shop, and F
 <hr>
 
 <h4>
-	This is you\'r profile Page
+	This is you\''r profile Page
 </h4>
 	<img src="/images/intro/intro1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
 

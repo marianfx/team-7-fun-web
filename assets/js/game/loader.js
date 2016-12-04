@@ -36,7 +36,7 @@ function loadProfile(element) {
     type: 'GET',
     url: '/profile',
     data: postForm,
-    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+    contentType: 'application/x-www-form-urlencoded;odata=verbose',
 
     success: function(result) {
 
@@ -59,7 +59,8 @@ function loadProfile(element) {
 
     error: function(err) {
 
-      window.location.href = '/500';
+      //window.location.href = '/500';
+      console.log(err);
     },
 
     timeout: 3000
@@ -74,7 +75,7 @@ function addFriend() {
     type: 'POST',
     url: '/profile',
     data: { id : id },
-    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+    contentType: 'application/x-www-form-urlencoded;odata=verbose',
 
     success: function(result) {
 
@@ -105,7 +106,7 @@ function loadPlayerMenu(){
   	$.ajax({
   		type: "GET", // type of request
   		url: '/render/me', //path of the request
-  		contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+  		contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
   		// the function called on Success (no error returned bu the server)
   		success: function(result) {
@@ -134,7 +135,8 @@ function loadPlayerMenu(){
   		},
   		// the function called on error (error returned from server or TimeOut Expired)
   		error: function(err) {
-          window.location.href = '/500';
+          //window.location.href = '/500';
+          console.log(err);
   		},
   		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
   	});
@@ -150,7 +152,7 @@ function loadCourses(){
   	$.ajax({
   		type: "GET", // type of request
   		url: '/render/courses', //path of the request
-  		contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+  		contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
   		// the function called on Success (no error returned bu the server)
   		success: function(result) {
@@ -171,7 +173,8 @@ function loadCourses(){
   		},
   		// the function called on error (error returned from server or TimeOut Expired)
   		error: function(err) {
-  			   window.location.href = '/500';
+  			   //window.location.href = '/500';
+          console.log(err);
   		},
   		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
   	});
@@ -200,7 +203,7 @@ function addTime(){
     type: "POST",
     url: "/player/addTime",
     data: {message: msg},
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
         console.log(result);
@@ -255,7 +258,7 @@ function loadArena(){
   	$.ajax({
   		type: "GET", // type of request
   		url: '/arena', //path of the request
-  		contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+  		contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
   		// the function called on Success (no error returned bu the server)
   		success: function(result) {
@@ -271,7 +274,8 @@ function loadArena(){
   		},
   		// the function called on error (error returned from server or TimeOut Expired)
   		error: function(err) {
-  			   window.location.href = '/500';
+  			   //window.location.href = '/500';
+          console.log(err);
   		},
   		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
   	});
@@ -295,7 +299,7 @@ function loadRound(me){
   		type: "GET", // type of request
   		url: '/questions', //path of the request
       data: formData,
-  		contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+  		contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
   		// the function called on Success (no error returned bu the server)
   		success: function(result) {
@@ -337,7 +341,7 @@ function loadCourse(me){
       type: "GET", // type of request
       url: '/course', //path of the request
       data: formData,
-      contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+      contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
       // the function called on Success (no error returned bu the server)
       success: function(result) {
@@ -398,7 +402,7 @@ function loadCookies() {
   $.ajax({
     type: 'GET',
     url: '/cookies',
-    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+    contentType: 'application/x-www-form-urlencoded;odata=verbose',
 
     success: function(result) {
 
@@ -421,7 +425,7 @@ function loadSkillpoints() {
   $.ajax({
     type: 'GET',
     url: '/skillpoints',
-    contentType: 'application/x-www-form-urlencoded;charset=utf-16',
+    contentType: 'application/x-www-form-urlencoded;odata=verbose',
 
     success: function(result) {
 
@@ -444,7 +448,7 @@ function loadInventory() {
   $.ajax({
     type: "GET",
     url: '/inventory',
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -474,7 +478,7 @@ function loadTopPlayersBy() {
     type: "POST",
     url: '/player/top',
     data: postForm,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -495,7 +499,7 @@ function loadSkills() {
   $.ajax({
     type: "GET",
     url: '/skills',
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -516,7 +520,8 @@ function loadSkills() {
 
     error: function(err) {
 
-      window.location.href = '/500'; /*DISPLAY SOMETHING ELSE? TIMEOUT*/
+      //window.location.href = '/500'; /*DISPLAY SOMETHING ELSE? TIMEOUT*/
+          console.log(err);
     },
 
     timeout: 3000
@@ -535,7 +540,7 @@ function addSkill() {
     type: "POST",
     url: '/skills',
     data: postForm,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -566,7 +571,7 @@ function buyItem() {
     type: "POST",
     url: '/shop/buy',
     data: postForm,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -603,7 +608,7 @@ function loadShop() {
     type: 'POST',
     url: '/shop',
     data: postForm,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -668,7 +673,7 @@ function reloadShop() {
     type: 'POST',
     url: '/reloadshop',
     data: postForm,
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 
@@ -700,7 +705,7 @@ function rollDices() {
     $.ajax({
     type: "GET",
     url: '/roll',
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
 

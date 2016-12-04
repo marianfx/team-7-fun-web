@@ -43,7 +43,7 @@ function doCreate() {
   	type: "POST", // type of request
   	url: '/addRound', //path of the request
   	data: postForm, //the data to send to the server (JSON)
-  	contentType: "application/x-www-form-urlencoded;charset=utf-16", // data content type (header)
+  	contentType: "application/x-www-form-urlencoded;odata=verbose", // data content type (header)
 
   	// the function called on Success (no error returned bu the server)
   	success: function( result ) {

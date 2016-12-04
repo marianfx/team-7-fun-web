@@ -11,7 +11,8 @@
 module.exports.globals = {
 
   //the server the app is hosted on
-  serverURL: 'http://localhost:6996',
+  serverURL: require('./local').serverURL,
+  
   /****************************************************************************
   *                                                                           *
   * Expose the lodash installed in Sails core as a global variable. If this   *

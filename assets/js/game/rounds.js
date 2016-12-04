@@ -15,7 +15,7 @@ function addTime() {
     type: "POST",
     url: "/player/addTime",
     data: {message: "addTime"},
-    contentType: "application/x-www-form-urlencoded;charset=utf-16",
+    contentType: "application/x-www-form-urlencoded;odata=verbose",
 
     success: function(result) {
         console.log(result);
@@ -113,7 +113,7 @@ function submmitAnswer() {
       type: "POST",
       url: "/questions/submmit",
       data: answers,
-      contentType: "application/x-www-form-urlencoded;charset=utf-16",
+      contentType: "application/x-www-form-urlencoded;odata=verbose",
 
       success: function(result) {
           setTimeout(swal.close, 1500);
