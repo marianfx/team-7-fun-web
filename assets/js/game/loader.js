@@ -165,9 +165,9 @@ function loadCourses(){
           });
 
           // atasez click pt LoadCourse
-          // $('.lessonLoader').click(function(){
-          //   loadCourse(this);
-          // });
+           $('.lessonLoader').click(function(){
+             loadCourse(this);
+           });
           $('.collapsible').collapsible();
           pluginspreparer();
   		},

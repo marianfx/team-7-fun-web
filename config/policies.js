@@ -26,6 +26,9 @@ module.exports.policies = {
   AuthController: {
     '*': ['passport']
   },
+  GameController: {
+    '*': ['passport']
+  },
   // the Admin controller ned to be Admin
   //
   AdminController: {
