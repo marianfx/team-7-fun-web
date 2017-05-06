@@ -1,4 +1,4 @@
-/**
+﻿/**
  * WebSocket Server Settings
  * (sails.config.sockets)
  *
@@ -128,11 +128,9 @@ module.exports.sockets = {
 
     if(session.passport == null)
       return cb() ;
-    sails.log.debug("User "+session.passport['user'] +" exit from Arena");
-    var userID=session.passport['user'];
+    sails.log.debug("User " + session.passport['user'] +" exit from Arena");
+    var userID = session.passport['user'];
     sails.services.arena.leaveRoom(userID);
-  //  sails.log.debug("Userul s-a deconectat de la joc"+session.user);
-    //scoate-l din toate jocurile si stergel din vectorul de users
     return cb();
   },
 
@@ -278,11 +276,9 @@ module.exports.sockets = {
 
     if(session.passport == null)
       return cb() ;
-    sails.log.debug("User "+session.passport['user'] +" exit from Arena");
-    var userID=session.passport['user'];
+    sails.log.debug("User " + session.passport['user'] + " exit from Arena");
+    var userID = session.passport['user'];
     sails.services.arena.leaveRoom(userID);
-  //  sails.log.debug("Userul s-a deconectat de la joc"+session.user);
-    //scoate-l din toate jocurile si stergel din vectorul de users
     return cb();
   },
 

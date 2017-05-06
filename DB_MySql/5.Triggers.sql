@@ -1,0 +1,145 @@
+
+# Trigger when user is deleted ( delete from GameUsers => delete from players and playersStatistics)
+DROP TRIGGER IF EXISTS GameUsers_delete;
+CREATE TRIGGER GameUsers_delete
+AFTER DELETE ON GameUsers
+FOR EACH ROW
+BEGIN
+  CALL onDeleteGameUser(OLD.PLAYERID);
+END;
+
+# Trigger when user is iserted  in game-user (insert into GameUsers=> insert into playersStatistics and Players)
+DROP TRIGGER IF EXISTS GameUsers_ins_After;
+CREATE TRIGGER GameUsers_ins_After
+AFTER INSERT ON GameUsers
+FOR EACH ROW
+BEGIN
+  CALL onUserRegister(NEW.PLAYERID, NEW.username);
+END;
+
+
+## -- do not execute this ##
+# THIS TRIGGER LOGS INFORMATION WHEN AN USER REGISTERS / UPDATES PERSONAL INFO / DELETES HIS ACCOUNT
+# DROP TRIGGER IF EXISTS T_LOGGER_GAMEUSERS_I;
+# CREATE TRIGGER T_LOGGER_GAMEUSERS_I
+# AFTER
+#   INSERT ON GAMEUSERS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION         VARCHAR(1000);
+#   DECLARE query_str VARCHAR(2000);
+#   # add something default to data_notare if inexistent
+#   SET OPERATION = CONCAT('User with USERNAME ', NEW.USERNAME, ', MAIL ', NEW.EMAIL, ' registered. ID assigned: ', NEW.PLAYERID);
+#
+#   SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#   CALL executeImmediate(query_str);
+# END;
+#
+# DROP TRIGGER IF EXISTS T_LOGGER_GAMEUSERS_U;
+# CREATE TRIGGER T_LOGGER_GAMEUSERS_U
+# AFTER
+#   UPDATE ON GAMEUSERS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION         VARCHAR(1000);
+#   DECLARE query_str VARCHAR(2000);
+#
+#   SET OPERATION = CONCAT('User with USERNAME ', OLD.USERNAME, ', MAIL ', OLD.EMAIL, ' updated info to: ', NEW.USERNAME, ', ', NEW.EMAIL, ', ', NEW.FACEBOOKID);
+#
+#   SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#   CALL executeImmediate(query_str);
+# END;
+#
+# DROP TRIGGER IF EXISTS T_LOGGER_GAMEUSERS_D;
+# CREATE TRIGGER T_LOGGER_GAMEUSERS_D
+# AFTER
+#   DELETE ON GAMEUSERS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION         VARCHAR(1000);
+#   DECLARE query_str VARCHAR(2000);
+#
+#   SET OPERATION = CONCAT('Player ', OLD.USERNAME, ' deleted his account.');
+#
+#   SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#   CALL executeImmediate(query_str);
+# END;
+#
+#
+# # THIS TRIGGER LOGS INFORMATION WHEN AN USER UPGRADES (PLAYERS TABLE)
+# DROP TRIGGER IF EXISTS T_LOGGER_PLAYERS;
+# CREATE TRIGGER T_LOGGER_PLAYERS
+# AFTER UPDATE ON PLAYERS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION VARCHAR(1000);
+#   DECLARE query_str VARCHAR(2000);
+#
+#   IF TRIM(OLD.PLAYERNAME) <> TRIM(NEW.PLAYERNAME) THEN
+#       SET OPERATION = CONCAT('Player with name ', OLD.PLAYERNAME, ' just updated it''s player name to ', NEW.PLAYERNAME);
+#   ELSE
+#       SET OPERATION = CONCAT('User with USERNAME ', OLD.PLAYERNAME, ' just upgraded. New data: ', NEW.EXPERIENCE, ', ', NEW.PLAYERLEVEL, ', ', NEW.COOKIES, ', ', NEW.S_CHEAT, ', ', NEW.S_LUCK, ', ', NEW.S_TIME, ', ', NEW.SKILLPOINTS);
+#   END IF;
+#
+#   SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#   CALL executeImmediate(query_str);
+# END;
+#
+#
+# # THIS TRIGGER LOGS INFORMATION WHEN AN USER wins / loses / logins (PLAYERS TABLE)
+# DROP TRIGGER IF EXISTS T_LOGGER_STATISTICS;
+# CREATE TRIGGER T_LOGGER_STATISTICS
+# AFTER  UPDATE ON PLAYERSSTATISTICS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION         VARCHAR(5000);
+#   DECLARE P_PNAME           VARCHAR(100);
+#   DECLARE query_str         VARCHAR(2000);
+#
+#   SELECT PLAYERNAME INTO P_PNAME FROM PLAYERS WHERE PLAYERID = OLD.PLAYERID;
+#
+#   SET OPERATION = '';
+#   IF OLD.WINS <> NEW.WINS THEN
+#       SET OPERATION = CONCAT('Player named ', P_PNAME, ' just WON a game.');
+#   END IF;
+#
+#   IF OLD.LOSES <> NEW.LOSES THEN
+#       SET OPERATION = CONCAT('Player named ', P_PNAME, ' just LOST a game.');
+#   END IF;
+#
+#   IF OLD.LASTLOGINDATE <> NEW.LASTLOGINDATE THEN
+#       SET OPERATION = CONCAT('Player named ', P_PNAME, ' just LOGGED IN.');
+#   END IF;
+#
+#   IF OLD.PERFECTROUNDS <> NEW.PERFECTROUNDS THEN
+#       SET OPERATION = CONCAT('Player named ', P_PNAME, ' upgraded perfect rounds.');
+#   END IF;
+#
+#   IF OPERATION IS NOT NULL THEN
+#       SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#       CALL executeImmediate(query_str);
+#   END IF;
+# END;
+#
+#
+# # THIS TRIGGER LOGS INFORMATION WHEN two users became friends
+# DROP TRIGGER IF EXISTS T_LOGGER_FRIENDS;
+# CREATE TRIGGER T_LOGGER_FRIENDS
+# AFTER INSERT ON FRIENDS
+# FOR EACH ROW
+# BEGIN
+#   DECLARE OPERATION          VARCHAR(1000);
+#   DECLARE P_FPNAME           VARCHAR(100);
+#   DECLARE P_SPNAME           VARCHAR(100);
+#   DECLARE query_str          VARCHAR(2000);
+#
+#   SELECT PLAYERNAME INTO P_FPNAME FROM PLAYERS WHERE PLAYERID = NEW.PLAYER1ID;
+#   SELECT PLAYERNAME INTO P_SPNAME FROM PLAYERS WHERE PLAYERID = NEW.PLAYER2ID;
+#
+#   SET OPERATION = CONCAT('Player ', P_FPNAME, ' just became friend with ', P_SPNAME);
+#
+#   SET query_str = CONCAT('INSERT INTO LOGGER_TABLE VALUES(', NOW(), ', ', OPERATION, ')');
+#   CALL executeImmediate(query_str);
+# END;
+
+COMMIT;

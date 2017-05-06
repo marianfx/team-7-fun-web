@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Default model configuration
  * (sails.config.models)
  *
@@ -15,9 +15,9 @@ module.exports.models = {
   *                                                                          *
   * Your app's default connection. i.e. the name of one of your app's        *
   * connections (see `config/connections.js`)                                *
-  *                                                                          *
+  *                          3wa                                                *
   ***************************************************************************/
-   connection: 'oracle_conn',
+    connection: 'mysql',
 
   /***************************************************************************
   *                                                                          *

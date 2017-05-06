@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Route Mappings
  * (sails.config.routes)
  *
@@ -21,16 +21,7 @@
  */
 
 module.exports.routes = {
-
-  /***************************************************************************
-   *                                                                          *
-   * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
-   * etc. depending on your default view engine) your home page.              *
-   *                                                                          *
-   * (Alternatively, remove this and add an `index.html` file in your         *
-   * `assets` directory)                                                      *
-   *                                                                          *
-   ***************************************************************************/
+    
    'GET /game': {
     controller: 'GameController',
     action: 'render'
@@ -122,7 +113,7 @@ module.exports.routes = {
     controller: 'CourseController',
     action: 'renderModalCourse'
   },
-  // post for subbmit ansfer in learning module
+  // post for subbmit answer in learning module
 
   'POST /questions/submmit': {
     controller: "QuestionController",
@@ -243,6 +234,4 @@ module.exports.routes = {
     controller: 'AdminController',
     action: 'createQuestion'
   }
-
-
 };

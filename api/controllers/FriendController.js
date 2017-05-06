@@ -92,11 +92,7 @@ module.exports = {
 
         var db = new sails.services.databaseservice();
 
-        var bindParams = {
-            me: _me,
-            llast: _last,
-            llimit: _limit
-        };
+        var bindParams = [_me, _last, _limit];
 
         db.executeQuery(query, bindParams, function(err, result){
               if(err){

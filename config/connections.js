@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Connections
  * (sails.config.connections)
  *
@@ -33,9 +33,9 @@ module.exports.connections = {
   },
 
   // the oracle connection is specified in local.js / oracle_conn (localll)
-  oracle_conn: require('./local').oracle_conn,
+  //oracle_conn: require('./local').oracle_conn,
 
-  oracle_user: require('./local').oracle_user
+  //oracle_user: require('./local').oracle_user
 
   /***************************************************************************
   *                                                                          *
@@ -45,13 +45,7 @@ module.exports.connections = {
   * Run: npm install sails-mysql                                             *
   *                                                                          *
   ***************************************************************************/
-  // someMysqlServer: {
-  //   adapter: 'sails-mysql',
-  //   host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
-  //   user: 'YOUR_MYSQL_USER', //optional
-  //   password: 'YOUR_MYSQL_PASSWORD', //optional
-  //   database: 'YOUR_MYSQL_DB' //optional
-  // },
+   mysql: require('./local').mysql
 
   /***************************************************************************
   *                                                                          *

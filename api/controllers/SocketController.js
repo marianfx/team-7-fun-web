@@ -1,11 +1,10 @@
-
 var Arena = require('./../services/Arena');
 var playerCtrl = require('./PlayerController');
 var Messages = sails.config.messages;
 
 
 // notify all players that a new USer have joined in the arena
-let ArenaUsers = function(res, newUser) {
+let ArenaUsers = function (res, newUser) {
 
   // make an array with player' s id
   var avaibleP = [];
@@ -23,7 +22,7 @@ let ArenaUsers = function(res, newUser) {
 
   sails.models.player.find({
     or: avaibleP
-  }, currID).exec(function(err, players) {
+  }, currID).exec(function (err, players) {
 
     if (err) {
       sails.log(err.message);
@@ -31,7 +30,7 @@ let ArenaUsers = function(res, newUser) {
     }
 
     // select current player from the list from the database
-    var aux23 = players.filter(function(obj) {
+    var aux23 = players.filter(function (obj) {
       return obj.playerID == currID;
     });
     var currentPlayer = aux23[0];
@@ -56,8 +55,7 @@ let ArenaUsers = function(res, newUser) {
         };
 
         var currPlayer = Game.Users.get(String(x.playerID));
-        if(currPlayer.onGame===false)
-        {
+        if (currPlayer.onGame === false) {
           data.push(aux);
         }
 
@@ -75,7 +73,7 @@ let ArenaUsers = function(res, newUser) {
 };
 // notify currUser with all other players' answers
 // this function is recursive
-let notifyme = function(vect, currUser, i) {
+let notifyme = function (vect, currUser, i) {
 
   // stop condition:
   if (i >= vect.length) {
@@ -83,7 +81,7 @@ let notifyme = function(vect, currUser, i) {
   }
 
   // get all information about player with id vect[i]
-  playerCtrl.getPlayer(vect[i], function(err, playerData) {
+  playerCtrl.getPlayer(vect[i], function (err, playerData) {
     if (err) {
       console.log(err.msg);
     }
@@ -103,7 +101,7 @@ let notifyme = function(vect, currUser, i) {
   });
 };
 
-let timeOutInit = function(roomNumber) {
+let timeOutInit = function (roomNumber) {
 
   //this function is call if and only if an invitation expired
 
@@ -112,7 +110,7 @@ let timeOutInit = function(roomNumber) {
   //************
   //AFISARE!!!
   //************
-  console.log(Messages.invitation_exp+ roomNumber);
+  console.log(Messages.invitation_exp + roomNumber);
 
 
   //initializate the game structured
@@ -133,7 +131,7 @@ let timeOutInit = function(roomNumber) {
 
 
   // Obtain an array with player who don't response to the invitation
-  var withoutAnswer = Game.games.get(roomNumber).opponents.filter(function(x) {
+  var withoutAnswer = Game.games.get(roomNumber).opponents.filter(function (x) {
     return acceptAnswer.indexOf(x) < 0;
   });
 
@@ -149,13 +147,12 @@ let timeOutInit = function(roomNumber) {
   //Check if we have minim two player in this game
   if (Game.games.get(roomNumber).players.size > 1) {
     sails.services.arena.startGame(roomNumber);
-  }
-  else sails.services.arena.notifyAbortGame(roomNumber);
+  } else sails.services.arena.notifyAbortGame(roomNumber);
 
 };
 module.exports = {
 
-  socket_connect: function(req, res) {
+  socket_connect: function (req, res) {
 
     // Make sure this is a socket request (not traditional HTTP)
 
@@ -187,7 +184,7 @@ module.exports = {
     };
 
     // get name for this new player from the dataBase
-    playerCtrl.getPlayer(newUser.id, function(err, data) {
+    playerCtrl.getPlayer(newUser.id, function (err, data) {
       if (err) {
         console.log(err.message);
       }
@@ -198,21 +195,21 @@ module.exports = {
     Game.Users.set(newUser.id, newUser);
 
     // join user to his roon for broadcast;
-    sails.sockets.join(req, newUser.id, function(err) {
+    sails.sockets.join(req, newUser.id, function (err) {
 
       if (err) {
         sails.log.debug(err.message);
         res.serverError(Messages.err_join_room);
       }
 
-     // notify all players that a new USer have joined in the arena
+      // notify all players that a new USer have joined in the arena
       ArenaUsers(res, newUser);
 
     });
   },
 
 
-  socket_challange: function(req, res) {
+  socket_challange: function (req, res) {
 
     // Make sure this is a socket request (not traditional HTTP)
 
@@ -247,7 +244,7 @@ module.exports = {
 
 
     //initializare timer for invitation
-    var currTimer = setTimeout(function() {
+    var currTimer = setTimeout(function () {
         timeOutInit(roomNumber);
       },
       30000, roomNumber);
@@ -296,7 +293,7 @@ module.exports = {
 
 
     //join myself in a gameRoom
-    sails.sockets.join(req, roomName, function(err) {
+    sails.sockets.join(req, roomName, function (err) {
       if (err) {
         return res.serverError(err);
       }
@@ -321,29 +318,29 @@ module.exports = {
 
 
       //add invited players to this game  and send invitations
-        playerCtrl.getPlayer(req.user.id, function(err, data) {
-      for (var i = 0; i < opponents.length; i++) {
+      playerCtrl.getPlayer(req.user.id, function (err, data) {
+        for (var i = 0; i < opponents.length; i++) {
 
-        var rival = Game.Users.get(opponents[i]);
-        rival.onGame = true;
-        rival.gameID = roomNumber;
-        Game.Users.set(opponents[i], rival);
+          var rival = Game.Users.get(opponents[i]);
+          rival.onGame = true;
+          rival.gameID = roomNumber;
+          Game.Users.set(opponents[i], rival);
 
-        sails.sockets.broadcast(opponents[i], "gameInvite", {
-          from: data[0].PLAYERNAME
-        });
-        var aux2 = opponents.length + 1;
+          sails.sockets.broadcast(opponents[i], "gameInvite", {
+            from: data[0].PLAYERNAME
+          });
+          var aux2 = opponents.length + 1;
 
-      }
+        }
 
-      return res.ok(Messages.res_subscribed + roomName + '!');
-    });
+        return res.ok(Messages.res_subscribed + roomName + '!');
+      });
     });
   },
 
-  socket_response_challenge: function(req, res) {
+  socket_response_challenge: function (req, res) {
 
-     // Make sure this is a socket request (not traditional HTTP)
+    // Make sure this is a socket request (not traditional HTTP)
     if (!req.isSocket) {
       return res.badRequest();
     }
@@ -399,7 +396,7 @@ module.exports = {
 
       Game.games.set(gameID, currentGame);
 
-     // if all players had responded to invitation
+      // if all players had responded to invitation
       if (sails.services.arena.ceckOnReady(gameID)) {
         //************
         //AFISARE!!!
@@ -408,8 +405,8 @@ module.exports = {
 
 
         sails.services.arena.startGame(gameID);
-         sails.log.debug(Messages.timmer_stop);
-          clearTimeout(currentGame.timer);
+        sails.log.debug(Messages.timmer_stop);
+        clearTimeout(currentGame.timer);
       }
 
       return res.json({
@@ -429,7 +426,7 @@ module.exports = {
 
 
     // join this player to the room game
-    sails.sockets.join(req, "game_" + gameID, function(err) {
+    sails.sockets.join(req, "game_" + gameID, function (err) {
       if (err) {
         return res.serverError(err.message);
       }
@@ -438,8 +435,8 @@ module.exports = {
       currentGame.players.set(req.user.id, req.user.id);
       Game.games.set(gameID, currentGame);
 
-     // if all players had responded to invitation
-      if (sails.services.arena.ceckOnReady(gameID) ) {
+      // if all players had responded to invitation
+      if (sails.services.arena.ceckOnReady(gameID)) {
         sails.services.arena.startGame(gameID);
 
         sails.log.debug("Timer-ul a fost oprit");
@@ -456,7 +453,7 @@ module.exports = {
   },
 
 
-  socket_submit_answer: function(req, res) {
+  socket_submit_answer: function (req, res) {
 
     //verific daca nu o depasit timpul
     // trimit time excited si nu ii dau puncte
@@ -489,7 +486,9 @@ module.exports = {
 
     //if answer is null we accept another answer
     if (req.body.answer == null) {
-      return res.badRequest({message:"Please choose an answer!"});
+      return res.badRequest({
+        message: "Please choose an answer!"
+      });
     }
 
     // if a player want to give another answer
@@ -507,7 +506,7 @@ module.exports = {
 
 
     // get information, from database, about player who answered and notify all other player who answered before
-    playerCtrl.getPlayer(currUser.id, function(err, data) {
+    playerCtrl.getPlayer(currUser.id, function (err, data) {
 
       for (var [key, value] of currGame.players) {
 
@@ -557,7 +556,7 @@ module.exports = {
       });
     }
   },
-  socket_disconnect: function(req, res) {
+  socket_disconnect: function (req, res) {
     // vad daca sunt in joaca anunt pe ceilalti ca eu ies din joc, => cazuri aferente
     // daca nu sunt in joc
     //sails.services.arena.changeRemainingTime(req.user.id, "time", 30);

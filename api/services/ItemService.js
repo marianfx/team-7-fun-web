@@ -4,11 +4,7 @@ module.exports = {
 
 		var query = sails.config.queries.get_shop;
 
-		var bindparams = {
-			id: player_id,
-			last: last,
-			limit: limit
-		};
+		var bindparams = [player_id, last, limit];
 
 		var db = new sails.services.databaseservice();
 
@@ -36,10 +32,7 @@ module.exports = {
 
 		var query = sails.config.queries.reload_shop;
 
-		var bindparams = {
-			id: player_id,
-			last: last
-		};
+		var bindparams = [player_id, last];
 
 		var db = new sails.services.databaseservice();
 

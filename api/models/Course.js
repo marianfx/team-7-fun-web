@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Course MODEL
  *
  * @description :: [the Course model]
@@ -14,6 +14,7 @@ module.exports = {
   attributes: {
     courseId: {
         primaryKey: true,
+        autoIncrement: true,
         type: 'integer',
         columnName: 'COURSEID'
     },

@@ -1,8 +1,7 @@
-SET DEFINE OFF;
-INSERT INTO COURSES(COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES(1, 'Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , '/images/favicon/logo_152x152.png')
-/
+
+INSERT INTO COURSES(COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES(1, 'Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , '/images/favicon/logo_152x152.png');
 COMMIT;
-/
+
 
 
 INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 1, '<h1>Welcome to the <strong>Fun<strong>!</h1>
@@ -39,7 +38,7 @@ In the top you have skill buttons, and other stuff like full-screen, shop, and F
 <hr>
 
 <h4>
-	This is you\''r profile Page
+	This is you''r profile Page
 </h4>
 	<img src="/images/intro/intro1.png" style="width: 100%; margin:0px auto;" alt="blog-img">
 
@@ -54,10 +53,10 @@ In the top you have skill buttons, and other stuff like full-screen, shop, and F
 <h1>
 	So to find how all these works pleas click everywere you want and ceckout what you will recieve.
 <h1>
-<strong>' , 1)
-/
+<strong>' , 1);
 COMMIT;
-/
+
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Do you love Web technology??'
@@ -67,16 +66,17 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. Maybe'
               , 'D.	Buraga :D'
               , 4
-              ,roundID_seq.CURRVAL);
-/
+              ,1);
 COMMIT;
+
 
 INSERT INTO COURSES (TITLE, SHORTDESC, HASHTAG, PHOTOURL)
 			VALUES ('HTML','HyperText Markup Language, commonly abbreviated as HTML,
 						 is the standard markup language used to create web pages.','#HTML','/images/courses/html.png' );
--------------ROUND I COURSE 1-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,courseID)
-       VALUES('INTRO HTML',4,'
+COMMIT;
+#-------------ROUND I COURSE 1-------------------------
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course,courseID)
+       VALUES(2, 'INTRO HTML',4,'
 <h3>Why learn HTML?</h3>
 <p>Every webpage you look at is written in a language called HTML. You can think of HTML as the skeleton that gives every webpage structure. In this course, we will use HTML to add paragraphs, headings, images and links to a webpage.</p>
  <h1>What is HTML</h1>
@@ -117,8 +117,8 @@ HTML elements form the building blocks of HTML pages.  </p>
 <td style="background-color: #ffffcc;">Aim to have one H1 on each page, containing a description of what the page is about. Largest Hader</td>
 </tr>
 </tbody>
-</table>',courseID_seq.CURRVAL);
-/
+</table>', 2);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('What does HTML stand for?'
@@ -128,8 +128,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. Home Tool Markup Language'
               , 'D.	How to make love.'
               , 2
-              ,roundID_seq.CURRVAL);
-/
+              ,2);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Who is making the Web standards?'
@@ -138,8 +138,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	Google'
               , 'D. Mozilla'
               , 1
-              ,roundID_seq.CURRVAL) ;
- /
+              ,2) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Choose the correct HTML element for the largest heading:'
@@ -148,8 +148,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C. <h1>'
               , 'D.	<hand>'
               , 3
-              ,roundID_seq.CURRVAL) ;
-/
+              ,2) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Choose the correct HTML element to define important text'
@@ -158,7 +158,7 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<important>'
               , 'D.	<strong>'
               , 4
-              ,roundID_seq.CURRVAL );
+              ,2);
 
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
@@ -168,12 +168,12 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<a url="http://www.w3schools.com">W3Schools.com</a>'
               , 'D.	<a href="http://www.w3schools.com">W3Schools</a>'
               , 4
-              ,roundID_seq.CURRVAL );
-/
+              ,2);
 
--------------ROUND II COURSE 1-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('HTML2',4,'<h3>HTML lesson2</h3>
+
+# -------------ROUND II COURSE 1-------------------------
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course,COURSEID)
+       VALUES(3, 'HTML2',4,'<h3>HTML lesson2</h3>
 <hr>
 <h4>Lists</h4>
 <p>
@@ -222,8 +222,8 @@ The <strong>width</strong>   and <strong>height</strong> attributes are necessar
 
 The alt attribute is the alternative description. This is an accessibility consideration, providing meaningful information for users who are unable to see the image (if they are visually impaired, for example).
 
-</p>',courseID_seq.CURRVAL);
-/
+</p>',2);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('How can you make a bulleted list?'
@@ -233,8 +233,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. <ol>'
               , 'D.	<ul>'
               , 4
-              ,roundID_seq.CURRVAL);
-/
+              ,3);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('What is the correct HTML for making a checkbox?'
@@ -243,8 +243,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<input type="check">'
               , 'D. <input type="checkbox">'
               , 4
-              ,roundID_seq.CURRVAL) ;
- /
+              ,3) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('What is the correct HTML for making a text input field?'
@@ -253,8 +253,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<textinput type="text">'
               , 'D. <input type="textfield">'
               , 2
-              ,roundID_seq.CURRVAL) ;
-/
+              ,3) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' What is the correct HTML for inserting an image?'
@@ -263,11 +263,12 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<img src="image.gif" alt="MyImage">'
               , 'D.	<img alt="MyImage">image.gif</img>'
               , 3
-              ,roundID_seq.CURRVAL) ;
-/
--------------ROUND III COURSE 1-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('HTML3',4,'<h3>Introduction to XML</h3>
+              ,3) ;
+
+
+# ------------ROUND III COURSE 1-------------------------
+INSERT INTO ROUNDS (roundId, NAME, nrOfQuestions, course,COURSEID)
+       VALUES(4, 'HTML3',4,'<h3>Introduction to XML</h3>
 <h4>Why Study XML?</h4>
 <p>XML plays an important role in many IT systems.</p>
 <p>For this reason, it is important for all software developers to have a good
@@ -299,8 +300,8 @@ understanding of XML.</p>
 <p>The XML language has no predefined tags.</p>
 <p>The tags in the example above (like:  <span><</span>to<span>></span> and<span><</span>from <span>></span> ) are not defined in any XML standard. These tags are "invented" by the author of the XML document.</p>
 <p>HTML works with predefined tags like: <span><</span>p<span>></span> ,<span><</span>h1<span>></span> ,<span><</span>table<span>></span> , etc.</p>
-<p>With XML, the author must define both the tags and the document structure.</p>',courseID_seq.CURRVAL);
-/
+<p>With XML, the author must define both the tags and the document structure.</p>', 2);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following attributes below are used for a font name??'
@@ -310,8 +311,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. <font>'
               , 'D.	<face>'
               , 3
-              ,roundID_seq.CURRVAL);
-/
+              ,4);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Each list item in an ordered or unordered list has which tag?'
@@ -320,8 +321,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<li>'
               , 'D. <ol>'
               , 3
-              ,roundID_seq.CURRVAL) ;
- /
+              ,4) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('What is the <br> tag for?'
@@ -330,8 +331,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	Line break'
               , 'D. Word break'
               , 3
-              ,roundID_seq.CURRVAL) ;
-/
+              ,4) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' What is the difference between XML and HTML?'
@@ -340,14 +341,12 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	HTML can have user defined tags, XML cannot'
               , 'D.	Both b and c above'
               , 4
-              ,roundID_seq.CURRVAL) ;
-/
+              ,4) ;
 
 
-
--------------ROUND IV COURSE 1-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('NEXT STEP HTML',4,'<h3>More Tags...</h3>
+# -------------ROUND IV COURSE 1-------------------------
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course, COURSEID)
+       VALUES(5, 'NEXT STEP HTML',4,'<h3>More Tags...</h3>
 <p>Knowing a lot of html tags is helpfull...</p>
 <a target="_blank" href="http://webdesignfromscratch.com/html-css/html-tags/">Full list of HTML tags</a>
 <hr>
@@ -379,8 +378,8 @@ INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
 <td style="background-color: #ffffcc;">Use this instead of the old <b><span><</span>b<span>></span></b> tag.</td>
 </tr>
 </tbody>
-</table>',courseID_seq.CURRVAL);
-/
+</table>', 2);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following is an advantage of putting presentation information in a separate CSS file rather than in HTML itself?'
@@ -390,8 +389,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. CSS Files are generally cached and therefore decrease server load and network traffic'
               , 'D.	All of the above'
               , 4
-              ,roundID_seq.CURRVAL);
-/
+              , 5);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('HTML(Hypertext Markup Language) has language elements which permit certain actions other than describing the structure of the web document. Which one of the following actions is NOT supported by pure HTML (without any server or client side scripting)pages?'
@@ -400,8 +399,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	Automatically redirect to another page upon download'
               , 'D. Display the client time as part of the page'
               , 4
-              ,roundID_seq.CURRVAL) ;
- /
+              ,5) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which HTML tag would be used to display power in expression (A+B)^2 '
@@ -410,8 +409,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<B>'
               , 'D.	<P>'
               , 1
-              ,roundID_seq.CURRVAL) ;
-/
+              ,5) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Choose the correct HTML tag to make the text bold?'
@@ -420,18 +419,20 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<STRONG>'
               , 'D.	Both A) and C)'
               , 4
-              ,roundID_seq.CURRVAL) ;
-/
+              ,5) ;
+
 commit;
 
--- insert into course course 2 CSS ;
+
+# !!-- insert into course COURSE II CSS ;
 INSERT INTO COURSES (COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL)
-			VALUES (2, 'CSS','Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of
+			VALUES (3, 'CSS','Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of
 							a document written in a markup language.Although most often used to set the visual style of web
 							pages and user interfaces written in HTML and XHTML','#CSS','/images/courses/css.png' );
--------------ROUND I COURSE 2-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('INTRO CSS',4,'<h3>CSS Introduction</h3>
+
+# -------------ROUND I COURSE 2-------------------------
+INSERT INTO ROUNDS (roundId, NAME,nrOfQuestions, course, COURSEID)
+       VALUES(6, 'INTRO CSS',4,'<h3>CSS Introduction</h3>
 <h4>What is CSS?</h4>
 <ul>
   <li><b>CSS</b> stands for <b>C</b>ascading <b>S</b>tyle <b>S</b>heets</li>
@@ -526,8 +527,8 @@ available. </p>
 <p>The CSS dimension properties allow you to control the height and width of an element.</p>
 <p>This element has a width of 100%.</p>
 </div>
-',courseID_seq.CURRVAL);
-/
+', 3);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following selector matches all elements of a type?'
@@ -537,8 +538,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. The Descendant Selector'
               , 'D.	The Class Selector.'
               , 1
-              ,roundID_seq.CURRVAL);
-/
+              ,6);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following defines a measurement as a percentage relative to another value, typically an enclosing element?'
@@ -547,8 +548,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	em'
               , 'D. ex'
               , 1
-              ,roundID_seq.CURRVAL) ;
- /
+              ,6) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following is correct about RGB Values format of CSS colors?'
@@ -557,8 +558,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C. The value can be an integer between 0 and 255 or a percentage.'
               , 'D.	All of the above.'
               , 4
-              ,roundID_seq.CURRVAL) ;
-/
+              ,6) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which of the following property is used to change the face of a font?'
@@ -567,7 +568,7 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	font-varian'
               , 'D.	font-weight'
               , 1
-              ,roundID_seq.CURRVAL) ;
+              ,6) ;
 
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
@@ -577,12 +578,12 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	letter-spacing'
               , 'D.	word-spacing'
               , 2
-              ,roundID_seq.CURRVAL) ;
-/
+              ,6) ;
 
--------------ROUND II COURSE 2------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('CSS2',4,'<h3>CSS lesson 2<h3>
+
+# -------------ROUND II COURSE 2------------------------
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course,COURSEID)
+       VALUES(7, 'CSS2', 4,'<h3>CSS lesson 2<h3>
 
 <h4>CSS Borders</h4>
 <div style="width:100%;border:15px groove #73AD21;padding:15px;" class="w3-theme-border">
@@ -674,8 +675,8 @@ marker.</p>
 <p>The <code>list-style-position</code> property specifies whether the list-item markers should appear inside or outside the content flow:</p>
 <h5>An Image as The List Item Marker</h5>
 <p>The <code>list-style-image</code> property specifies an image as the list
-item marker:</p>',courseID_seq.CURRVAL);
-/
+item marker:</p>', 3);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property is used to set the width of an image border?'
@@ -685,8 +686,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. width'
               , 'D.	moz-opacity'
               , 1
-              ,roundID_seq.CURRVAL);
-/
+              ,7);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property of a table element specifies the width that should appear between table cells?'
@@ -695,8 +696,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	:caption-side'
               , 'D. :empty-cells'
               , 2
-              ,roundID_seq.CURRVAL) ;
- /
+              ,7) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property changes the style of left border?'
@@ -705,8 +706,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	:border-left-style'
               , 'D. :border-right-style'
               , 3
-              ,roundID_seq.CURRVAL) ;
-/
+              ,7) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('  Which of the following property specifies an image for the marker rather than a bullet point or number?'
@@ -715,11 +716,11 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	list-style-image'
               , 'D.	list-style'
               , 1
-              ,roundID_seq.CURRVAL) ;
-/
--------------ROUND III COURSE 2-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('CSS3',4,'<h3>CSS lesson 3<h3>
+              ,7) ;
+
+# -------------ROUND III COURSE 2-------------------------
+INSERT INTO ROUNDS (roundID, NAME, nrOfQuestions, course, COURSEID)
+       VALUES(8, 'CSS3',4,'<h3>CSS lesson 3<h3>
 
 <h4>CSS Padding</h4>
 <div style="width:100%;border-width:1px;border-style:solid;padding:50px;">
@@ -770,8 +771,8 @@ padding properties:</p>
 	<li>left padding is 100px</li></ul>
 	</li>
 </ul>
-',courseID_seq.CURRVAL);
-/
+', 3);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which of the following selector matches all elements of a type?'
@@ -781,8 +782,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C.  The Descendant Selector'
               , 'D.  The Class Selector'
               , 1
-              ,roundID_seq.CURRVAL);
-/
+              ,8);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following is a way to associate styles with your HTML document?'
@@ -791,8 +792,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	Both of the above'
               , 'D. None of the above.'
               , 3
-              ,roundID_seq.CURRVAL) ;
- /
+              ,8) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property specifies the left padding of an element?'
@@ -801,8 +802,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	padding-left'
               , 'D. padding-right'
               , 3
-              ,roundID_seq.CURRVAL) ;
-/
+              ,8) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which of the following selector selects all paragraph elements with a lang attribute?'
@@ -811,14 +812,13 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	p[lang~="fr"]'
               , 'D.	p[lang|="fr"]'
               , 1
-              ,roundID_seq.CURRVAL) ;
-/
+              ,8) ;
 
 
 
--------------ROUND IV COURSE 2-------------------------
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('NEXT STEP CSS',4,'<h3>CSS lesson 4<h3>
+# -------------ROUND IV COURSE 2-------------------------
+INSERT INTO ROUNDS (roundId, NAME,nrOfQuestions, course,COURSEID)
+       VALUES(9, 'NEXT STEP CSS',4,'<h3>CSS lesson 4<h3>
 <h4>CSS Backgrounds</h4>
 <h5>Background Color</h5>
 <p>The <code>background-color</code> property specifies the background color of an element.</p>
@@ -897,8 +897,8 @@ one property.</p>
 <p>You can set the margin property to <code>auto</code> to horizontally center the element within its container.</p>
 <p>The element will then take up the specified width, and the remaining space will be split equally between the
 left and right margins:</p>
-',courseID_seq.CURRVAL);
-/
+', 3);
+
 INSERT INTO Questions (question,difficulty, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property is used to control the scrolling of an image in the background?'
@@ -908,8 +908,8 @@ INSERT INTO Questions (question,difficulty, answerA, answerB,
               , 'C. background-repeat'
               , 'D.	background-position'
               , 1
-              ,roundID_seq.CURRVAL);
-/
+              ,9);
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following value of cursor shows it as an arrow?'
@@ -918,8 +918,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	pointer'
               , 'D. move'
               , 2
-              ,roundID_seq.CURRVAL) ;
- /
+              ,9) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property is used to set the opacity of an image?'
@@ -928,8 +928,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	width'
               , 'D. -moz-opacity'
               , 4
-              ,roundID_seq.CURRVAL) ;
-/
+              ,9) ;
+
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('Which of the following property specifies a shorthand property for setting the margin properties in one declaration?'
@@ -938,14 +938,17 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	:margin-top'
               , 'D.	:margin-left'
               , 1
-              ,roundID_seq.CURRVAL) ;
-/
+              ,9) ;
 
-INSERT INTO COURSES (TITLE, SHORTDESC, HASHTAG,PHOTOURL)
-			VALUES ('JavaScript','JavaScript is an interpreted programming or script language from Netscape. It is somewhat similar in capability to Microsoft Visual Basic, Sun Tcl,
+
+# COURSE III
+INSERT INTO COURSES (COURSEID, TITLE, SHORTDESC, HASHTAG,PHOTOURL)
+			VALUES (4, 'JavaScript','JavaScript is an interpreted programming or script language from Netscape. It is somewhat similar in capability to Microsoft Visual Basic, Sun Tcl,
 					the UNIX-derived Perl, and IBMs REXX. ','#JS','/images/courses/js.png' );
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('INTRO JS',4,' <h3>Java Script lesson 1</h3>
+
+
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course, COURSEID)
+       VALUES(10, 'INTRO JS',4,' <h3>Java Script lesson 1</h3>
        	<h4>JavaScript Statements</h4>
 <p>In HTML, JavaScript statements are "instructions" to be "executed" by the web
 browser.</p>
@@ -1002,7 +1005,7 @@ from accessing other parts of the page until the box is closed.</p>
 	alert(<em>message</em>)
 </div>
 
-',courseID_seq.CURRVAL);
+', 4);
 
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
@@ -1012,9 +1015,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	<javascript>'
               , 'D.	<script>'
               , 4
-              ,roundID_seq.CURRVAL) ;
+              , 10) ;
 
-/
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES('What is the correct JavaScript syntax to change the content of the HTML element below?
@@ -1026,9 +1028,7 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	#demo.innerHTML = "Hello World!";'
               , 'D.	document.getElementById("demo").innerHTML = "Hello World!";'
               , 4
-              ,roundID_seq.CURRVAL) ;
-
-/
+              ,10) ;
 
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
@@ -1038,9 +1038,8 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	alertBox("Hello World");'
               , 'D.	msg("Hello World");'
               , 2
-              ,roundID_seq.CURRVAL) ;
+              ,10) ;
 
-/
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' How to write an IF statement in JavaScript?'
@@ -1049,11 +1048,11 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	if i == 5 then'
               , 'D.	if (i == 5)'
               , 4
-              ,roundID_seq.CURRVAL) ;
+              ,10) ;
 
-/
-INSERT INTO ROUNDS (NAME,nrOfQuestions, course,COURSEID)
-       VALUES('JS1',4,' <h3>Java Script lesson 2</h3>
+
+INSERT INTO ROUNDS (roundID, NAME,nrOfQuestions, course,COURSEID)
+       VALUES(11, 'JS1',4,' <h3>Java Script lesson 2</h3>
 
 <h4>JavaScript <span class="color_h1">Functions</span></h4>
 <p class="intro">A JavaScript function is a block of code designed to perform a
@@ -1118,7 +1117,7 @@ fruits.reverse();
 <span style="color:black">
 <span style="color:mediumblue">var</span> text = <span style="color:brown">"Hello"</span> + <span style="color:brown">" "</span> + <span style="color:brown">"World!"</span>;<br>
 <span style="color:mediumblue">var</span> text = <span style="color:brown">"Hello"</span>.concat(<span style="color:brown">" "</span>,<span style="color:brown">"World!"</span>);</span>
-',courseID_seq.CURRVAL);
+', 4);
 
 INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
@@ -1128,9 +1127,9 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	Both of the above'
               , 'D.	None of the above'
               , 3
-              ,roundID_seq.CURRVAL) ;
+              ,11) ;
 
- /
+
  INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which built-in method adds one or more elements to the end of an array and returns the new length of the array?'
@@ -1139,9 +1138,9 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C.	put()'
               , 'D.	None of the above'
               , 2
-              ,roundID_seq.CURRVAL) ;
+              ,11) ;
 
- /
+
  INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which of the following function of Array object reverses the order of the elements of an array?'
@@ -1150,9 +1149,9 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C. reduce()'
               , 'D.	reduceRight()'
               , 1
-              ,roundID_seq.CURRVAL) ;
+              ,11) ;
 
- /
+
  INSERT INTO Questions (question, answerA, answerB,
                        answerC, answerD, correctAnswer, roundID)
        VALUES(' Which built-in method combines the text of two strings and returns a new string?'
@@ -1161,11 +1160,6 @@ INSERT INTO Questions (question, answerA, answerB,
               , 'C. attach()'
               , 'D.	None of the above.'
               , 2
-              ,roundID_seq.CURRVAL) ;
+              , 11) ;
 
- /
-
-
-
-
-commit;
+COMMIT;

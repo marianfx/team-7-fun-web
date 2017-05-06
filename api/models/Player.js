@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Player.js
  *
  * @description ::
@@ -6,17 +6,17 @@
 
 module.exports = {
 
-	tableName: 'PLAYERS',
+    tableName: 'PLAYERS',
+    autoPK: false,
     autoCreatedAt: false,
     autoUpdatedAt: false,
-    autoPK: false,
 
 	attributes: {
 
 		playerID: {
-			type: 'integer',
-			primaryKey: true,
-			required: true,
+            primaryKey: true,
+            required: true,
+            type: 'integer',
 			columnName: 'PLAYERID'
 		},
 

@@ -1,6 +1,6 @@
-module.exports = {
+﻿module.exports = {
 
-    port: process.env.PORT || 6996,
+    port: 6996,
     serverURL: 'http://localhost:6996',
     oracle_conn: {
                     adapter: 'sails-oracle-db',
@@ -12,5 +12,12 @@ module.exports = {
                     user          : "",
                     password      : "",
                     connectString : "localhost/XE"
-                },
+    },
+    mysql: {
+        adapter: 'sails-mysql',
+        host: '127.0.0.1',
+        user: 'fx', //optional
+        password: 'fxfxfx', //optional
+        database: 'funweb' //optional
+    },
 };

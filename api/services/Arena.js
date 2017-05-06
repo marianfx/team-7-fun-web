@@ -1,14 +1,14 @@
-var playerCtrl = require('./../controllers/PlayerController');
+﻿var playerCtrl = require('./../controllers/PlayerController');
 var Messages = sails.config.messages;
 
 
 // return gameID
-let getFreeRoom = function() {
+let getFreeRoom = function () {
   return Game.activeGames;
 };
 
 // this function will be called for every second
-let startClock = function(gameID) {
+let startClock = function (gameID) {
   var currentPlayers = Game.games.get(gameID).players;
   var endRound = true;
   var auxtimer = null;
@@ -33,7 +33,7 @@ let startClock = function(gameID) {
   if (currentPlayers.size === 1) {
     clearTimeout(Game.games.get(gameID).roundInterval);
     roundTop(gameID,
-      function(gameID, topPlayers) {
+      function (gameID, topPlayers) {
 
         // create an array with name, answers and id of players of this game
         var bigTop = [];
@@ -105,7 +105,7 @@ let startClock = function(gameID) {
   // if round is end, reset timer and send all answers
   if (endRound) {
     roundTop(gameID,
-      function(gameID, topPlayers) {
+      function (gameID, topPlayers) {
 
         var currentGame = Game.games.get(gameID);
         var gamePlayers = currentGame.players;
@@ -128,16 +128,16 @@ let startClock = function(gameID) {
           for (var i in answers)
 
             if (answers[i].id == topPlayers[j].id) {
-            var myPlayer = Game.Users.get(String(topPlayers[j].id));
+              var myPlayer = Game.Users.get(String(topPlayers[j].id));
 
-            var aux = {
-              id: answers[i].id,
-              nrAnswer: topPlayers[j].nrAnswer,
-              currAnswer: answers[i].currAnswer,
-              name: myPlayer.name
-            };
-            bigTop.push(aux);
-          }
+              var aux = {
+                id: answers[i].id,
+                nrAnswer: topPlayers[j].nrAnswer,
+                currAnswer: answers[i].currAnswer,
+                name: myPlayer.name
+              };
+              bigTop.push(aux);
+            }
         }
 
         var swig = require('swig');
@@ -156,7 +156,7 @@ let startClock = function(gameID) {
     sails.log.debug("End Round");
 
 
-    setTimeout(function() {
+    setTimeout(function () {
       sails.services.arena.startRound(gameID);
     }, 2000, gameID);
 
@@ -166,7 +166,7 @@ let startClock = function(gameID) {
 };
 
 // recursive function: update  losses and winners to the database
-let update_end_battle = function(gamePlayers, winners, i) {
+let update_end_battle = function (gamePlayers, winners, i) {
 
   // stop condition
   if (i >= gamePlayers.length)
@@ -175,27 +175,18 @@ let update_end_battle = function(gamePlayers, winners, i) {
   // prepare statement
   var DB = new sails.services.databaseservice();
   var plsql = sails.config.queries.update_end_battle;
-  var oracledb = DB.oracledb;
-
-
   // prepare bind variable
   // flag -1 = player with "id" lossed
   // flag 1 = palyer with "id" winn
-  var bindvars = {
-    id: gamePlayers[i],
-    flag: -1
-  };
+  var bindvars = [gamePlayers[i], -1];
   // check if current Player is winner
   if (winners.indexOf(String(gamePlayers[i])) > -1) {
-    bindvars.flag = 1;
-    //************
-    //AFISARE!!!
-    //************
+    bindvars[1] = 1;
     sails.log.debug("Player with ID:" + gamePlayers[i] + " win a game");
   }
 
   // call procedure from dataBase
-  DB.procedureSimple(plsql, bindvars, function(err, rows) {
+  DB.procedureSimple(plsql, bindvars, function (err, rows) {
 
     if (err)
       sails.log.debug(err.message);
@@ -204,43 +195,38 @@ let update_end_battle = function(gamePlayers, winners, i) {
 
   // update EXPERIENCE
   plsql = sails.config.queries.update_experience_battle;
-  playerCtrl.getPlayer(gamePlayers[i], function(err, playerData) {
-var user = Game.Users.get(String(gamePlayers[i]));
+  playerCtrl.getPlayer(gamePlayers[i], function (err, playerData) {
+    var user = Game.Users.get(String(gamePlayers[i]));
 
 
-var experience = (25 * user.answers)+ playerData[0].EXPERIENCE;
-var upLevel = playerData[0].PLAYERLEVEL;
-if(experience> 50*Math.pow(2,playerData[0].PLAYERLEVEL))
-{
-  upLevel=upLevel+1;
-}
-
-  var bindvars2={
-    id: gamePlayers[i],
-    myexperience: experience,
-    mylevel: upLevel
-  };
-
-  resetStatus(gamePlayers[i]);
+    var experience = (25 * user.answers) + playerData[0].EXPERIENCE;
+    var upLevel = playerData[0].PLAYERLEVEL;
+    if (experience > 50 * Math.pow(2, playerData[0].PLAYERLEVEL)) {
+      upLevel = upLevel + 1;
+    }
 
 
-  DB.procedureSimple(plsql, bindvars2, function(err, rows) {
+    resetStatus(gamePlayers[i]);
 
-    if (err)
-      sails.log.debug(err.message);
-    return;
+    var bindvars2 = [experience, upLevel, gamePlayers[i]];
+
+    DB.procedureSimple(plsql, bindvars2, function (err, rows) {
+
+      if (err)
+        sails.log.debug(err.message);
+      return;
+    });
+
+
+    //call this function for next player
+    update_end_battle(gamePlayers, winners, i + 1);
+
   });
-
-
-  //call this function for next player
-  update_end_battle(gamePlayers, winners, i + 1);
-
-});
 
 };
 
 //reset Status of a player: he is no longer in a game
-let resetStatus = function(userID) {
+let resetStatus = function (userID) {
   var user = Game.Users.get(String(userID));
 
   if (user == null)
@@ -253,7 +239,7 @@ let resetStatus = function(userID) {
 
 
 //check if a game can start. If all players had responded to the invitation
-let ceckOnReady = function(gameID) {
+let ceckOnReady = function (gameID) {
 
   return (Game.games.get(gameID).players.size == Game.games.get(gameID).nrOfInvitation) &&
     (Game.games.get(gameID).nrOfInvitation > 1);
@@ -261,7 +247,7 @@ let ceckOnReady = function(gameID) {
 
 
 
-let startGame = function(gameID) {
+let startGame = function (gameID) {
 
   //notify all player subscribed to the gameID that game is  going to start
   notifyStartGame(gameID);
@@ -281,17 +267,10 @@ let startGame = function(gameID) {
   //  prepare for get minim RoundID
   var DB = new sails.services.databaseservice();
   var plsql = sails.config.queries.getminRound;
-  var oracledb = DB.oracledb;
 
-  var bindvars = {
-    str: payersStr,
-    cursor: {
-      type: oracledb.CURSOR,
-      dir: oracledb.BIND_OUT
-    }
-  };
+  var bindvars = [payersStr];
 
-  DB.procedureFetch(plsql, bindvars, function(err, rows) {
+  DB.procedureFetch(plsql, bindvars, function (err, rows) {
 
     if (err) {
       sails.log.debug(Messages.round_not_found);
@@ -300,7 +279,9 @@ let startGame = function(gameID) {
 
 
     var dB = new sails.services.databaseservice();
-    dB.loadQuestions(rows[0].LASTROUNDID, gameID, function(err, gameID, questions) {
+    var plsql = sails.config.queries.questions_loader;
+    var bindvars = [rows[0].LASTROUNDID, 5];
+    dB.procedureFetch(plsql, bindvars, function (err, questions) {
 
       //if don't found question in database the game will be abort
       if (questions == null) {
@@ -309,6 +290,8 @@ let startGame = function(gameID) {
       }
 
       // add questions to the game
+      sails.log.debug("Loaded questions in Arena.");
+      sails.log.debug(questions);
       var currentGame = Game.games.get(gameID);
       currentGame.questions = questions;
       Game.games.set(gameID, currentGame);
@@ -317,11 +300,6 @@ let startGame = function(gameID) {
 
     });
   });
-
-
-
-
-
 };
 
 /**
@@ -332,7 +310,7 @@ let startGame = function(gameID) {
  *
  */
 
-let roundTop = function(gameID, next) {
+let roundTop = function (gameID, next) {
   var currentGame = Game.games.get(gameID);
 
   var currPlayersMap = currentGame.players;
@@ -346,7 +324,7 @@ let roundTop = function(gameID, next) {
 
 
   //sort players and call next function
-  currPlayers.sort(function(a, b) {
+  currPlayers.sort(function (a, b) {
     return parseInt(b.answers) - parseInt(a.answers);
   });
   var topPlayers = [];
@@ -361,13 +339,13 @@ let roundTop = function(gameID, next) {
   return next(gameID, topPlayers);
 
 };
-let addTime = function(userID, res) {
+let addTime = function (userID, res) {
   var user = Game.Users.get(String(userID));
   if (user == null) {
     return;
   }
   if (user.gameID !== -1) {
-    playerCtrl.getPlayer(userID, function(err, playerData) {
+    playerCtrl.getPlayer(userID, function (err, playerData) {
 
 
       if (playerData[0].S_TIME > 0) {
@@ -377,13 +355,9 @@ let addTime = function(userID, res) {
 
         var DB = new sails.services.databaseservice();
         var plsql = sails.config.queries.decremente_S_TIME;
-        var oracledb = DB.oracledb;
 
-        var bindvars = {
-          id: userID,
-          timepoints: playerData[0].S_TIME - 1
-        };
-        DB.procedureSimple(plsql, bindvars, function(err, rows) {
+        var bindvars = [playerData[0].S_TIME - 1, userID];
+        DB.procedureSimple(plsql, bindvars, function (err, rows) {
 
           if (err)
             sails.log.debug(err.message);
@@ -409,7 +383,7 @@ let addTime = function(userID, res) {
  * @param  {int} gameID
  *
  */
-let startRound = function(gameID) {
+let startRound = function (gameID) {
 
 
   var currentGame = Game.games.get(gameID);
@@ -420,7 +394,7 @@ let startRound = function(gameID) {
 
     // make Final top
     roundTop(gameID,
-      function(gameID, topPlayers) {
+      function (gameID, topPlayers) {
 
         // create an array with name, answers and id of players of this game
         var bigTop = [];
@@ -452,9 +426,8 @@ let startRound = function(gameID) {
             break;
           }
         }
-        var gamePlayers =[];
-        for( var [key,val] of Game.games.get(gameID).players)
-        {
+        var gamePlayers = [];
+        for (var [key, val] of Game.games.get(gameID).players) {
           gamePlayers.push(key);
         }
         var playerVec = [];
@@ -464,7 +437,7 @@ let startRound = function(gameID) {
         }
         console.log("apelez functia recursiva pentru prima data");
         console.log(playerVec);
-       gameOut(playerVec, 0);
+        gameOut(playerVec, 0);
 
         //create an array just with   winnersId and update in database number of winners for player
         var winnersID = [];
@@ -500,7 +473,7 @@ let startRound = function(gameID) {
   }
 
   // define a function who call startClock for every second
-  var roundInterval = setInterval(function() {
+  var roundInterval = setInterval(function () {
     startClock(gameID);
   }, 1000, gameID);
   currentGame.roundInterval = roundInterval;
@@ -545,7 +518,7 @@ let startRound = function(gameID) {
  * @param  {object} newValue [new value of the property]
  */
 
-let changePropertyUser = function(userID, prop, newValue) {
+let changePropertyUser = function (userID, prop, newValue) {
   var user = Game.Users.get(String(userID));
   user[prop] = newValue;
   Game.Users.set(String(userID), user);
@@ -556,7 +529,7 @@ let changePropertyUser = function(userID, prop, newValue) {
  * [this function will be called whenever a player leave arena]
  * @param  {int} userID [unique identifier for players]
  */
-let leaveRoom = function(userID) {
+let leaveRoom = function (userID) {
   var user = Game.Users.get(String(userID));
   if (null == user) {
     //************
@@ -579,7 +552,7 @@ let leaveRoom = function(userID) {
 
 
     // broadcast to the all member of the room and notify that a player left room
-    playerCtrl.getPlayer(userID, function(err, playerData) {
+    playerCtrl.getPlayer(userID, function (err, playerData) {
       sails.sockets.broadcast(roomName, "abordGame", {
         name: playerData[0].PLAYERNAME
       });
@@ -590,13 +563,9 @@ let leaveRoom = function(userID) {
 
     var DB = new sails.services.databaseservice();
     var plsql = sails.config.queries.update_end_battle;
-    var oracledb = DB.oracledb;
-    var bindvars = {
-      id: userID,
-      flag: -1
-    };
+    var bindvars = [userID, -1];
 
-    DB.procedureSimple(plsql, bindvars, function(err, rows) {
+    DB.procedureSimple(plsql, bindvars, function (err, rows) {
 
       if (err)
         sails.log.debug(err.message);
@@ -618,7 +587,7 @@ let leaveRoom = function(userID) {
 };
 
 //notify that the game will be stopped
-let notifyAbortGame = function(gameID) {
+let notifyAbortGame = function (gameID) {
   var gamePlayers = Game.games.get(gameID).players;
 
   for (var [key, value] of gamePlayers) {
@@ -633,7 +602,7 @@ let notifyAbortGame = function(gameID) {
 
 
 //notity all pleyers subscribed to a game that it is ready to Start
-let notifyStartGame = function(gameID) {
+let notifyStartGame = function (gameID) {
   sails.log.debug("game with id: " + gameID + "starts");
   var currPlayers = Game.games.get(gameID).players;
 
@@ -675,17 +644,15 @@ let notifyStartGame = function(gameID) {
 
 };
 
-let gameOut = function(playerVec, i) {
-  if (i >= playerVec.length)
-  {
+let gameOut = function (playerVec, i) {
+  if (i >= playerVec.length) {
     console.log("am terminat de parcurs functia recursiva!");
     return;
   }
 
-  playerCtrl.getPlayer(playerVec[i], function(err, playerData) {
+  playerCtrl.getPlayer(playerVec[i], function (err, playerData) {
 
-    if(err)
-    {
+    if (err) {
       console.log(err.message);
       return;
     }
@@ -705,12 +672,12 @@ let gameOut = function(playerVec, i) {
       }
     }
     console.log("apelez functia recursiva");
-    gameOut(playerVec,i+1);
+    gameOut(playerVec, i + 1);
   });
 
 };
 
-let checkEndRound = function(gameID) {
+let checkEndRound = function (gameID) {
   var isEndRound = true;
   for (var [key, value] of Game.games.get(gameID).players) {
     isEndRound = (isEndRound && Game.Users.get(String(key)).answerdQ);

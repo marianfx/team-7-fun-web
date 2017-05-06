@@ -1,92 +1,36 @@
-
-
-/**
- * Actual fetch of the rows given an result set.
- * @method function
- */
-let fetchRowsFromRS = function(connection, resultSet, numRows, next) {
-
-    resultSet.getRows( // get numRows rows
-        numRows,
-        function (err, rows) {
-
-          connection.release( (err) => {
-                  if (err)
-                    sails.log.error(err.message);
-          });
-
-          if(err || (rows.length === 0)) {
-              return next(new Error('Could not fetch any rows.'));
-
-          }
-
-          sails.log.debug('Got ' + rows.length + ' rows.');
-          return next(null, rows);
-
-        });
-};
-
-/**
- * Actual fetch of the rows given an result set. For a given game id.
- * @method function
- */
-let fetchRowsFromRS2 = function(connection, resultSet, numRows, gameID, next) {
-
-    resultSet.getRows( // get numRows rows
-        numRows,
-        function (err, rows) {
-            if(err || (rows.length === 0)) {
-                return next(new Error('Could not fetch any rows.'), null,null);
-
-            }
-            sails.log.debug('Got ' + rows.length + ' rows.');
-            return next(null, gameID, rows);
-
-        });
-};
-
-
 /**
  * This is the service responsable with the Oracle Special Procedure Calls and Queries Fetcher
  * @type {Function}
  */
 module.exports = function() {
-
-    /**
-     * The Oracle DB Module
-     */
-    this.oracledb = require('oracledb');
-
-
     /**
      * Calls a procedure from the database and fetches the results, passing them to the next function. Warning, does return a cursor. NOT for normal queries.
      * @method procedureFetch
      */
     this.procedureFetch = function (plsql, bindvars, next) {
 
-            var numRows = 8;
-            var arrRows;
+      var numRows = 8;
+      var arrRows;
 
-            this.oracledb.getConnection(sails.config.connections.oracle_user,
-                function (err, connection) {
-                    if(err) {
-                        sails.log.debug(err.message);
-                        return next(err, null);
-                    }
-                    connection.execute(
-                        plsql,
-                        bindvars,
-                        function (err, result) {
-                            if(err) {
-                                sails.log.debug(err.message);
-                                return next(err, null);
-                            }
-
-                            fetchRowsFromRS(connection, result.outBinds.cursor, numRows, next);
-                        });
-
+      this.executer = require("mysql").createConnection(require("../../config/local").mysql_full);
+      this.executer.on('error', function(err) {
+        return next(err, null);
+      });
+      var conn = this.executer;
+      this.executer.query(
+        plsql,
+        bindvars,
+        function (err, result) {
+          if (err) {
+            sails.log.debug(err.message);
+            return next(err, null);
+          }
+          //sails.log.debug(result[0]);
+          conn.end();
+          return next(null, result[0]);
         });
-      };
+    };
+
 
 
       /**
@@ -98,31 +42,26 @@ module.exports = function() {
        */
       this.procedureSimple = function (plsql, bindvars, next) {
 
-          this.oracledb.getConnection(sails.config.connections.oracle_user,
-              function (err, connection) {
-                  if(err) {
-                      sails.log.debug(err.message);
-                      return next(err);
-                  }
+        this.executer = require("mysql").createConnection(require("../../config/local").mysql_full);
+        this.executer.on('error', function(err) {
+          return next(err, null);
+        });
+        var conn = this.executer;
+        this.executer.query(
+          plsql,
+          bindvars,
+          function (err, result) {
 
-                  connection.execute(
-                      plsql,
-                      bindvars,
-                      function (err, result) {
-
-                        connection.release( (err) => {
-                                if (err)
-                                  sails.log.error(err.message);
-                        });
-
-                        if(err) {
-                            sails.log.debug(err);
-                            return next(err);
-                        }
-                        return next(null);
-                      });
-              });
+            if (err) {
+              sails.log.debug(err);
+              return next(err);
+            }
+            //sails.log.debug(result);
+            conn.end();
+            return next(null);
+          });
       };
+
 
 
       /**
@@ -134,33 +73,26 @@ module.exports = function() {
        */
       this.executeQuery = function (query, bindparams, next) {
 
-          this.oracledb.getConnection(sails.config.connections.oracle_user,
-              function (err, connection) {
-                  if(err) {
-                      sails.log.debug(err.message);
-                      return next(err, []);
-                  }
+        this.executer = require("mysql").createConnection(require("../../config/local").mysql_full);
+        this.executer.on('error', function(err) {
+          return next(err, null);
+        });
+        var conn = this.executer;
+        this.executer.query(
+          query,
+          bindparams,
+          function (err, result) {
 
-                  connection.execute(
-                      query,
-                      bindparams,
-                      function (err, result) {
-
-                        connection.release( (err) => {
-                                if (err)
-                                  sails.log.error(err.message);
-                        });
-
-                        if(err) {
-                            sails.log.debug(err);
-                            return next(err, []);
-                        }
-
-                        return next(err, result.rows);
-                      });
-              });
-
+            if (err) {
+              sails.log.debug(err);
+              return next(err, []);
+            }
+            //sails.log.debug(result);
+            conn.end();
+            return next(err, result);
+          });
       };
+
 
 
       /**
@@ -170,85 +102,27 @@ module.exports = function() {
          * @param  {[type]}   bindvars [The binded variables]
          * @param  {Function} next     [The next function in line to call]
          */
-        this.executeProcedure = function (query, bindparams, next) {
+        this.executeProcedure = function (query, bindparams, next, isFromAddLuck = false) {
 
-            this.oracledb.getConnection(sails.config.connections.oracle_user,
-                function (err, connection) {
-                    if(err) {
-                        sails.log.debug(err.message);
-                        return next(err, null);
-                    }
-
-                    connection.execute(
-                        query,
-                        bindparams,
-                        function (err, result) {
-
-                            connection.release( (err) => {
-                                if (err)
-                                  sails.log.error(err.message);
-                            });
-
-                            if(err) {
-                                return next(err, null);
-                            }
-
-                            return next(err, result.outBinds);
-                        });
-                });
-
-        };
-
-
-        /**
-         * Loads the questions
-         * @method loadQuestions
-         */
-         this.loadQuestions = function (lastRound, gameID, next) {
-
-            var plsql = "BEGIN Game_Managament.loadQuestions(:p_roundID,:nr_questions,:cursor); END;";
-            var bindvars = {
-              p_roundID: lastRound,
-              nr_questions: 5,
-                cursor: {
-                    type: this.oracledb.CURSOR,
-                    dir: this.oracledb.BIND_OUT
-                }
-            };
-
-            this.procedureFetch2(plsql, bindvars,gameID, next);
-        };
-
-        /**
-         * Calls a procedure from the database and fetches the results, passing them to the next function. Warning, does return a cursor. NOT for normal queries.
-         * @method procedureFetch
-         */
-        this.procedureFetch2 = function (plsql, bindvars,gameID, next) {
-
-                var numRows = 8;
-                var arrRows;
-
-                this.oracledb.getConnection(sails.config.connections.oracle_user,
-                    function (err, connection) {
-                        if(err) {
-                            sails.log.debug(err.message);
-                            return next(err, null);
-                        }
-                        connection.execute(
-                            plsql,
-                            bindvars,
-                            function (err, result) {
-                                if(err) {
-                                    sails.log.debug(err.message);
-                                    return next(err, null);
-                                }
-
-                                fetchRowsFromRS2(connection, result.outBinds.cursor, numRows,gameID, next);
-                            });
-
+          this.executer = require("mysql").createConnection(require("../../config/local").mysql_full);
+          this.executer.on('error', function(err) {
+            return next(err, null);
+          });
+          var conn = this.executer;
+          this.executer.query(
+            query,
+            bindparams,
+            function (err, result) {
+              if (err) {
+                return next(err, null);
+              }
+              var returnO = result;
+              if(!isFromAddLuck)
+                returnO = result[0];
+              conn.end();
+              return next(err, returnO);
             });
-          };
-
+        };
 
       /**
        * Parse a possible error from the database.
@@ -256,29 +130,23 @@ module.exports = function() {
        */
       this.parseError = function (err, next) {
 
-              if(err) {
+        if (err) {
+          sails.log.debug(err);
+          var containsORA = err.message.indexOf('ER_SIGNAL_EXCEPTION');
 
-              var containsORA = err.message.indexOf('ORA');
+          if (containsORA >= 0) {
+            var startIndex = err.message.indexOf(':') + 2;
+            err.message = err.message.substr(startIndex, err.length);
 
-              if(containsORA >= 0) {
+            var endIndex = err.message.indexOf('ORA');
+            err.message = err.message.substr(0);
+            sails.log.debug(err.message);
 
-                var startIndex = err.message.indexOf(':') + 2;
-                err.message = err.message.substr(startIndex, err.length);
-
-                var endIndex = err.message.indexOf('ORA');
-
-                err.message = err.message.substr(0, endIndex);
-
-                sails.log.debug(err.message);
-
-              }
-              else {
-                err.message = 'Something very very bad happened on the server.';
-              }
+          } else {
+            err.message = 'Something very very bad happened on the server.';
           }
+        }
 
-          next(err);
-
+        next(err);
       };
-
 };

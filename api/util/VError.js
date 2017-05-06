@@ -74,7 +74,6 @@ function VError (properties) {
 
         				return i;
         			});
-              return n;
       		});
 
           // get only the first field

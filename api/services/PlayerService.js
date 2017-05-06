@@ -27,9 +27,7 @@ module.exports = {
 		var db = new sails.services.databaseservice();
 
 		var query = sails.config.queries.load_skills;
-		var bindparams = {
-			id : player_id
-		};
+		var bindparams = [player_id];
 
 		db.executeQuery(query, bindparams, function(err, data) {
 
@@ -41,10 +39,7 @@ module.exports = {
 
 		var query = sails.config.queries.buy_item;
 
-		var bindparams = {
-			playerID : player_id,
-			itemID : item_id
-		};
+		var bindparams = [player_id, item_id];
 
 		var db = new sails.services.databaseservice();
 
@@ -66,10 +61,7 @@ module.exports = {
 		var db = new sails.services.databaseservice();
 
 		var query = sails.config.queries.add_skill;
-		var bindparams = {
-			id : player_id,
-			skillName : skill
-		};
+		var bindparams = [player_id, skill];
 
 		db.procedureSimple(query, bindparams, function(err) {
 
@@ -92,12 +84,7 @@ module.exports = {
 
 		var query = sails.config.queries.use_luck;
 
-		var bindparams = {
-			id : player_id,
-			random1 : { dir : oracledb.BIND_OUT, type : oracledb.INT },
-			random2 : { dir : oracledb.BIND_OUT, type : oracledb.INT },
-			what : { dir : oracledb.BIND_OUT, type : oracledb.INT }
-		};
+		var bindparams = [player_id];
 
 		db.executeProcedure(query, bindparams, function(err, data) {
 
@@ -105,7 +92,7 @@ module.exports = {
 
 				next(error, data);
 			});
-		});
+		}, true);
 	},
 
 
@@ -113,10 +100,8 @@ module.exports = {
 
 		var db = new sails.services.databaseservice();
 
-		var query = sails.config.queries.get_friends_count,
-			bindparams = {
-				id : player_id
-			};
+		var query = sails.config.queries.get_friends_count;
+		var bindparams = [player_id];
 
 		db.executeQuery(query, bindparams, function(err, data) {
 
@@ -131,11 +116,8 @@ module.exports = {
 
 		var db = new sails.services.databaseservice();
 
-		var query = sails.config.queries.are_friends,
-			bindparams = {
-				id1 : player_id1,
-				id2 : player_id2
-			};
+		var query = sails.config.queries.are_friends;
+		var bindparams = [player_id1, player_id2];
 
 		db.executeQuery(query, bindparams, function(err, data) {
 
@@ -231,13 +213,9 @@ module.exports = {
 	updateExperience : function(_id, _round, _percent, next){
 
     var plsql = sails.config.queries.update_experience;
-    var bindvars = {
-      playerid: _id,
-      roundid: _round,
-      precent: _percent
-    };
+    var bindvars = [_id, _round, _percent];
 
-		var db = new sails.services.databaseservice();
+	var db = new sails.services.databaseservice();
     db.procedureSimple(plsql, bindvars, (error) => {
         return next(error);
     });
@@ -246,13 +224,10 @@ module.exports = {
 
   updateEndBattle : function(req,res){
 
-    var plsql = "BEGIN player_package.update_battle_end  (:p_playerid , :p_flag); END;";
-    var bindvars = {
-      p_playerid : req.user.id,
-      p_flag : req.body.flag
-    };
+    var plsql = "CALL update_battle_end(?, ?)";
+    var bindvars = [req.user.id, req.body.flag];
 
-		var db = new sails.services.databaseservice();
+	var db = new sails.services.databaseservice();
     db.procedureSimple(plsql, bindvars, (error) => {
         if(error){
           return res.json({message: 'Error to dataBase!'});
@@ -264,14 +239,10 @@ module.exports = {
 
   saveGameHistory : function(req,res) {
     // cand va fi apelata trebuie modificat parametrul al doilea => serverul stie jucatorii
-    var plsql = "BEGIN Game_Managament.saveGameHistory  (:p_playerID1 , :p_playerID2,:p_winnerID); END;";
-    var bindvars = {
-      p_playerID1 : req.user.id,
-      p_playerID2 : req.body.p_playerID2,
-      p_winnerID : req.user.id
-    };
+    var plsql = "CALL saveGameHistory(?, ?, ?)";
+    var bindvars = [req.user.id, req.body.p_playerID2, req.user.id];
 
-		var db = new sails.services.databaseservice();
+	var db = new sails.services.databaseservice();
     db.procedureSimple(plsql, bindvars, (error) => {
         if(error){
           return res.json({message: 'Error to dataBase!'});

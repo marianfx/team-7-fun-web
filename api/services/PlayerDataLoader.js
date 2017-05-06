@@ -12,7 +12,7 @@ module.exports = function(){
 
       var DB = new sails.services.databaseservice();
       var query = sails.config.queries.user_lastround;
-      var binds = {id: _playerId};
+      var binds = [_playerId];
       DB.executeQuery(query, binds, (err, result) => {
           if(err)
             return next(err);
@@ -30,7 +30,7 @@ module.exports = function(){
 
       var DB = new sails.services.databaseservice();
       var query = sails.config.queries.all_friends;
-      var binds = {me: _playerId};
+      var binds = [_playerId];
       DB.executeQuery(query, binds, (err, result) => {
           if(err)
             return next(err);
@@ -53,7 +53,8 @@ module.exports = function(){
       sails.controllers.player.getPlayer(_playerId, (err, players) => {
           if(err)
             return next(err);
-
+          
+          sails.log.debug("Got players from Db.");
           object.user = players[0];
           object.user.nextlvl = 50 * Math.pow(2, object.user.PLAYERLEVEL + 1);//progresie geom
 
@@ -61,6 +62,8 @@ module.exports = function(){
               if(err)
                 return next(err);
 
+              sails.log.debug("Loaded courses.");
+              sails.log.debug(result);
               object.courses = result.courses;
 
               this.getFriendsList(_playerId, (err, friendlist) => {

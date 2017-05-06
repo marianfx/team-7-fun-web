@@ -62,13 +62,12 @@ module.exports = function(){
 
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.all_courses;
-    var binds = {};
+    var binds = [];
     DB.executeQuery(query, binds, (err, results) => {
         if(err)
           return next(err);
         return next(null, results);
     });
-
   };
 
 
@@ -149,7 +148,7 @@ module.exports = function(){
 
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.courses_upon_x;
-    var binds = {id: upperRound};
+    var binds = [upperRound];
 
     DB.executeQuery(query, binds, (err, results) => {
         if(err)
@@ -179,7 +178,9 @@ module.exports = function(){
 
                     if(err)
                       return next(err);
-
+                    
+                    sails.log.debug("Loaded courses in CourseLoader.");
+                    sails.log.debug(result);
                     // add course data
                     var _course = { courseId: -1 };
                     var courses = [];

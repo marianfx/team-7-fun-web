@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{febf3316-4253-4f08-b48f-e561fc049409}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>app.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="DB_MySql\.idea\codeStyleSettings.xml" />
+    <Content Include="DB_MySql\.idea\dataSources.local.xml" />
+    <Content Include="DB_MySql\.idea\dataSources.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\storage.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata.keystream" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata.keystream.len" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata.len" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata.values.at" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata_i" />
+    <Content Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\metadata_i.len" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\storage.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata.keystream" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata.keystream.len" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata.len" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata.values.at" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata_i" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\metadata_i.len" />
+    <Content Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_src_\schema\FX.zip" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\storage.xml" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata.keystream" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata.keystream.len" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata.len" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata.values.at" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata_i" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\metadata_i.len" />
+    <Content Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_src_\schema\funweb.zip" />
+    <Content Include="DB_MySql\.idea\DB_Oracle.iml" />
+    <Content Include="DB_MySql\.idea\modules.xml" />
+    <Content Include="DB_MySql\.idea\sqldialects.xml" />
+    <Content Include="DB_MySql\.idea\workspace.xml" />
+    <Content Include="DB_MySql\Indexes.sql" />
+    <Content Include="DB_MySql\PCKAuth.sql" />
+    <Content Include="DB_MySql\PCKGame_Manag.sql" />
+    <Content Include="DB_MySql\PlayerPackage.sql" />
+    <Content Include="DB_MySql\PopulationRoundsQuestions.sql" />
+    <Content Include="DB_MySql\PopulationShopItems.sql" />
+    <Content Include="DB_MySql\Project_init.sql" />
+    <Content Include="DB_MySql\Project_triggers.sql" />
+    <Content Include="package.json" />
+    <Content Include="about.md" />
+    <Content Include="app_flow.md" />
+    <Content Include="client.md" />
+    <Content Include="readme.md" />
+    <Compile Include="app.js" />
+    <Compile Include="Gruntfile.js" />
+    <Content Include="assets\robots.txt" />
+    <Content Include="assets\commsframe.html" />
+    <Content Include="assets\index.html" />
+    <Compile Include="config\blueprints.js" />
+    <Compile Include="config\bootstrap.js" />
+    <Compile Include="config\connections.js" />
+    <Compile Include="config\globals.js" />
+    <Compile Include="config\http.js" />
+    <Compile Include="config\i18n.js" />
+    <Compile Include="config\local.default.js" />
+    <Compile Include="config\local.js" />
+    <Compile Include="config\log.js" />
+    <Compile Include="config\messages.js" />
+    <Compile Include="config\models.js" />
+    <Compile Include="config\passport.js" />
+    <Compile Include="config\policies.js" />
+    <Compile Include="config\queries.js" />
+    <Compile Include="config\routes.js" />
+    <Compile Include="config\session.js" />
+    <Compile Include="config\sockets.js" />
+    <Compile Include="config\views.js" />
+    <Content Include="tasks\README.md" />
+    <Compile Include="tasks\pipeline.js" />
+    <Compile Include="api\controllers\AdminController.js" />
+    <Compile Include="api\controllers\AuthController.js" />
+    <Compile Include="api\controllers\CourseController.js" />
+    <Compile Include="api\controllers\FriendController.js" />
+    <Compile Include="api\controllers\GameController.js" />
+    <Compile Include="api\controllers\ItemController.js" />
+    <Compile Include="api\controllers\PlayerController.js" />
+    <Compile Include="api\controllers\PlayerItemController.js" />
+    <Compile Include="api\controllers\QuestionController.js" />
+    <Compile Include="api\controllers\RoundController.js" />
+    <Compile Include="api\controllers\SocketController.js" />
+    <Compile Include="api\controllers\UserController.js" />
+    <Compile Include="api\models\Course.js" />
+    <Compile Include="api\models\Friend.js" />
+    <Compile Include="api\models\Game.js" />
+    <Compile Include="api\models\Item.js" />
+    <Compile Include="api\models\Player.js" />
+    <Compile Include="api\models\PlayerItem.js" />
+    <Compile Include="api\models\Question.js" />
+    <Compile Include="api\models\Round.js" />
+    <Compile Include="api\models\User.js" />
+    <Compile Include="api\policies\isAdmin.js" />
+    <Compile Include="api\policies\itsMe.js" />
+    <Compile Include="api\policies\passport.js" />
+    <Compile Include="api\policies\sessionAuth.js" />
+    <Compile Include="api\responses\badRequest.js" />
+    <Compile Include="api\responses\created.js" />
+    <Compile Include="api\responses\forbidden.js" />
+    <Compile Include="api\responses\notFound.js" />
+    <Compile Include="api\responses\ok.js" />
+    <Compile Include="api\responses\serverError.js" />
+    <Compile Include="api\services\Arena.js" />
+    <Compile Include="api\services\AuthService.js" />
+    <Compile Include="api\services\CourseLoader.js" />
+    <Compile Include="api\services\DatabaseService.js" />
+    <Compile Include="api\services\FacebookCrawler.js" />
+    <Compile Include="api\services\ItemService.js" />
+    <Compile Include="api\services\passport.js" />
+    <Compile Include="api\services\PlayerDataLoader.js" />
+    <Compile Include="api\services\PlayerService.js" />
+    <Compile Include="api\services\QuestionService.js" />
+    <Compile Include="api\util\VError.js" />
+    <Compile Include="api\services\protocols\index.js" />
+    <Compile Include="api\services\protocols\local.js" />
+    <Compile Include="api\services\protocols\oauth2.js" />
+    <Content Include="assets\images\cookies.png" />
+    <Content Include="assets\images\400.jpg" />
+    <Content Include="assets\images\cover.jpg" />
+    <Content Include="assets\images\donotcheat.jpg" />
+    <Content Include="assets\images\waiting.gif" />
+    <Content Include="assets\index_files\bootstrap.min.css" />
+    <Content Include="assets\index_files\mdb.css" />
+    <Content Include="assets\index_files\style.css" />
+    <Content Include="assets\index_files\logo_32x32.png" />
+    <Compile Include="assets\index_files\bootstrap.min.js" />
+    <Compile Include="assets\index_files\jquery.min.js" />
+    <Compile Include="assets\index_files\mdb.js" />
+    <Compile Include="assets\js\jquery-2.1.1.min.js" />
+    <Compile Include="assets\js\materialize.js" />
+    <Compile Include="assets\js\perfect-scrollbar.js" />
+    <Compile Include="assets\js\sweetalert.min.js" />
+    <Content Include="assets\styles\font.css" />
+    <Content Include="assets\styles\materialize.css" />
+    <Content Include="assets\styles\perfect-scrollbar.css" />
+    <Content Include="assets\styles\sweetalert.css" />
+    <Content Include="assets\images\avatars\defaultPlayer.png" />
+    <Content Include="assets\images\avatars\e5217378-4ebb-443f-88af-017507e3de2b.jpg" />
+    <Content Include="assets\images\avatars\f726ce3d-5acb-4262-9347-e6cfb3b9cfa3.jpg" />
+    <Content Include="assets\images\courses\css.png" />
+    <Content Include="assets\images\courses\defaultCourse.png" />
+    <Content Include="assets\images\courses\html.png" />
+    <Content Include="assets\images\courses\js.png" />
+    <Content Include="assets\images\courses\welcome.png" />
+    <Content Include="assets\images\favicon\logo_144x144.png" />
+    <Content Include="assets\images\favicon\logo_152x152.png" />
+    <Content Include="assets\images\favicon\logo_32x32.png" />
+    <Content Include="assets\images\favicon\logo_64x64.png" />
+    <Content Include="assets\images\favicon\favicon.ico" />
+    <Content Include="assets\images\intro\intro0.1.png" />
+    <Content Include="assets\images\intro\intro0.2.png" />
+    <Content Include="assets\images\intro\intro0.3.png" />
+    <Content Include="assets\images\intro\intro0.4.1.png" />
+    <Content Include="assets\images\intro\intro0.4.png" />
+    <Content Include="assets\images\intro\intro0.png" />
+    <Content Include="assets\images\intro\intro1.1.png" />
+    <Content Include="assets\images\intro\intro1.png" />
+    <Content Include="assets\images\items\defaultItem.png" />
+    <Content Include="assets\images\items\trophy.png" />
+    <Content Include="assets\images\items\blue_hour_glass.svg" />
+    <Content Include="assets\images\items\brown_hour_glass.svg" />
+    <Content Include="assets\images\items\green_hour_glass.svg" />
+    <Compile Include="assets\js\admin\newCourse.js" />
+    <Compile Include="assets\js\admin\newQuestion.js" />
+    <Compile Include="assets\js\admin\newRound.js" />
+    <Compile Include="assets\js\auth\signin.js" />
+    <Compile Include="assets\js\auth\signup.js" />
+    <Compile Include="assets\js\dependencies\sails.io.js" />
+    <Compile Include="assets\js\game\dropify.js" />
+    <Compile Include="assets\js\game\flipclock.js" />
+    <Compile Include="assets\js\game\loader.js" />
+    <Compile Include="assets\js\game\plugins.preparer.js" />
+    <Compile Include="assets\js\game\rounds.js" />
+    <Compile Include="assets\js\multiplayer\arena.js" />
+    <Content Include="assets\styles\admin\course.css" />
+    <Content Include="assets\styles\auth\signin.css" />
+    <Content Include="assets\styles\auth\signup.css" />
+    <Content Include="assets\styles\game\dropify.css" />
+    <Content Include="assets\styles\game\flipclock.css" />
+    <Content Include="assets\styles\game\game.css" />
+    <Content Include="assets\styles\game\game.style.css" />
+    <Content Include="assets\styles\game\rounds.css" />
+    <Content Include="assets\styles\auth\images\bg.jpg" />
+    <Compile Include="config\env\development.js" />
+    <Compile Include="config\env\production.js" />
+    <Content Include="config\locales\_README.md" />
+    <Compile Include="tasks\config\clean.js" />
+    <Compile Include="tasks\config\coffee.js" />
+    <Compile Include="tasks\config\concat.js" />
+    <Compile Include="tasks\config\copy.js" />
+    <Compile Include="tasks\config\cssmin.js" />
+    <Compile Include="tasks\config\jst.js" />
+    <Compile Include="tasks\config\less.js" />
+    <Compile Include="tasks\config\sails-linker.js" />
+    <Compile Include="tasks\config\sync.js" />
+    <Compile Include="tasks\config\uglify.js" />
+    <Compile Include="tasks\config\watch.js" />
+    <Compile Include="tasks\register\build.js" />
+    <Compile Include="tasks\register\buildProd.js" />
+    <Compile Include="tasks\register\compileAssets.js" />
+    <Compile Include="tasks\register\default.js" />
+    <Compile Include="tasks\register\linkAssets.js" />
+    <Compile Include="tasks\register\linkAssetsBuild.js" />
+    <Compile Include="tasks\register\linkAssetsBuildProd.js" />
+    <Compile Include="tasks\register\prod.js" />
+    <Compile Include="tasks\register\syncAssets.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="api" />
+    <Folder Include="api\controllers" />
+    <Folder Include="api\models" />
+    <Folder Include="api\policies" />
+    <Folder Include="api\responses" />
+    <Folder Include="api\services" />
+    <Folder Include="api\services\protocols" />
+    <Folder Include="api\util" />
+    <Folder Include="assets" />
+    <Folder Include="assets\images" />
+    <Folder Include="assets\images\avatars" />
+    <Folder Include="assets\images\courses" />
+    <Folder Include="assets\images\favicon" />
+    <Folder Include="assets\images\intro" />
+    <Folder Include="assets\images\items" />
+    <Folder Include="assets\index_files" />
+    <Folder Include="assets\js" />
+    <Folder Include="assets\js\admin" />
+    <Folder Include="assets\js\auth" />
+    <Folder Include="assets\js\dependencies" />
+    <Folder Include="assets\js\game" />
+    <Folder Include="assets\js\multiplayer" />
+    <Folder Include="assets\styles" />
+    <Folder Include="assets\styles\admin" />
+    <Folder Include="assets\styles\auth" />
+    <Folder Include="assets\styles\auth\images" />
+    <Folder Include="assets\styles\fonts" />
+    <Folder Include="assets\styles\fonts\roboto" />
+    <Folder Include="assets\styles\game" />
+    <Folder Include="config" />
+    <Folder Include="config\env" />
+    <Folder Include="config\locales" />
+    <Folder Include="DB_MySql\" />
+    <Folder Include="DB_MySql\.idea\" />
+    <Folder Include="DB_MySql\.idea\dataSources\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_metadata_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_src_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_src_\database\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_src_\database\solution\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_src_\database\solution\schema\" />
+    <Folder Include="DB_MySql\.idea\dataSources\9fb843d1-7c57-4d90-bc15-105f4c55e864\_staging_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\" />
+    <Folder Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_metadata_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_src_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_src_\schema\" />
+    <Folder Include="DB_MySql\.idea\dataSources\b8827b4a-73de-4cfb-872b-d2840520d1d7\_staging_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\" />
+    <Folder Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_metadata_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_src_\" />
+    <Folder Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_src_\schema\" />
+    <Folder Include="DB_MySql\.idea\dataSources\f57aec5c-6c1b-4b85-ae2e-8f24d97be830\_staging_\" />
+    <Folder Include="tasks" />
+    <Folder Include="tasks\config" />
+    <Folder Include="tasks\register" />
+    <Folder Include="views" />
+    <Folder Include="views\admin" />
+    <Folder Include="views\auth" />
+    <Folder Include="views\game" />
+    <Folder Include="views\multiplayer" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -76,6 +76,10 @@ let updateUserWithNewProfileData = function(queryHasTokens, user, c_user, next){
       // Save any updates to the Passport before moving on
       return sails.models.user.update(query, toUpdate)
         .exec(function (err, updated) {
+          sails.log.debug("Updated user");
+          sails.log.debug(query);
+          sails.log.debug(updated);
+          sails.log.debug(err);
           sails.log.debug('Already existing user updated with success.');
           var _status = 1;
           if(err) _status = 0;
@@ -187,7 +191,7 @@ passport.connect = function (req, query, profile, next) {
     .exec(function (errr, _user) {
 
       if(errr)
-        return next(err, null, {status: 0});
+        return next(errr, null, {status: 0});
 
       // not logged in, creating an account
       if (!req.user) {

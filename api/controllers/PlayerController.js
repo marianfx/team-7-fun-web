@@ -69,7 +69,7 @@ module.exports = {
 		});
 	},
 
-	loadTopPlayersBy: function(req,res) {
+	loadTopPlayersBy: function(req, res) {
 
 		var byWhat = req.body.by;
 
@@ -163,13 +163,15 @@ module.exports = {
 				res.serverError({ message: err.message });
 				return;
 			}
+			sails.log.debug("Dice.");
+			//sails.log.debug(data[1]);
+			//sails.log.debug(data[1][0]['@p_random1']);
+			response.html_firstDie = swig.renderFile('views/game/die.swig', { dieSide :  data[1][0]['@p_random1'] });
+			response.html_secondDie = swig.renderFile('views/game/die.swig', { dieSide :  data[2][0]['@p_random2'] });
 
-			response.html_firstDie = swig.renderFile('views/game/die.swig', { dieSide :  data.random1 });
-			response.html_secondDie = swig.renderFile('views/game/die.swig', { dieSide :  data.random2 });
+			response.what = data[3][0]['@p_what'];
 
-			response.what = data.what;
-
-			sails.log.debug(response);
+			//sails.log.debug(response);
 
 			res.ok(response);
 		});
@@ -226,9 +228,7 @@ module.exports = {
 		var db = new sails.services.databaseservice();
 		var query = sails.config.queries.user_details;
 
-		var bindparams = {
-			id : pid
-		};
+		var bindparams = [pid];
 
 		db.executeQuery(query, bindparams, function(err, data) {
 				next(err, data);
@@ -240,21 +240,24 @@ module.exports = {
 	 * Renders the player menu to the user (info, friends etc).
 	 * @method function
 	 */
-	render: function(req, res, next){
+	render: function (req, res, next) {
 
-			// load player info
-			// load friends
-			// load courses (smaller than the current one). For each one, add the rounds.
-			var me = req.user.id;
-			var PlayerLoader = new sails.services.playerdataloader();
-			PlayerLoader.getAllPlayerInfo(me, (err, result) => {
-					if(err)
-						return res.serverError(sails.config.messages.server_error_DB_fault);
+	  // load player info
+	  // load friends
+	  // load courses (smaller than the current one). For each one, add the rounds.
+	  var me = req.user.id;
+	  var PlayerLoader = new sails.services.playerdataloader();
+	  PlayerLoader.getAllPlayerInfo(me, (err, result) => {
+	    if (err)
+	      return res.serverError(sails.config.messages.server_error_DB_fault);
 
-            var rendered = swig.renderFile('./views/game/playermenu.swig', {data: result});
-            return res.ok(rendered);
-			});
+	    var rendered = swig.renderFile('./views/game/playermenu.swig', {
+	      data: result
+	    });
+	    return res.ok(rendered);
+	  });
 	},
+
 
 
 	  /**
@@ -262,26 +265,26 @@ module.exports = {
 	 * @param  {[request]} req [here i get userID]
 	 * @param  {[response]} res [description]
 	 */
-	  addTime: function(req,res){
+	  addTime: function (req, res) {
 
-	    sails.log.debug("ADDING TIME TO "+ req.user.id);
+	    sails.log.debug("ADDING TIME TO " + req.user.id);
 
-      console.log(req.body.message);
-      if(req.body.message==="multiplayer")
-      {
-        sails.services.arena.addTime(req.user.id,res);
-        return;
-      }
+	    console.log(req.body.message);
+	    if (req.body.message === "multiplayer") {
+	      sails.services.arena.addTime(req.user.id, res);
+	      return;
+	    }
 
 	    var QS = new sails.services.questionservice();
 	    QS.addSomeTime(req.user.id, (err, result) => {
 
-	        if(err)
-	          return res.serverError('Something bad happened on the server (' + err.message + ').');
+	      if (err)
+	        return res.serverError('Something bad happened on the server (' + err.message + ').');
 
-	        return res.ok(result);
+	      return res.ok(result);
 	    });
 	  },
+
 
 
     /**

@@ -1,23 +1,18 @@
-/**
- * Items.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
-
+﻿
 module.exports = {
 
-	tableName: "ITEMS",
+    tableName: "ITEMS",
+    autoPK: false,
     autoCreatedAt: false,
     autoUpdatedAt: false,
-    autoPK: false,
 	
 	attributes: {
 
-		itemID: {
-			type: 'integer',
-			primaryKey: true,
-			required: true,
+        itemID: {
+            primaryKey: true,
+            autoIncrement: true,
+            required: true,
+            type: 'integer',
 			columnName: 'ITEMID'
 		},
 

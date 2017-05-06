@@ -1,22 +1,22 @@
-module.exports = {
+﻿module.exports = {
 
-	tableName: 'INVENTORIES',
+    tableName: 'INVENTORIES',
+    autoPK: false,
     autoCreatedAt: false,
     autoUpdatedAt: false,
-    autoPK: false,
 	
 	attributes: {
 
 		playerID: {
-			type:'integer',
-			required: true,
+            required: true,
+            type: 'integer',
 			columnName: 'PLAYERID',
 			model: 'player'
 		},
 
 		itemID: {
-			type: 'integer',
-			required: true,
+            required: true,
+            type: 'integer',
 			columnName: 'ITEMID',
 			model: 'item'
 		},

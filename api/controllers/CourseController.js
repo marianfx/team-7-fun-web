@@ -35,11 +35,9 @@ module.exports = {
 
         var DB = new sails.services.databaseservice();
         var query = sails.config.queries.get_round_course;
-        var binds = {
-          roundid: req.param('roundID')
-        };
+        var binds = [req.param('roundID')];
 
-        DB.executeQuery(query,binds,(err,result)=>{
+        DB.executeQuery(query, binds, (err, result)=>{
           if(err)
             return res.serverError("cannot find Course for that round");
 

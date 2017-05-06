@@ -67,9 +67,7 @@ module.exports = function() {
     sails.log.debug("Sending results.");
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.getpast_roundtime;
-    var binds = {
-      id: req.user.id
-    };
+    var binds = [req.user.id];
 
     // update difference
     DB.executeQuery(query, binds, (err, result) => {
@@ -95,9 +93,7 @@ module.exports = function() {
         PlayerDataLoader.getLastRound(req.user.id, (err, roundID) => {
 
           query = sails.config.queries.get_roundrow;
-          binds = {
-            id: roundID
-          };
+          binds = [roundID];
 
           DB.executeQuery(query, binds, (err, result) => {
 
@@ -171,16 +167,13 @@ module.exports = function() {
 
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.update_starttime;
-    var binds = {
-      id: userID
-    };
+    var binds = [userID];
 
     sails.log.debug("START ROUND!");
     // execute block plsql witch update LASTROUNDSTART;
     DB.procedureSimple(query, binds, (err) => {
         return next(err);
     });
-
   };
 
 
@@ -188,49 +181,48 @@ module.exports = function() {
    * Adds time for the current player (meaning he plays)
    * @param  {[integer]} _id [The id of the player]
    */
-  this.addSomeTime = function(_id, next){
+  this.addSomeTime = function (_id, next) {
 
     var DB = new sails.services.databaseservice();
     var query = sails.config.queries.user_details;
-    var binds={
-      id : _id
-    };
+    var binds = [_id];
 
-    DB.executeQuery(query,binds,(err,result) => {
+    DB.executeQuery(query, binds, (err, result) => {
 
-      if(err)
+      if (err)
         return next(new Error('Cannot execute database query for adding time'));
 
       var stime = result[0].S_TIME;
       var level = result[0].PLAYERLEVEL;
-      var cost = Math.ceil(level/3);
+      var cost = Math.ceil(level / 3);
       sails.log.debug(stime);
       sails.log.debug("COST " + cost);
 
       // cannot add time
-      if((stime < cost) && (stime === 0))
+      if ((stime < cost) && (stime === 0))
         return next(null, {
-                        flag : false,
-                        time : 0
-                      });
+          flag: false,
+          time: 0
+        });
 
       query = sails.config.queries.add_time_player;
-      binds = {
-        playerid : _id
-      };
+      binds = [_id];
 
-       DB.procedureSimple(query, binds, (err) => {
+      DB.procedureSimple(query, binds, (err) => {
 
-         if(err)
-            return next(null, { flag : false,
-                         time : 0
-                       });
-         return next(null, { flag : true,
-                         time : cost*5
-                       });
+        if (err)
+          return next(null, {
+            flag: false,
+            time: 0
+          });
+        return next(null, {
+          flag: true,
+          time: cost * 5
+        });
 
-         });
-       });
+      });
+    });
   };
+
 
 };

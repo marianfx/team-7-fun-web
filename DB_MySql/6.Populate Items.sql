@@ -5,7 +5,6 @@ INSERT INTO ITEMS (NAME, DESCRIPTION, SKILLPOINTS, SKILL, COOKIESCOST, FILEPATH)
          'S_TIME',
          20,
          'images/items/brown_hour_glass.svg');
-/
 
 INSERT INTO ITEMS (NAME, DESCRIPTION, SKILLPOINTS, SKILL, COOKIESCOST, FILEPATH)
   VALUES('Blue Hour Glass', 
@@ -14,7 +13,6 @@ INSERT INTO ITEMS (NAME, DESCRIPTION, SKILLPOINTS, SKILL, COOKIESCOST, FILEPATH)
          'S_TIME',
          40,
          'images/items/blue_hour_glass.svg');
-/
 
 INSERT INTO ITEMS (NAME, DESCRIPTION, SKILLPOINTS, SKILL, COOKIESCOST, FILEPATH)
   VALUES('Green Hour Glass', 
@@ -23,7 +21,6 @@ INSERT INTO ITEMS (NAME, DESCRIPTION, SKILLPOINTS, SKILL, COOKIESCOST, FILEPATH)
          'S_TIME',
          60,
          'images/items/green_hour_glass.svg');
-/
 
 COMMIT;
 

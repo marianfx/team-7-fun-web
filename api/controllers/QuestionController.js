@@ -8,35 +8,34 @@
  * @param  {[type]} roundTime [description]
  * @return {[type]}           [description]
  */
-let bindRound = function(res, newvec, q, rows, roundTime) {
-  if (q >= rows.length) {
-      sails.log.debug(newvec);
-      sails.log.debug("CURRENT ROUNDTIME IS " + roundTime);
-      return sails.controllers.question.renderView(res, newvec, roundTime);
+let bindRound = function (res, newvec, q, rows, roundTime) {
+
+  sails.log.debug("In bind round method.");
+
+  if (q >= rows.length || !rows.hasOwnProperty(q)) {
+    sails.log.debug(newvec);
+    sails.log.debug("CURRENT ROUNDTIME IS " + roundTime);
+    return sails.controllers.question.renderView(res, newvec, roundTime);
   }
-
-  if (rows.hasOwnProperty(q)) {
-
-    sails.models.round.findOne({
-      roundid: rows[q].ROUNDID
-    }).exec(function(err, round) {
-
-      if (err) {
-        return res.serverError('Something really bad happened here :(.');
-      }
-      if (!round)
-        return res.notFound('Could not find the round, sorry.');
-      var roundTime;
-      roundTime=round.roundTime;
-      rows[q].roundname = round.name;
-      delete rows[q].CORRECTANSWER;
-      delete rows[q].ROUNDID;
-      newvec.push(rows[q]);
-      //#####
-      return bindRound(res, newvec, q + 1, rows, roundTime);
-    });
-  }
+  
+  sails.models.round.findOne({
+    roundid: rows[q].ROUNDID
+  }).exec(function (err, round) {
+    if (err) {
+      return res.serverError('Something really bad happened here :(.');
+    }
+    if (!round)
+      return res.notFound('Could not find the round, sorry.');
+    var roundTime = round.roundTime;
+    rows[q].roundname = round.name;
+    delete rows[q].CORRECTANSWER;
+    delete rows[q].ROUNDID;
+    newvec.push(rows[q]);
+    //#####
+    return bindRound(res, newvec, q + 1, rows, roundTime);
+  });
 };
+
 
 
 /**
@@ -105,16 +104,8 @@ module.exports = {
         // round started, load questions, prepare player
         var DB = new sails.services.databaseservice();
         var plsql = sails.config.queries.questions_loader;
-        var oracledb = DB.oracledb;
 
-        var bindvars = {
-          p_roundID: roundId,
-          nr_questions: nQ,
-          cursor: {
-            type: oracledb.CURSOR,
-            dir: oracledb.BIND_OUT
-          }
-        };
+        var bindvars = [roundId, nQ];
 
         // search for a player
         sails.models.player.findOne({
@@ -135,10 +126,12 @@ module.exports = {
 
             if (err)
               return res.notFound('Seems like that round cannot be found.');
-
+            
+            sails.log.debug("I'm inside the question render.");
+            sails.log.debug(rows);
             var newvec = [];
             var q = 0;
-            var roundTime=300;
+            var roundTime = 300;
             // call the correctAnswer remover
             return bindRound(res, newvec, q, rows, roundTime);
           });

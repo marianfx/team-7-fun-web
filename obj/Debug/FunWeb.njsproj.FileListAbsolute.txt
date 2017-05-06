@@ -1,0 +1,2 @@
+C:\repos\team-7-fun-web\obj\Debug\FunWeb.njsprojResolveAssemblyReference.cache
+C:\repos\team-7-fun-web\bin\Microsoft.NodejsTools.WebRole.dll
