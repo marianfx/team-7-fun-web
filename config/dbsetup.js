@@ -41,11 +41,11 @@ function CallRunOperations(jObject) {
           return;
         }
         console.log("The execution of queries ended and the settings are saved in the file.");
-        process.exit();
+        //process.exit();
       });
     } else {
       console.log("Process finished with errors.")
-      process.exit();
+      //process.exit();
     }
 
   });
