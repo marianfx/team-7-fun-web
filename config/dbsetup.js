@@ -35,7 +35,7 @@ function CallRunOperations(jObject) {
 
     if (!hasError) {
       jObject.run = false;
-      fs.writeFile("dbsetup.json", JSON.stringify(jObject), (err) => {
+      fs.writeFile(requiredPath, JSON.stringify(jObject), (err) => {
         if (err) {
           console.log("Failed to write back to file (to make the query execution not run again).")
           return;

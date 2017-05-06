@@ -86,12 +86,12 @@ module.exports = function () {
       sails.log.debug(index);
       sails.log.debug(usr);
       sails.models.user.findOne()
-          .where({facebookId: usr.id})
+          .where({FACEBOOKID: usr.id})
           .then( (_usr) => {
 
               // no user found, so continue
               if(!_usr)
-                return next(null, finalList);
+                return ref.addToFriends(ref, index + 1, allList, finalList, next);
 
               sails.log.debug("Userfind");
               sails.log.debug("Found user");
@@ -111,7 +111,7 @@ module.exports = function () {
           })
           .catch( (_err) => {
                 sails.log.debug(_err);
-                return next(null, finalList);
+                return ref.addToFriends(ref, index + 1, allList, finalList, next);
           });
   };
 
