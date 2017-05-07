@@ -1,3 +1,12 @@
+
+.profile-btn-wrapped {
+    font-size: 14px !important;
+    height: auto !important;
+    word-wrap: normal;
+    line-height: 17px !important;
+    text-align: right;
+}
+
 .animated {
   -webkit-animation-name: buttonPulse;
   -webkit-animation-duration: 2s;
@@ -41,6 +50,15 @@
 .imagewrap {
   display: inline-block;
   position: relative;
+}
+
+.card-image {
+  padding-top: 10px !important;
+}
+
+.container {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
 }
 
 .buyButton {

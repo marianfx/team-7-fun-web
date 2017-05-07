@@ -17,11 +17,14 @@
              <nav class="navbar-color">
                  <div class="nav-wrapper">
 
-									 <ul class="left" style="margin-left: 50px;">
-	                    <li>
-	                      <a href="/"><h1><strong>Fun Web<strong></h1></a>
-	                    </li>
-	                  </ul>
+                <ul class="left" style="margin-left: 50px; height: 100%;">
+                    <li style="height:100%">
+                        <h1 class="logo-wrapper">
+                            <a href="/"><h1><strong>Fun Web<strong></h1></a>
+                        </h1>
+                    </li>
+                    <li></li>
+                </ul>
 
                      <!-- other stuff here. All aligned right. -->
                      <ul class="right">
@@ -77,7 +80,7 @@
      <!-- END MAIN -->
 
 		 <!-- Floating button for entering the arena -->
-        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <div class="fixed-action-btn" style="bottom: 25px; right: 22px; z-index:1010;">
             <a id="arenaBTN" class="btn-floating btn-large red">
                 <i class="large mdi-hardware-security"></i>
             </a>

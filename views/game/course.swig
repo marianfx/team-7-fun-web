@@ -1,9 +1,15 @@
+
 <!--CARD WIDGETS START-->
 <div id="card-widgets">
     <div class="row" id="coursesContainer">
+      {% if !data.courses || data.courses.length === 0 %}
+        <div class="col s12 center-align">
+            <img alt="Nothing here to display." src="/images/nothinghere.gif" style="width: 100%;" />
+        </div>
+      {% endif %}
       {% for entry in data.courses %}
       <!-- Course card-->
-      <div class="col s12 m3 l3">
+      <div class="col s12 m6 l4">
         <div class="course-card">
           <div class="card" style="margin-top: 10px; padding-bottom: 20px; margin-bottom: 20px;">
             <!-- Card image -->
@@ -13,8 +19,8 @@
             <!-- The special info button -->
             <ul class="card-action-buttons">
               <li>
-                <a class="btn-floating tooltipped waves-effect waves-light light-blue" data-position="top" data-tooltip="See info">
-                  <i class="mdi-action-info activator"></i>
+                <a class="btn-floating btn-large tooltipped waves-effect waves-light grey" data-position="top" data-tooltip="See info">
+                  <i class="mdi-communication-live-help activator"></i>
                 </a>
               </li>
             </ul>
@@ -31,51 +37,51 @@
               <!-- All the rouds -->
               <div class="row center-align" style="padding-left: 50px;">
 
-      {% for round in entry.rounds %}
-            <!-- Finished course -->
-            {% if round.roundid < data.me.lastRoundId %}
-                <div class="fixed-action-btn" style="position: relative; display: inline-block; bottom: 0px;">
-                  <a class="btn-floating green unlocked">
-                    <i class="mdi-action-done"></i>
-                  </a>
-                  <ul class="center-align" style="bottom: 70%; margin-left: -1px;">
-                    <li>
-                      <a lessonId="{{ round.roundid }}" class="btn-floating tooltipped lessonLoader" data-position="right" data-tooltip="Read lesson">
-                        <i class="material-icons green">attach_file</i>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-            {% endif %}
-            <!-- Current course -->
-            {% if round.roundid === data.me.lastRoundId %}
-                <div class="fixed-action-btn" style="position: relative; display: inline-block; bottom: 0px;">
-                  <a class="btn-floating red darken-2 animated unlocked">
-                    <i class="mdi-av-play-arrow"></i>
-                  </a>
-                  <ul class="center-align" style="bottom: 70%; margin-left: -1px;">
-                    <li>
-                      <a lessonId="{{ round.roundid }}" class="btn-floating tooltipped lessonLoader" data-position="right" data-tooltip="Read lesson">
-                        <i class="material-icons cyan darken-1">attach_file</i>
-                      </a>
-                    </li>
-                    <li>
-                      <a lessonId="{{ round.roundid }}" class="btn-floating playable">
-                        <i class="material-icons red darken-1">query_builder</i>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-            {% endif %}
-            <!-- Future locked course -->
-            {% if round.roundid > data.me.lastRoundId %}
-                <div class="fixed-action-btn locked" style="position: relative; display: inline-block; bottom: 0px;">
-                  <a class="btn-floating tooltipped grey darken-1" data-position="top" data-tooltip="Locked">
-                    <i class="mdi-action-lock"></i>
-                  </a>
-                </div>
-            {% endif %}
-        {% endfor %}
+                {% for round in entry.rounds %}
+                      <!-- Finished course -->
+                      {% if round.roundid < data.me.lastRoundId %}
+                          <div class="fixed-action-btn" style="position: relative; display: inline-block; bottom: 0px;">
+                            <a class="btn-floating green unlocked">
+                              <i class="mdi-action-done"></i>
+                            </a>
+                            <ul class="center-align" style="bottom: 70%; margin-left: -1px;">
+                              <li>
+                                <a lessonId="{{ round.roundid }}" class="btn-floating tooltipped lessonLoader" data-position="right" data-tooltip="Read lesson">
+                                  <i class="material-icons green">attach_file</i>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                      {% endif %}
+                      <!-- Current course -->
+                      {% if round.roundid === data.me.lastRoundId %}
+                          <div class="fixed-action-btn" style="position: relative; display: inline-block; bottom: 0px;">
+                            <a class="btn-floating red darken-2 animated unlocked">
+                              <i class="mdi-av-play-arrow"></i>
+                            </a>
+                            <ul class="center-align" style="bottom: 70%; margin-left: -1px;">
+                              <li>
+                                <a lessonId="{{ round.roundid }}" class="btn-floating tooltipped lessonLoader" data-position="right" data-tooltip="Read lesson">
+                                  <i class="material-icons cyan darken-1">attach_file</i>
+                                </a>
+                              </li>
+                              <li>
+                                <a lessonId="{{ round.roundid }}" class="btn-floating playable">
+                                  <i class="material-icons red darken-1">query_builder</i>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                      {% endif %}
+                      <!-- Future locked course -->
+                      {% if round.roundid > data.me.lastRoundId %}
+                          <div class="fixed-action-btn locked" style="position: relative; display: inline-block; bottom: 0px;">
+                            <a class="btn-floating tooltipped grey darken-1" data-position="top" data-tooltip="Locked">
+                              <i class="mdi-action-lock"></i>
+                            </a>
+                          </div>
+                      {% endif %}
+                  {% endfor %}
               </div>
               <!-- Course title and author -->
               <div class="row col s12">

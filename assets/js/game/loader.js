@@ -5,16 +5,19 @@ var learnRound= false;
 
 $(document).ready(function() {
 
-    loadPlayerMenu();
-    loadCourses();
-    loadSkills();
+    loadPlayerMenu(function(){
+      loadCourses(function() {
+        loadSkills(function(){
+          $('#openShopButton').leanModal();
+          $('#openShopButton').click(openShop);
+          $('#loadShopButton').click(loadShop);
+          $('#rollDicesButton').click(rollDices);
 
-    $('#openShopButton').leanModal();
-    $('#openShopButton').click(openShop);
-    $('#loadShopButton').click(loadShop);
-    $('#rollDicesButton').click(rollDices);
+          $('#arenaBTN').click(loadArena);
+        });
+      })
+    });
 
-    $('#arenaBTN').click(loadArena);
 
 
 });
@@ -101,7 +104,7 @@ function addFriend() {
  * Loads the left aside menu with the player informations
  * @method loadPlayerMenu
  */
-function loadPlayerMenu(){
+function loadPlayerMenu(next){
 
   	$.ajax({
   		type: "GET", // type of request
@@ -131,12 +134,15 @@ function loadPlayerMenu(){
             loadCourse(this);
           });
           $('.collapsible').collapsible();
+          
           pluginspreparer();
+          next();
   		},
   		// the function called on error (error returned from server or TimeOut Expired)
   		error: function(err) {
           //window.location.href = '/500';
           console.log(err);
+          loadPlayerMenu(next);//retry
   		},
   		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
   	});
@@ -147,7 +153,7 @@ function loadPlayerMenu(){
  * Loads all the courses available for the current user
  * @method loadCourses
  */
-function loadCourses(){
+function loadCourses(next){
 
   	$.ajax({
   		type: "GET", // type of request
@@ -169,12 +175,15 @@ function loadCourses(){
              loadCourse(this);
            });
           $('.collapsible').collapsible();
+
           pluginspreparer();
+          next();
   		},
   		// the function called on error (error returned from server or TimeOut Expired)
   		error: function(err) {
   			   //window.location.href = '/500';
           console.log(err);
+          loadCourses(next);
   		},
   		timeout: 3000 // the time limit to wait for a response from the server, milliseconds
   	});
@@ -209,8 +218,8 @@ function addTime(){
         console.log(result);
         if(result.flag) {
           clock.setTime(time + result.time);
-          $("#timeBtn").attr("data-tooltip","Running");
-          loadSkills();
+          $(".timeBtn").attr("data-tooltip","Running");
+          loadSkills(function(){});
 
         }
         else
@@ -494,7 +503,7 @@ function loadTopPlayersBy() {
   });
 }
 
-function loadSkills() {
+function loadSkills(next) {
 
   $.ajax({
     type: "GET",
@@ -503,25 +512,42 @@ function loadSkills() {
 
     success: function(result) {
 
-      $('#toAppendSkills').html(result);
+      // workaround to split the result in 2
+      var firstStart = "<!-- Menu when it appears UP -->";
+      var secondStart = "<!-- Menu when it appears Left -->";
+      var firstIndex = result.toString().indexOf(firstStart);
+      var secondIndex = result.toString().indexOf(secondStart);
+      if(firstIndex >= 0)
+      {
+        firstIndex = firstResult + firstStart.length;
+        var firstResult = result.toString().substring(firstIndex, secondIndex);
+        $('#toAppendSkills').html(firstResult);
 
+        var secondResult = result.toString().substring(secondIndex);
+        $('#skillsOnSmallScreens').html(secondResult);
+      }
+      
       /*actions*/
       $('.tooltipped').tooltip({delay: 50});
 
-      $('#openLuckButton').leanModal();
-      $('#openLuckButton').click(resetDice);
-      $('#timeBtn').click(addTime);
+      $('.openLuckButton').leanModal();
+      $('.openLuckButton').click(resetDice);
+      $('.timeBtn').click(addTime);
 
       $('.addSkillPoint').click(addSkill);
-      $('#cheatButton').click(cheat);
+      $('.cheatButton').click(cheat);
 
-      if(isPlaying) { $('#addTimeButton').click(addTime); }
+      if(isPlaying) { $('.addTimeButton').click(addTime); }
+      
+      $('.collapsible').collapsible();
+      next();
     },
 
     error: function(err) {
 
       //window.location.href = '/500'; /*DISPLAY SOMETHING ELSE? TIMEOUT*/
-          console.log(err);
+      console.log(err);
+      loadSkills(next);
     },
 
     timeout: 3000
@@ -544,7 +570,7 @@ function addSkill() {
 
     success: function(result) {
 
-      loadSkills(); /*the lazy approach to just render all of them*/
+      loadSkills(function(){}); /*the lazy approach to just render all of them*/
 
       loadSkillpoints();
     },
@@ -582,7 +608,7 @@ function buyItem() {
 
       loadCookies();
 
-      loadSkills(); /*the lazy approach to just render all of them*/
+      loadSkills(function(){}); /*the lazy approach to just render all of them*/
     },
 
     error: function(err) {
@@ -730,7 +756,7 @@ function rollDices() {
         displaySwal('Yeeeey', msg, 'success', null);
       }
 
-      loadSkills();
+      loadSkills(function(){});
     },
 
     error: function(err) {

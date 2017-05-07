@@ -8,17 +8,18 @@
 
   <div class="col col s8 m8 l8">
     <!-- Name with dropdown-menu -->
-    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown">
-      {{ data.user.PLAYERNAME }}
+    <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn profile-btn-wrapped" href="#" data-activates="profile-dropdown">
       <i class="material-icons">toc</i>
+      {{ data.user.PLAYERNAME }}
     </a>
 
     <!-- Drop down menu with links to profile -->
     <ul id="profile-dropdown" class="dropdown-content" style="width: 128px; position: absolute; top: 57px; left: 101.234px; opacity: 1; display: none;">
        <li>
         <a href="#" class="loadProfileButton" profileid="{{ data.user.PLAYERID }}">
-          <i class="large material-icons">settings</i>Profile</a>
-      </li> 
+          <i class="large material-icons">settings</i>Profile
+        </a>
+      </li>
       <li>
         <a href="#">
           <i class="material-icons">credit_card</i>
@@ -34,7 +35,7 @@
   </ul>
 
   <!-- User level -->
-  <p class="user-level">
+  <p class="user-level" style="margin-top: 16px !important;line-height: 20%;">
     <b>Level {{ data.user.PLAYERLEVEL }}</b>
     <span class="right">
       {{ data.user.EXPERIENCE }} /
@@ -43,12 +44,12 @@
   </p>
 
   <!-- PLAYER COOKIES -->
-  <p id="toAppendCookies" class="user-level">
+  <p id="toAppendCookies" class="user-level" style="margin-top: 0px !important; line-height: 150%; margin-right: 2px;">
 
   </p>
 
   <!-- PLAYER AVAILABLE SKILLPOINTS -->
-  <p id="toAppendSkillPoints" class="user-level">
+  <p id="toAppendSkillPoints" class="user-level" style="margin-top: 0px !important; line-height: 150%;">
 
   </p>
 
@@ -57,6 +58,9 @@
 </li>
 
 <!-- Information about user here -->
+
+<span id="skillsOnSmallScreens" class="hide-on-large-only show-on-medium-and-down">
+</span>
 
 <!-- Friends -->
 <li class="no-padding">
