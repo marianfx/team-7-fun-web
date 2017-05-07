@@ -390,7 +390,7 @@ let startRound = function (gameID) {
 
 
   // if lastRound was already played, the game will be stopped
-  if (currentGame.currentQuestion >= currentGame.nrOfQuestions) {
+  if (currentGame.currentQuestion >= currentGame.nrOfQuestions || currentGame.currentQuestion >= currentGame.questions.length) {
 
     // make Final top
     roundTop(gameID,
