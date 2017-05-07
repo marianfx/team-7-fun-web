@@ -23,28 +23,30 @@
   </title>
 
   <!-- Favicons-->
-  <link rel="icon" href="images/favicon/logo_32x32.png" sizes="32x32">
+  <link rel="icon" href="/images/favicon/logo_32x32.png" sizes="32x32">
   <!-- Favicons - for iPhone-->
-  <link rel="apple-touch-icon-precomposed" href="images/favicon/logo_152x152.png">
+  <link rel="apple-touch-icon-precomposed" href="/images/favicon/logo_152x152.png">
   <!-- Favicons - For Windows Phone-->
   <meta name="msapplication-TileColor" content="#00bcd4">
-  <meta name="msapplication-TileImage" content="images/favicon/logo_144x144.png">
+  <meta name="msapplication-TileImage" content="/images/favicon/logo_144x144.png">
 
   {% block head %}
   <!--STYLES-->
   <!--Import Google Icon Font-->
-  <link type="text/css" rel="stylesheet" href="./styles/font.css">
+  <link type="text/css" rel="stylesheet" href="/styles/font.css">
   <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="./styles/materialize.css" media="screen" />
+  <link type="text/css" rel="stylesheet" href="/styles/materialize.css" media="screen" />
   <!--Import sweetalert(swal).css-->
-  <link type="text/css" rel="stylesheet" href="./styles/sweetalert.css" media="screen" />
+  <link type="text/css" rel="stylesheet" href="/styles/sweetalert.css" media="screen" />
   <!--Import perfect scrollbar.css-->
-  <link type="text/css" rel="stylesheet" href="./styles/perfect-scrollbar.css">
+  <link type="text/css" rel="stylesheet" href="/styles/perfect-scrollbar.css">
+	
+  <!-- Finally, main site styles -->
+  <link type="text/css" rel="stylesheet" href="/styles/game/game.css">
+	<link type="text/css" rel="stylesheet" href="/styles/game/game.style.css">
 
   <!--STYLES END-->
   {% endblock %}
-
-
 </head>
 
 <body>
@@ -52,10 +54,11 @@
   {% block content %}{% endblock %} {% block footer %}
 
   <!--SCRIPTS-->
-  <script src="./js/jquery-2.1.1.min.js"></script>
-  <script src="./js/materialize.js"></script>
-  <script src="./js/sweetalert.min.js"></script>
-  <script src="./js/perfect-scrollbar.js"></script>
+  <script src="/js/jquery-2.1.1.min.js"></script>
+  <script src="/js/materialize.js"></script>
+  <script src="/js/sweetalert.min.js"></script>
+  <script src="/js/perfect-scrollbar.js"></script>
+	<script src="/js/plugins.preparer.js"></script>
   <!--SCRIPTS END-->
   {% endblock %}
 </body>

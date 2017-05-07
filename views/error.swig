@@ -6,6 +6,6 @@
 
 {% block content %}
 
-<img src="images/400.jpg">
+<img src="/images/400.jpg">
 
 {% endblock %}

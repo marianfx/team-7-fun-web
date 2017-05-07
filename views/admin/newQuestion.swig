@@ -5,7 +5,7 @@
 
 {% block head %}
   {% parent %}
-  <link type="text/css" rel="stylesheet" href="./styles/admin/course.css">
+  <link type="text/css" rel="stylesheet" href="/styles/admin/course.css">
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
               <option value="{{round.roundid}}">{{round.name}}</option>
 {% endfor %}
             </select>
-            <label class="center-align">Chose Round</label>
+            <label class="center-align">Choose Round</label>
           </div>
           <div class="errorTxt1 righted"></div>
         </div>
@@ -37,7 +37,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">forum</i>
-            <label class="center-align" for="questionTB">QUESTION</label>
+            <label for="questionTB">QUESTION</label>
             <input id="questionTB" name="questionTB" type="text" data-error=".errorTxt2">
             <div class="errorTxt2 righted"></div>
           </div>
@@ -46,7 +46,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">code</i>
-            <label class="center-align" for="answerATB">answerA</label>
+            <label for="answerATB">answerA</label>
             <input id="answerATB" name="answerATB" value="A. " type="text"  data-error=".errorTxt3">
             <div class="errorTxt3 righted"></div>
           </div>
@@ -55,7 +55,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">code</i>
-            <label class="center-align" for="answerBTB">ANSWERB</label>
+            <label for="answerBTB">ANSWERB</label>
             <input id="answerBTB" name="answerBTB"  value="B. " type="text"  data-error=".errorTxt4">
             <div class="errorTxt4 righted"></div>
           </div>
@@ -64,7 +64,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">code</i>
-            <label class="center-align" for="answerCTB">ANSWERC</label>
+            <label for="answerCTB">ANSWERC</label>
             <input id="answerCTB" name="answerCTB" value="C. " type="text"  data-error=".errorTxt5">
             <div class="errorTxt5 righted"></div>
           </div>
@@ -73,7 +73,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">code</i>
-            <label class="center-align" for="answerDTB">ANSWERD</label>
+            <label for="answerDTB">ANSWERD</label>
             <input id="answerDTB" name="answerDTB" value="D. " type="text"  data-error=".errorTxt6">
             <div class="errorTxt6 righted"></div>
           </div>
@@ -82,7 +82,7 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="material-icons prefix">done_all</i>
-            <label class="center-align" for="correctAnsTB">CORRECTANSWER</label>
+            <label for="correctAnsTB">CORRECTANSWER</label>
             <input id="correctAnsTB" name="correctAnsTB" type="number" min="1" step="1" max="4" data-error=".errorTxt7">
             <div class="errorTxt7 righted"></div>
           </div>
@@ -104,5 +104,5 @@
   <!--Import script for this page-->
   <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
   <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.min.js"></script>
-  <script type="text/javascript" src="./js/admin/newQuestion.js"></script>
+  <script type="text/javascript" src="/js/admin/newQuestion.js"></script>
 {% endblock %}

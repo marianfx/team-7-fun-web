@@ -1,12 +1,12 @@
 
-<link type="text/css" rel="stylesheet" href="./styles/game/dropify.css">
+<link type="text/css" rel="stylesheet" href="/styles/game/dropify.css">
 
 <!-- START PROFILE HEADER : photo, username, level, experience, cookies, add friend button -->
 <div id="profile-page" class="section">
   <!-- profile-page-header -->
   <div id="profile-page-header" class="card">
 
-    <div class="card-image waves-effect waves-block waves-light" style="overflow: hidden;background: url('images/cover.jpg');background-size: cover;background-position: center;"></div>
+    <div class="card-image waves-effect waves-block waves-light" style="overflow: hidden;background: url('/images/cover.jpg');background-size: cover;background-position: center;"></div>
 
     <div class="card-content">
       <figure class="card-profile-image">
@@ -96,7 +96,7 @@
           </div>
         </li>
         <li class="collection-item">
-          <form id="updateForm" class="col s12" action="player/update" enctype="multipart/form-data" method="post">
+          <form id="updateForm" class="col s12" action="/player/update" enctype="multipart/form-data" method="post">
             <div class="row">
               <div class="input-field col s12">
                 <input id="last_name" name="playerName" type="text" class="validate" value="{{ data.playername }}">
@@ -249,4 +249,4 @@
   </div>
 
 
-	<script src="./js/game/dropify.js"></script>
+	<script src="/js/game/dropify.js"></script>

@@ -19,12 +19,12 @@
         <a href="#" class="loadProfileButton" profileid="{{ data.user.PLAYERID }}">
           <i class="large material-icons">settings</i>Profile</a>
       </li> 
-      {# <li>
+      <li>
         <a href="#">
           <i class="material-icons">credit_card</i>
           Donate
         </a>
-      </li> #}
+      </li>
       <li class="divider"></li>
       <li>
         <a href="/logout">

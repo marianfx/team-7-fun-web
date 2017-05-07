@@ -31,7 +31,7 @@
 
 
   <script type="text/javascript" src="/js/dependencies/sails.io.js"></script>
-  <script type="text/javascript" src="js/multiplayer/arena.js"></script>
+  <script type="text/javascript" src="/js/multiplayer/arena.js"></script>
 
 
 
