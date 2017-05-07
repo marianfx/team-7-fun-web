@@ -2,7 +2,7 @@
 INSERT INTO COURSES(COURSEID, TITLE, SHORTDESC, HASHTAG, PHOTOURL) VALUES(1, 'Welcome to Fun Web', 'The ''Intro'' into the fun', '#FUNWEB' , '/images/favicon/logo_152x152.png');
 COMMIT;
 
-
+SET CHARACTER SET utf8;
 
 INSERT INTO ROUNDS(roundID, NAME, NROFQUESTIONS, COURSE, COURSEID) VALUES(1, 'DEFAULT', 1, '<h1>Welcome to the <strong>Fun<strong>!</h1>
 

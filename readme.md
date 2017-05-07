@@ -109,6 +109,15 @@
       10.	populate-courses-rounds-questions
       11.	indexes
 
+    -In order to make work in linux distribution mysql database you have to:
+      1.  Open: $ sudo gedit /etc/mysql/my.cnf 
+      2.  Add at the end of the file the following 
+          - [mysqld]
+            lower_case_table_names = 1
+      3. $ sercive mysqld stop;
+      4. $ sercive mysqld start;
+      5. check if this variable was set to 1; ($ mysqladmin -u root -p variables)
+
 # _**x. Real time communication**_
 - Best use = multiplayer games (like Fun Web Uses)
 -  [http://sailsjs.org/documentation/concepts/realtime](http://sailsjs.org/documentation/concepts/realtime)
