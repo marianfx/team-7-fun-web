@@ -140,7 +140,7 @@ module.exports = {
 			if(err) {
 
 				sails.log.debug(err);
-				res.serverError({ message: error.message });
+				res.serverError({ message: err.message });
 			}
 			else {
 
